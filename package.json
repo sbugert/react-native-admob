@@ -1,0 +1,15 @@
+{
+  "name": "react-native-admob",
+  "version": "0.0.1",
+  "description": "A react-native component for Google AdMob banners",
+  "author": "Simon Bugert <simon.bugert@gmail.com>",
+  "main": "index.js",
+  "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sbugert/react-native-admob.git"
+  },
+  "peerDependencies": {
+    "react-native": "^0.16.0"
+  }
+}
