@@ -1,3 +1,4 @@
+[![npm version](https://badge.fury.io/js/react-native-admob.svg)](https://badge.fury.io/js/react-native-admob)
 ## react-native-admob
 
 A react-native component for Google AdMob banners (currently only iOS.)
