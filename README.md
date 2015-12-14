@@ -1,13 +1,45 @@
 ## react-native-admob
 
-A react-native component for Google AdMob banners (currently only iOS.)
+A react-native component for Google AdMob banners
 
 ### Installation
+
+##### iOS
 
 1. `npm i react-native-admob -S`
 2. Add [Google AdMob Framework](https://developers.google.com/admob/ios/quick-start#manually_using_the_sdk_download) to your Xcode project.
 3. Add react-native-admob static library to your Xcode project like explained [here](http://facebook.github.io/react-native/docs/linking-libraries-ios.html).
 4. To use it in your javascript code you can `import Banner from 'react-native-admob'` or `var Banner = require("react-native-admob")`
+
+##### Android
+
+Make the following additions to the given files.
+
+**android/settings.gradle**
+```
+include ':RNAdMob', ':app'
+project(':RNAdMob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-admob/android')
+```
+
+**android/app/build.gradle**
+```
+dependencies {
+   ...
+   compile project(':RNAdMob')
+}
+```
+
+**MainActivity.java**
+
+On top, where imports are:
+```java
+import com.sbugert.rnadmob.RNAdMobPackage;
+```
+
+Under `.addPackage(new MainReactPackage())`:
+```java
+.addPackage(new RNAdMobPackage())
+```
 
 ### Usage
 
@@ -45,5 +77,5 @@ A react-native component for Google AdMob banners (currently only iOS.)
 
 ### TODO
 - [ ] Add Interstitial Ads support
-- [ ] Add Android support
+- [x] Add Android support (experimental)
 - [ ] Add example project

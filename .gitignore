@@ -53,3 +53,6 @@ fastlane/report.xml
 fastlane/screenshots
 
 node_modules/**/*
+
+# Android
+android/.idea/

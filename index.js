@@ -70,6 +70,7 @@ AdMobBanner.propTypes = {
   adViewWillDismissScreen: React.PropTypes.func,
   adViewDidDismissScreen: React.PropTypes.func,
   adViewWillLeaveApplication: React.PropTypes.func,
+  ...View.propTypes,
 };
 
 AdMobBanner.defaultProps = { bannerSize: 'smartBannerPortrait', didFailToReceiveAdWithError: () => {} };
