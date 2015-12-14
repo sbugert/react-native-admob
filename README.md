@@ -77,5 +77,5 @@ Under `.addPackage(new MainReactPackage())`:
 
 ### TODO
 - [ ] Add Interstitial Ads support
-- [x] Add Android support (experimental)
-- [ ] Add example project
+- [x] Add Android support (very experimental)
+- [x] Add example project

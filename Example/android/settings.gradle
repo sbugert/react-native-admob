@@ -1,0 +1,4 @@
+rootProject.name = 'Example'
+
+include ':RNAdMob', ':app'
+project(':RNAdMob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-admob/android')
