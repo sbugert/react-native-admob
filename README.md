@@ -45,10 +45,19 @@ Under `.addPackage(new MainReactPackage())`:
 ### Usage
 
 ```javascript
+
+import {AdMobBanner, AdMobInterstitial} from 'react-native-admob'
+
+// Display a banner
 <Banner
   bannerSize={"fullBanner"}
   adUnitID={"your-admob-unit-id"}
   didFailToReceiveAdWithError={this.bannerError} />
+
+// Display an intersticial
+// if in DEV mode, display a test interstitial, otherwise display a real ad
+AdMobInterstitial.setAdUnitId('your-admob-unit-id');
+AdMobInterstitial.tryShowNewInterstitial(__DEV__ ? "your-device-id" : null);
 ```
 
 ### Props
