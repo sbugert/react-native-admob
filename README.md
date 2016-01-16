@@ -49,7 +49,7 @@ Under `.addPackage(new MainReactPackage())`:
 import {AdMobBanner, AdMobInterstitial} from 'react-native-admob'
 
 // Display a banner
-<Banner
+<AdMobBanner
   bannerSize={"fullBanner"}
   adUnitID={"your-admob-unit-id"}
   didFailToReceiveAdWithError={this.bannerError} />
