@@ -77,4 +77,6 @@ AdMobBanner.defaultProps = { bannerSize: 'smartBannerPortrait', didFailToReceive
 
 const RNBanner = requireNativeComponent('RNAdMob', AdMobBanner);
 
-module.exports = AdMobBanner;
+const AdMobInterstitial = React.NativeModules['RNAdMobInterstitial'];
+
+module.exports = {AdMobBanner,AdMobInterstitial};
