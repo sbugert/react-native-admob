@@ -8,7 +8,7 @@ var {
   View,
 } = React;
 
-var Banner = require('react-native-admob');
+var Banner = require('react-native-admob').AdMobBanner;
 
 var Example = React.createClass({
   getInitialState: function() {
