@@ -56,3 +56,10 @@ node_modules/**/*
 
 # Android
 android/.idea/
+android/android.iml
+android/gradle/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+Example/android/Example.iml
+Example/android/app/app.iml
