@@ -69,7 +69,7 @@ var styles = StyleSheet.create({
     marginBottom: 15,
   },
   banner: {
-    backgroundColor: '#555',
+    backgroundColor: '#055',
   },
 });
 

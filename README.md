@@ -1,7 +1,7 @@
 [![npm version](https://badge.fury.io/js/react-native-admob.svg)](https://badge.fury.io/js/react-native-admob)
 ## react-native-admob
 
-A react-native component for Google AdMob banners
+A react-native component for Google AdMob banners (react-native v0.19.0 or newer required)
 
 ### Installation
 
@@ -10,8 +10,7 @@ A react-native component for Google AdMob banners
 1. `npm i react-native-admob -S`
 2. Add [Google AdMob Framework](https://developers.google.com/admob/ios/quick-start#manually_using_the_sdk_download) to your Xcode project.
 3. Add react-native-admob static library to your Xcode project like explained [here](http://facebook.github.io/react-native/docs/linking-libraries-ios.html).
-4. To use it in your javascript code you can `import Banner from 'react-native-admob'` or `var Banner = require("react-native-admob")`
-
+4. To use it in your javascript code you can `import { AdMobBanner } from 'react-native-admob'`
 ##### Android
 
 Make the following additions to the given files.

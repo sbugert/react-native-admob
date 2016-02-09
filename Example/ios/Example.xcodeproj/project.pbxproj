@@ -22,8 +22,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		A92D15A31C1F1BB90010D0C3 /* libRNAdMobManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A92D15A21C1F1BAE0010D0C3 /* libRNAdMobManager.a */; };
-		A92D15A51C1F1C0E0010D0C3 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A92D15A41C1F1C0E0010D0C3 /* GoogleMobileAds.framework */; };
+		A958E0631C6A2DBF00B37AC0 /* libRNAdMobManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A958E0621C6A2DB000B37AC0 /* libRNAdMobManager.a */; };
+		A958E0651C6A2DCD00B37AC0 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A958E0641C6A2DCD00B37AC0 /* GoogleMobileAds.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,9 +104,9 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		A92D15A11C1F1BAE0010D0C3 /* PBXContainerItemProxy */ = {
+		A958E0611C6A2DB000B37AC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A92D15931C1F1BAE0010D0C3 /* RNAdMobManager.xcodeproj */;
+			containerPortal = A958E0531C6A2DB000B37AC0 /* RNAdMobManager.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A96DA7741C146D7200FC639B;
 			remoteInfo = RNAdMobManager;
@@ -135,8 +135,8 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		A92D15931C1F1BAE0010D0C3 /* RNAdMobManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAdMobManager.xcodeproj; path = "../node_modules/react-native-admob/RNAdMobManager/RNAdMobManager.xcodeproj"; sourceTree = "<group>"; };
-		A92D15A41C1F1C0E0010D0C3 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		A958E0531C6A2DB000B37AC0 /* RNAdMobManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAdMobManager.xcodeproj; path = "../node_modules/react-native-admob/RNAdMobManager/RNAdMobManager.xcodeproj"; sourceTree = "<group>"; };
+		A958E0641C6A2DCD00B37AC0 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,13 +151,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A92D15A31C1F1BB90010D0C3 /* libRNAdMobManager.a in Frameworks */,
+				A958E0631C6A2DBF00B37AC0 /* libRNAdMobManager.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
-				A92D15A51C1F1C0E0010D0C3 /* GoogleMobileAds.framework in Frameworks */,
+				A958E0651C6A2DCD00B37AC0 /* GoogleMobileAds.framework in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
@@ -275,8 +275,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A92D15A41C1F1C0E0010D0C3 /* GoogleMobileAds.framework */,
-				A92D15931C1F1BAE0010D0C3 /* RNAdMobManager.xcodeproj */,
+				A958E0641C6A2DCD00B37AC0 /* GoogleMobileAds.framework */,
+				A958E0531C6A2DB000B37AC0 /* RNAdMobManager.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
@@ -320,10 +320,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A92D15941C1F1BAE0010D0C3 /* Products */ = {
+		A958E0541C6A2DB000B37AC0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A92D15A21C1F1BAE0010D0C3 /* libRNAdMobManager.a */,
+				A958E0621C6A2DB000B37AC0 /* libRNAdMobManager.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -435,8 +435,8 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = A92D15941C1F1BAE0010D0C3 /* Products */;
-					ProjectRef = A92D15931C1F1BAE0010D0C3 /* RNAdMobManager.xcodeproj */;
+					ProductGroup = A958E0541C6A2DB000B37AC0 /* Products */;
+					ProjectRef = A958E0531C6A2DB000B37AC0 /* RNAdMobManager.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -518,11 +518,11 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A92D15A21C1F1BAE0010D0C3 /* libRNAdMobManager.a */ = {
+		A958E0621C6A2DB000B37AC0 /* libRNAdMobManager.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNAdMobManager.a;
-			remoteRef = A92D15A11C1F1BAE0010D0C3 /* PBXContainerItemProxy */;
+			remoteRef = A958E0611C6A2DB000B37AC0 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -559,7 +559,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "../node_modules/react-native/packager/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
