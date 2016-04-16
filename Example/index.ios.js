@@ -9,6 +9,9 @@ var {
 } = React;
 
 var Banner = require('react-native-admob').AdMobBanner;
+var Interstital = require('react-native-admob').AdMobInterstitial;
+
+Interstital.setAdUnitId('ca-app-pub-3940256099942544/1033173712');
 
 var Example = React.createClass({
   getInitialState: function() {
@@ -21,11 +24,17 @@ var Example = React.createClass({
       size: size,
     });
   },
+  showInterstital() {
+    Interstital.tryShowNewInterstitial(null);
+  },
   render: function() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
           Welcome to react-native-admob!
+        </Text>
+        <Text onPress={this.showInterstital} style={styles.instructions}>
+          Show Interstital
         </Text>
         <Text onPress={this.press.bind(this, 'banner')} style={styles.instructions}>
           Set banner size to 'banner'

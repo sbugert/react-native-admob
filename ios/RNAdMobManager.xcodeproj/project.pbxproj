@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A962C2531CB27DBD00E508A1 /* RNAdMobInterstitial.m in Sources */ = {isa = PBXBuildFile; fileRef = A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */; };
 		A96DA7841C146DA600FC639B /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DA7811C146DA600FC639B /* BannerView.m */; };
 		A96DA7851C146DA600FC639B /* RNAdMobManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DA7831C146DA600FC639B /* RNAdMobManager.m */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A962C2511CB27DBD00E508A1 /* RNAdMobInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdMobInterstitial.h; sourceTree = SOURCE_ROOT; };
+		A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAdMobInterstitial.m; sourceTree = SOURCE_ROOT; };
 		A96DA7741C146D7200FC639B /* libRNAdMobManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNAdMobManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96DA7801C146DA600FC639B /* BannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerView.h; sourceTree = SOURCE_ROOT; };
 		A96DA7811C146DA600FC639B /* BannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerView.m; sourceTree = SOURCE_ROOT; };
@@ -65,6 +68,8 @@
 				A96DA7811C146DA600FC639B /* BannerView.m */,
 				A96DA7821C146DA600FC639B /* RNAdMobManager.h */,
 				A96DA7831C146DA600FC639B /* RNAdMobManager.m */,
+				A962C2511CB27DBD00E508A1 /* RNAdMobInterstitial.h */,
+				A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */,
 			);
 			path = RNAdMobManager;
 			sourceTree = "<group>";
@@ -126,6 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A962C2531CB27DBD00E508A1 /* RNAdMobInterstitial.m in Sources */,
 				A96DA7841C146DA600FC639B /* BannerView.m in Sources */,
 				A96DA7851C146DA600FC639B /* RNAdMobManager.m in Sources */,
 			);
