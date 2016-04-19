@@ -23,7 +23,8 @@ The banner is implemented as a component while the interstitial has an imperativ
 
 ##### Android
 
-Make the following additions to the given files.
+1. `npm i react-native-admob -S`
+2. Make the following additions to the given files:
 
 **android/settings.gradle**
 
