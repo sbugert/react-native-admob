@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  NativeModules,
   requireNativeComponent,
   View,
 } from 'react-native';
@@ -78,6 +79,6 @@ AdMobBanner.defaultProps = { bannerSize: 'smartBannerPortrait', didFailToReceive
 
 const RNBanner = requireNativeComponent('RNAdMob', AdMobBanner);
 
-const AdMobInterstitial = React.NativeModules['RNAdMobInterstitial'];
+const AdMobInterstitial = NativeModules['RNAdMobInterstitial'];
 
 module.exports = {AdMobBanner,AdMobInterstitial};
