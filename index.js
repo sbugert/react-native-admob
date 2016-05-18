@@ -81,4 +81,4 @@ const RNBanner = requireNativeComponent('RNAdMob', AdMobBanner);
 
 const AdMobInterstitial = NativeModules['RNAdMobInterstitial'];
 
-module.exports = {AdMobBanner,AdMobInterstitial};
+module.exports = { AdMobBanner, AdMobInterstitial };

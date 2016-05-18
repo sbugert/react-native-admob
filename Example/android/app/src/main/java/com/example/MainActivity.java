@@ -1,13 +1,12 @@
 package com.example;
 
 import com.facebook.react.ReactActivity;
+import com.sbugert.rnadmob.RNAdMobPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
 import java.util.Arrays;
 import java.util.List;
-
-import com.sbugert.rnadmob.RNAdMobPackage;
 
 public class MainActivity extends ReactActivity {
 

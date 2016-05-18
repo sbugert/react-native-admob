@@ -1,17 +1,15 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React, { Component } from 'react';
+import {
   AppRegistry,
   StyleSheet,
   Text,
   View,
-} = React;
+} from 'react-native';
+import { AdMobBanner, AdMobInterstitial } from 'react-native-admob';
 
-var Banner = require('react-native-admob').AdMobBanner;
-var Interstital = require('react-native-admob').AdMobInterstitial;
-
-Interstital.setAdUnitId('ca-app-pub-3940256099942544/1033173712');
+AdMobInterstitial.setAdUnitId('ca-app-pub-3940256099942544/1033173712');
 
 var Example = React.createClass({
   getInitialState: function() {
@@ -25,7 +23,7 @@ var Example = React.createClass({
     });
   },
   showInterstital() {
-    Interstital.tryShowNewInterstitial(null);
+    AdMobInterstitial.tryShowNewInterstitial(null);
   },
   render: function() {
     return (
@@ -51,7 +49,7 @@ var Example = React.createClass({
         <Text onPress={this.press.bind(this, 'smartBannerLandscape')} style={styles.instructions}>
           Set banner size to 'smartBannerLandscape'
         </Text>
-        <Banner
+        <AdMobBanner
           style={styles.banner}
           bannerSize={this.state.size}
           adUnitID={"ca-app-pub-3940256099942544/2934735716"} />

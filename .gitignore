@@ -66,3 +66,6 @@ android/gradlew.bat
 android/local.properties
 Example/android/Example.iml
 Example/android/app/app.iml
+Example/.buckconfig
+Example/.vscode/
+Example/android/app/BUCK

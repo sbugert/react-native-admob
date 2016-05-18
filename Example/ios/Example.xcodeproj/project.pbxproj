@@ -22,20 +22,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		A9D563281CC3931E00EE63FB /* libRNAdMobManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D563271CC3931700EE63FB /* libRNAdMobManager.a */; };
-		A9FB0B9E1CB2679400B38262 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0B9D1CB2679400B38262 /* GoogleMobileAds.framework */; };
-		A9FB0BB01CB2683200B38262 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BAF1CB2683200B38262 /* AdSupport.framework */; };
-		A9FB0BB51CB2684600B38262 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BB11CB2684600B38262 /* AudioToolbox.framework */; };
-		A9FB0BB61CB2684600B38262 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BB21CB2684600B38262 /* AVFoundation.framework */; };
-		A9FB0BB71CB2684600B38262 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BB31CB2684600B38262 /* CoreGraphics.framework */; };
-		A9FB0BB81CB2684600B38262 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BB41CB2684600B38262 /* CoreMedia.framework */; };
-		A9FB0BC01CB2687400B38262 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BB91CB2687300B38262 /* CoreTelephony.framework */; };
-		A9FB0BC11CB2687400B38262 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BBA1CB2687300B38262 /* EventKit.framework */; };
-		A9FB0BC21CB2687400B38262 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BBB1CB2687300B38262 /* EventKitUI.framework */; };
-		A9FB0BC31CB2687400B38262 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BBC1CB2687300B38262 /* MediaPlayer.framework */; };
-		A9FB0BC41CB2687400B38262 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BBD1CB2687300B38262 /* MessageUI.framework */; };
-		A9FB0BC51CB2687400B38262 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BBE1CB2687300B38262 /* StoreKit.framework */; };
-		A9FB0BC61CB2687400B38262 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FB0BBF1CB2687400B38262 /* SystemConfiguration.framework */; };
+		A938A3CD1CEC9C2D00ACE116 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A938A3CC1CEC9C2D00ACE116 /* GoogleMobileAds.framework */; };
+		BBC21E7EF9DB4BF995284EF1 /* libRNAdMobManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 82FE4206CBB04AB995D955C5 /* libRNAdMobManager.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,9 +104,9 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		A9D563261CC3931700EE63FB /* PBXContainerItemProxy */ = {
+		A938A3CA1CEC9C1B00ACE116 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A9D563221CC3931700EE63FB /* RNAdMobManager.xcodeproj */;
+			containerPortal = 55D2EC67D6BE4AB195AE7363 /* RNAdMobManager.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A96DA7741C146D7200FC639B;
 			remoteInfo = RNAdMobManager;
@@ -145,22 +133,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Example/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Example/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		55D2EC67D6BE4AB195AE7363 /* RNAdMobManager.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNAdMobManager.xcodeproj; path = "../node_modules/react-native-admob/ios/RNAdMobManager.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		82FE4206CBB04AB995D955C5 /* libRNAdMobManager.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNAdMobManager.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		A9D563221CC3931700EE63FB /* RNAdMobManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAdMobManager.xcodeproj; path = "../node_modules/react-native-admob/ios/RNAdMobManager.xcodeproj"; sourceTree = "<group>"; };
-		A9FB0B9D1CB2679400B38262 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
-		A9FB0BAF1CB2683200B38262 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		A9FB0BB11CB2684600B38262 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		A9FB0BB21CB2684600B38262 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		A9FB0BB31CB2684600B38262 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		A9FB0BB41CB2684600B38262 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		A9FB0BB91CB2687300B38262 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		A9FB0BBA1CB2687300B38262 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
-		A9FB0BBB1CB2687300B38262 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
-		A9FB0BBC1CB2687300B38262 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		A9FB0BBD1CB2687300B38262 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		A9FB0BBE1CB2687300B38262 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		A9FB0BBF1CB2687400B38262 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		A938A3CC1CEC9C2D00ACE116 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,30 +152,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9D563281CC3931E00EE63FB /* libRNAdMobManager.a in Frameworks */,
-				A9FB0BC01CB2687400B38262 /* CoreTelephony.framework in Frameworks */,
-				A9FB0BC11CB2687400B38262 /* EventKit.framework in Frameworks */,
-				A9FB0BC21CB2687400B38262 /* EventKitUI.framework in Frameworks */,
-				A9FB0BC31CB2687400B38262 /* MediaPlayer.framework in Frameworks */,
-				A9FB0BC41CB2687400B38262 /* MessageUI.framework in Frameworks */,
-				A9FB0BC51CB2687400B38262 /* StoreKit.framework in Frameworks */,
-				A9FB0BC61CB2687400B38262 /* SystemConfiguration.framework in Frameworks */,
-				A9FB0BB51CB2684600B38262 /* AudioToolbox.framework in Frameworks */,
-				A9FB0BB61CB2684600B38262 /* AVFoundation.framework in Frameworks */,
-				A9FB0BB71CB2684600B38262 /* CoreGraphics.framework in Frameworks */,
-				A9FB0BB81CB2684600B38262 /* CoreMedia.framework in Frameworks */,
-				A9FB0BB01CB2683200B38262 /* AdSupport.framework in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
-				A9FB0B9E1CB2679400B38262 /* GoogleMobileAds.framework in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
+				A938A3CD1CEC9C2D00ACE116 /* GoogleMobileAds.framework in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				BBC21E7EF9DB4BF995284EF1 /* libRNAdMobManager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +246,6 @@
 		13B07FAE1A68108700A75B9A /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				A9FB0B9D1CB2679400B38262 /* GoogleMobileAds.framework */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -312,7 +276,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A9D563221CC3931700EE63FB /* RNAdMobManager.xcodeproj */,
+				A938A3CC1CEC9C2D00ACE116 /* GoogleMobileAds.framework */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
@@ -323,6 +287,7 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+				55D2EC67D6BE4AB195AE7363 /* RNAdMobManager.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -338,18 +303,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				A9FB0BB91CB2687300B38262 /* CoreTelephony.framework */,
-				A9FB0BBA1CB2687300B38262 /* EventKit.framework */,
-				A9FB0BBB1CB2687300B38262 /* EventKitUI.framework */,
-				A9FB0BBC1CB2687300B38262 /* MediaPlayer.framework */,
-				A9FB0BBD1CB2687300B38262 /* MessageUI.framework */,
-				A9FB0BBE1CB2687300B38262 /* StoreKit.framework */,
-				A9FB0BBF1CB2687400B38262 /* SystemConfiguration.framework */,
-				A9FB0BB11CB2684600B38262 /* AudioToolbox.framework */,
-				A9FB0BB21CB2684600B38262 /* AVFoundation.framework */,
-				A9FB0BB31CB2684600B38262 /* CoreGraphics.framework */,
-				A9FB0BB41CB2684600B38262 /* CoreMedia.framework */,
-				A9FB0BAF1CB2683200B38262 /* AdSupport.framework */,
 				13B07FAE1A68108700A75B9A /* Example */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ExampleTests */,
@@ -368,10 +321,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A9D563231CC3931700EE63FB /* Products */ = {
+		A938A3BD1CEC9C1B00ACE116 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A9D563271CC3931700EE63FB /* libRNAdMobManager.a */,
+				A938A3CB1CEC9C1B00ACE116 /* libRNAdMobManager.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -421,7 +374,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 610;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -483,8 +436,8 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = A9D563231CC3931700EE63FB /* Products */;
-					ProjectRef = A9D563221CC3931700EE63FB /* RNAdMobManager.xcodeproj */;
+					ProductGroup = A938A3BD1CEC9C1B00ACE116 /* Products */;
+					ProjectRef = 55D2EC67D6BE4AB195AE7363 /* RNAdMobManager.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -566,11 +519,11 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A9D563271CC3931700EE63FB /* libRNAdMobManager.a */ = {
+		A938A3CB1CEC9C1B00ACE116 /* libRNAdMobManager.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNAdMobManager.a;
-			remoteRef = A9D563261CC3931700EE63FB /* PBXContainerItemProxy */;
+			remoteRef = A938A3CA1CEC9C1B00ACE116 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -667,6 +620,10 @@
 				INFOPLIST_FILE = ExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
@@ -684,6 +641,10 @@
 				INFOPLIST_FILE = ExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
@@ -694,7 +655,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEAD_CODE_STRIPPING = NO;
-				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -703,6 +663,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-admob/ios",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -715,7 +676,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -724,6 +684,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-admob/ios",
 				);
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -770,6 +731,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-admob/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -810,6 +772,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-admob/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
