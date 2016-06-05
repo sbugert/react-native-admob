@@ -24,6 +24,9 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
 
   public static final String PROP_BANNER_SIZE = "bannerSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
+  public static final String PROP_TEST_DEVICE_ID = "testDeviceID";
+
+  private String testDeviceID = null;
 
   public enum Events {
     EVENT_SIZE_CHANGE("onSizeChange"),
@@ -181,9 +184,22 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
     loadAd(newAdView);
   }
 
+  @ReactProp(name = PROP_TEST_DEVICE_ID)
+  public void setPropTestDeviceID(final ReactViewGroup view, final String testDeviceID) {
+    this.testDeviceID = testDeviceID;
+  }
+
   private void loadAd(final AdView adView) {
     if (adView.getAdSize() != null && adView.getAdUnitId() != null) {
-      AdRequest adRequest = new AdRequest.Builder().build();
+      AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+      if (testDeviceID != null){
+        if (testDeviceID.equals("EMULATOR")) {
+          adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+        } else {
+          adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+        }
+      }
+      AdRequest adRequest = adRequestBuilder.build();
       adView.loadAd(adRequest);
     }
   }

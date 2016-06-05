@@ -11,7 +11,7 @@ The banner is implemented as a component while the interstitial has an imperativ
 
 1. `npm i react-native-admob -S`
 2. `rnpm link`
-3. Add [Google AdMob Framework](https://developers.google.com/admob/ios/quick-start#manually_using_the_sdk_download) to your Xcode project. This is only needed for iOS and guarantees your  app is using the newest admob version.
+3. Add [Google AdMob Framework](https://developers.google.com/admob/ios/quick-start#manually_using_the_sdk_download) to your Xcode project. This is only needed for iOS and guarantees your app is using the newest admob version.
 
 #### Manual Installation
 
@@ -44,7 +44,7 @@ dependencies {
 
 **MainActivity.java**
 
-On top, where imports are:  
+On top, where imports are:
 ```java
 import com.sbugert.rnadmob.RNAdMobPackage;
 ```
@@ -64,14 +64,15 @@ import { AdMobBanner, AdMobInterstitial } from 'react-native-admob'
 
 // Display a banner
 <AdMobBanner
-  bannerSize={"fullBanner"}
-  adUnitID={"your-admob-unit-id"}
+  bannerSize="fullBanner"
+  adUnitID="your-admob-unit-id"
+  testDeviveID="EMULATOR"
   didFailToReceiveAdWithError={this.bannerError} />
 
-// Display an intersticial
-// if in DEV mode, display a test interstitial, otherwise display a real ad
-AdMobInterstitial.setAdUnitId('your-admob-unit-id');
-AdMobInterstitial.tryShowNewInterstitial(__DEV__ ? "your-device-id" : null);
+// Display an interstitial
+AdMobInterstitial.setAdUnitID('your-admob-unit-id');
+AdMobInterstitial.setTestDeviceID('EMULATOR');
+AdMobInterstitial.requestAd(AdMobInterstitial.showAd);
 ```
 
 For a full example reference to the [example project](Example).
@@ -84,32 +85,64 @@ For a full example reference to the [example project](Example).
 ##### bannerSize property
 *Corresponding to [iOS framework banner size constants](https://developers.google.com/admob/ios/banner)*
 
-| Prop value | Description | Size |
-|---|---|---|
-|`banner`|Standard Banner for Phones and Tablets|`320x50`|
-|`largeBanner`|Large Banner for Phones and Tablets|`320x100`|
-|`mediumRectangle`|IAB Medium Rectangle for Phones and Tablets|`300x250`|
-|`fullBanner`|IAB Full-Size Banner for Tablet|`468x60`|
-|`leaderboard`|IAB Leaderboard for Tablets|`728x90`|
-|**`smartBannerPortrait`**|Smart Banner for Phones and Tablets (default)|`Screen width x 32|50|90`|
-|`smartBannerLandscape`|Smart Banner for Phones and Tablets|`Screen width x 32|50|90`|
+| Prop value              | Description                                 | Size                  |
+|-------------------------|---------------------------------------------|-----------------------|
+|`banner`                 |Standard Banner for Phones and Tablets       |320x50                 |
+|`largeBanner`            |Large Banner for Phones and Tablets          |320x100                |
+|`mediumRectangle`        |IAB Medium Rectangle for Phones and Tablets  |300x250                |
+|`fullBanner`             |IAB Full-Size Banner for Tablet              |468x60                 |
+|`leaderboard`            |IAB Leaderboard for Tablets                  |728x90                 |
+|**`smartBannerPortrait`**|Smart Banner for Phones and Tablets (default)|Screen width x 32|50|90|
+|`smartBannerLandscape`   |Smart Banner for Phones and Tablets          |Screen width x 32|50|90|
+
+*Note: There is no `smartBannerPortrait` and `smartBannerLandscape` on Android. Both prop values will map to `smartBanner`*
 
 
 ##### Events as function props
 *Corresponding to [Ad lifecycle event callbacks](https://developers.google.com/admob/ios/banner)*
 
-| Prop |
-|---|
-|`adViewDidReceiveAd()`|
+| Prop                                          |
+|-----------------------------------------------|
+|`adViewDidReceiveAd()`                         |
 |`didFailToReceiveAdWithError(errorDescription)`|
-|`adViewWillPresentScreen()`|
-|`adViewWillDismissScreen()`|
-|`adViewDidDismissScreen()`|
-|`adViewWillLeaveApplication()`|
+|`adViewWillPresentScreen()`                    |
+|`adViewWillDismissScreen()`                    |
+|`adViewDidDismissScreen()`                     |
+|`adViewWillLeaveApplication()`                 |
+
+#### AdMobInterstitials
+
+##### Methods
+
+| Name                      | Description                                                                                                     |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------|
+|`setAdUnitID(adUnitID)`    | sets the AdUnit ID for all future ad requests.                                                                  |
+|`setTestDeviceID(deviceID)`| sets the test device ID                                                                                         |
+|`requestAd(callback)`      | requests an interstitial and calls callback when `interstitialDidLoad` or`interstitialDidFailToLoad` event fires|
+|`showAd(callback)`         | shows an interstitial if it is ready and calls callback when `interstitialDidOpen` event fires                  |
+|`isReady(callback)`        | calls callback with boolean whether interstitial is ready to be shown                                           |
+
+*For simulators/emulators you can use `'EMULATOR'` for the test device ID.*  
+*Note: `tryShowNewInterstitial()` is deprecated as of v1.1.0 and can be replaced by calling `requestAd` with `showAd` as callback.*
+
+##### Events
+Unfortunately, events are not consistent across iOS and Android. To have one unified API, new event names are introduced for pairs that are roughly equivalent.
+
+| iOS                                      | *this library*                   | Android             |
+|------------------------------------------|----------------------------------|---------------------|
+|`interstitialDidReceiveAd`                |`interstitialDidLoad`             |`onAdLoaded`         |
+|`interstitial:didFailToReceiveAdWithError`|`interstitialDidFailToLoad`       |`onAdFailedToLoad`   |
+|`interstitialWillPresentScreen`           |`interstitialDidOpen`             |`onAdOpened`         |
+|`interstitialDidFailToPresentScreen`      |                                  |                     |
+|`interstitialWillDismissScreen`           |                                  |                     |
+|`interstitialDidDismissScreen`            |`interstitialDidClose`            |`onAdClosed`         |
+|`interstitialWillLeaveApplication`        |`interstitialWillLeaveApplication`|`onAdLeftApplication`|
+
+*Note that `interstitialWillLeaveApplication` and `onAdLeftApplication` are not exactly the same but share one event in this library.*
 
 
 ---
 
 ### TODO
-- [ ] Expose full GADInterstitial API 
 - [ ] Support [Ad Targeting](https://developers.google.com/admob/ios/targeting)
+- [ ] Also use interstitial event names for banner

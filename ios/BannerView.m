@@ -69,7 +69,13 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     _bannerView.delegate = self;
     _bannerView.adUnitID = _adUnitID;
     _bannerView.rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-    [_bannerView loadRequest:[GADRequest request]];
+    GADRequest *request = [GADRequest request];
+    if(_testDeviceID) {
+//      request.testDevices = @[_testDeviceID];
+      request.testDevices = @[kGADSimulatorID];
+    }
+
+    [_bannerView loadRequest:request];
   }
 }
 
@@ -94,6 +100,17 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
       [_bannerView removeFromSuperview];
     }
 
+    [self loadBanner];
+  }
+}
+- (void)setTestDeviceID:(NSString *)testDeviceID
+{
+  if(![testDeviceID isEqual:_testDeviceID]) {
+    _testDeviceID = testDeviceID;
+    if (_bannerView) {
+      [_bannerView removeFromSuperview];
+    }
+    
     [self loadBanner];
   }
 }

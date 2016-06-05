@@ -26,7 +26,7 @@
 
 /* Begin PBXFileReference section */
 		A962C2511CB27DBD00E508A1 /* RNAdMobInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdMobInterstitial.h; sourceTree = SOURCE_ROOT; };
-		A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAdMobInterstitial.m; sourceTree = SOURCE_ROOT; };
+		A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = RNAdMobInterstitial.m; sourceTree = SOURCE_ROOT; };
 		A96DA7741C146D7200FC639B /* libRNAdMobManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNAdMobManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96DA7801C146DA600FC639B /* BannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerView.h; sourceTree = SOURCE_ROOT; };
 		A96DA7811C146DA600FC639B /* BannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerView.m; sourceTree = SOURCE_ROOT; };

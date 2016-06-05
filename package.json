@@ -1,7 +1,7 @@
 {
   "name": "react-native-admob",
-  "version": "1.0.0",
-  "description": "A react-native component for Google AdMob banners",
+  "version": "1.1.0",
+  "description": "A react-native component for Google AdMob banners and interstitials",
   "author": "Simon Bugert <simon.bugert@gmail.com>",
   "main": "index.js",
   "license": "BSD-2-Clause",
