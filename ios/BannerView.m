@@ -71,8 +71,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     _bannerView.rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
     GADRequest *request = [GADRequest request];
     if(_testDeviceID) {
-//      request.testDevices = @[_testDeviceID];
-      request.testDevices = @[kGADSimulatorID];
+      if(_testDeviceID == @"EMULATOR") {
+        request.testDevices = @[kGADSimulatorID];
+      } else {
+        request.testDevices = @[_testDeviceID];
+      }
     }
 
     [_bannerView loadRequest:request];
