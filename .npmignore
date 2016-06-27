@@ -1,1 +1,8 @@
 Example/
+android/.idea/
+android/android.iml
+android/RNAdMob.iml
+android/gradle/
+android/gradlew
+android/gradlew.bat
+android/local.properties
