@@ -25,6 +25,7 @@ ios/GoogleMobileAds.framework/
 
 # Android/IJ
 #
+*.iml
 .idea
 .gradle
 local.properties
