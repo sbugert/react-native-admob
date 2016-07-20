@@ -66,7 +66,7 @@ import { AdMobBanner, AdMobInterstitial } from 'react-native-admob'
 <AdMobBanner
   bannerSize="fullBanner"
   adUnitID="your-admob-unit-id"
-  testDeviveID="EMULATOR"
+  testDeviceID="EMULATOR"
   didFailToReceiveAdWithError={this.bannerError} />
 
 // Display an interstitial
