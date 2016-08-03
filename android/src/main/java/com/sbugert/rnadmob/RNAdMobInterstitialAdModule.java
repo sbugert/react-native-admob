@@ -104,7 +104,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
           requestAdCallback = callback;
           AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
           if (testDeviceID != null){
-            if (testDeviceID.equals("DEVICE_ID_EMULATOR")) {
+            if (testDeviceID.equals("EMULATOR")) {
               adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
             } else {
               adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
