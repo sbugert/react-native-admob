@@ -17,7 +17,7 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.AdRequest;
 
-public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule {
+public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule implements RewardedVideoAdListener {
     RewardedVideoAd mRewardedVideoAd;
     String adUnitID;
     String testDeviceID;
@@ -26,75 +26,67 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "RNAdMobRewardedVideo";
+        return "RNAdMobRewarded";
     }
 
     public RNAdMobRewardedVideoAdModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(reactContext);
+    }
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
-                    @Override
-                    public void onRewarded(RewardItem rewardItem) {
-                        sendEvent("didRewardUserWithReward", null);
-                    }
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+        sendEvent("didRewardUserWithReward", null);
+    }
 
-                    @Override
-                    public void onRewardedVideoAdLoaded() {
-                        sendEvent("rewardedVideoDidLoad", null);
-                        requestAdCallback.invoke();
-                    }
+    @Override
+    public void onRewardedVideoAdLoaded() {
+        sendEvent("rewardedVideoDidLoad", null);
+        requestAdCallback.invoke();
+    }
 
-                    @Override
-                    public void onRewardedVideoAdOpened() {
-                        sendEvent("rewardedVideoDidOpen", null);
-                    }
+    @Override
+    public void onRewardedVideoAdOpened() {
+        sendEvent("rewardedVideoDidOpen", null);
+    }
 
-                    @Override
-                    public void onRewardedVideoStarted() {
-                        sendEvent("rewardedVideoDidStart", null);
-                    }
+    @Override
+    public void onRewardedVideoStarted() {
+        sendEvent("rewardedVideoDidStart", null);
+    }
 
-                    @Override
-                    public void onRewardedVideoAdClosed() {
-                        sendEvent("rewardedVideoDidClose", null);
-                    }
+    @Override
+    public void onRewardedVideoAdClosed() {
+        sendEvent("rewardedVideoDidClose", null);
+    }
 
-                    @Override
-                    public void onRewardedVideoAdLeftApplication() {
-                        sendEvent("rewardedVideoWillLeaveApplication", null);
-                    }
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+        sendEvent("rewardedVideoWillLeaveApplication", null);
+    }
 
-                    @Override
-                    public void onRewardedVideoAdFailedToLoad(int errorCode) {
-                        WritableMap event = Arguments.createMap();
-                        String errorString = null;
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int errorCode) {
+        WritableMap event = Arguments.createMap();
+        String errorString = null;
 
-                        switch (errorCode) {
-                            case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                            errorString = "ERROR_CODE_INTERNAL_ERROR";
-                            break;
-                            case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                            errorString = "ERROR_CODE_INVALID_REQUEST";
-                            break;
-                            case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                            errorString = "ERROR_CODE_NETWORK_ERROR";
-                            break;
-                            case AdRequest.ERROR_CODE_NO_FILL:
-                            errorString = "ERROR_CODE_NO_FILL";
-                            break;
-                        }
+        switch (errorCode) {
+            case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+            errorString = "ERROR_CODE_INTERNAL_ERROR";
+            break;
+            case AdRequest.ERROR_CODE_INVALID_REQUEST:
+            errorString = "ERROR_CODE_INVALID_REQUEST";
+            break;
+            case AdRequest.ERROR_CODE_NETWORK_ERROR:
+            errorString = "ERROR_CODE_NETWORK_ERROR";
+            break;
+            case AdRequest.ERROR_CODE_NO_FILL:
+            errorString = "ERROR_CODE_NO_FILL";
+            break;
+        }
 
-                        event.putString("error", errorString);
-                        sendEvent("rewardedVideoDidFailToLoad", event);
-                        requestAdCallback.invoke(errorString);
-                    }
-                });
-            }
-        });
+        event.putString("error", errorString);
+        sendEvent("rewardedVideoDidFailToLoad", event);
+        requestAdCallback.invoke(errorString);
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
@@ -116,6 +108,10 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
+                RNAdMobRewardedVideoAdModule.this.mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getCurrentActivity());
+
+                RNAdMobRewardedVideoAdModule.this.mRewardedVideoAd.setRewardedVideoAdListener(RNAdMobRewardedVideoAdModule.this);
+
                 if (mRewardedVideoAd.isLoaded()) {
                     callback.invoke("Ad is already loaded."); // TODO: make proper error
                 } else {
@@ -124,7 +120,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule {
                     AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
 
                     if (testDeviceID != null){
-                        if (testDeviceID.equals("DEVICE_ID_EMULATOR")) {
+                        if (testDeviceID.equals("EMULATOR")) {
                             adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
                         } else {
                             adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
