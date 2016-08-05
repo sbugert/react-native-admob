@@ -35,7 +35,12 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
 
     @Override
     public void onRewarded(RewardItem rewardItem) {
-        sendEvent("didRewardUserWithReward", null);
+        WritableMap reward = Arguments.createMap();
+
+        reward.putInt("amount", rewardItem.getAmount());
+        reward.putString("type", rewardItem.getType());
+
+        sendEvent("didRewardUserWithReward", reward);
     }
 
     @Override
