@@ -7,81 +7,57 @@ import {
   Platform,
   TouchableHighlight,
 } from 'react-native';
-import { AdMobInterstitial, AdMobBanner } from 'react-native-admob';
+import { AdMobRewarded } from 'react-native-admob';
 
 export default class Example extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      bannerSize: 'smartBannerPortrait',
-    };
-    this.setBannerSize = this.setBannerSize.bind(this);
-  }
-
   componentDidMount() {
-    AdMobInterstitial.setTestDeviceID('EMULATOR');
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
+    AdMobRewarded.setTestDeviceID('EMULATOR');
+    AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
 
-    AdMobInterstitial.addEventListener('interstitialDidLoad',
-      () => console.log('interstitialDidLoad event'));
-    AdMobInterstitial.addEventListener('interstitialDidClose',
-      this.interstitialDidClose);
-    AdMobInterstitial.addEventListener('interstitialDidFailToLoad',
-      () => console.log('interstitialDidFailToLoad event'));
-    AdMobInterstitial.addEventListener('interstitialDidOpen',
-      () => console.log('interstitialDidOpen event'));
-    AdMobInterstitial.addEventListener('interstitialWillLeaveApplication',
-      () => console.log('interstitalWillLeaveApplication event'));
+    AdMobRewarded.addEventListener('rewardedVideoDidRewardUser',
+      (type, amount) => console.log('rewardedVideoDidRewardUser', type, amount)
+    );
+    AdMobRewarded.addEventListener('rewardedVideoDidLoad',
+      () => console.log('rewardedVideoDidLoad')
+    );
+    AdMobRewarded.addEventListener('rewardedVideoDidFailToLoad',
+      (error) => console.log('rewardedVideoDidFailToLoad', error)
+    );
+    AdMobRewarded.addEventListener('rewardedVideoDidOpen',
+      () => console.log('rewardedVideoDidOpen')
+    );
+    AdMobRewarded.addEventListener('rewardedVideoDidClose',
+      () => {
+        console.log('rewardedVideoDidClose');
+        AdMobRewarded.requestAd((error) => error && console.log(error));
+      }
+    );
+    AdMobRewarded.addEventListener('rewardedVideoWillLeaveApplication',
+      () => console.log('rewardedVideoWillLeaveApplication')
+    );
 
-    AdMobInterstitial.requestAd((error) => error && console.log(error));
+    AdMobRewarded.requestAd((error) => error && console.log(error));
   }
 
   componentWillUnmount() {
-    AdMobInterstitial.removeAllListeners();
+    AdMobRewarded.removeAllListeners();
   }
 
-  interstitialDidClose() {
-    console.log('interstitialDidClose event');
-    AdMobInterstitial.requestAd((error) => error && console.log(error));
-  }
-
-  showInterstital() {
-    AdMobInterstitial.showAd((error) => error && console.log(error));
-  }
-
-  setBannerSize() {
-    const { bannerSize } = this.state;
-    this.setState({
-      bannerSize: bannerSize === 'smartBannerPortrait' ?
-        'mediumRectangle' : 'smartBannerPortrait',
-    });
+  showRewarded() {
+    AdMobRewarded.showAd((error) => error && console.log(error));
   }
 
   render() {
-    const { bannerSize } = this.state;
-    console.log(bannerSize);
-
     return (
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
           <TouchableHighlight>
-            <Text onPress={this.showInterstital} style={styles.button}>
-              Show interstital and preload next
-            </Text>
-          </TouchableHighlight>
-          <TouchableHighlight>
-            <Text onPress={this.setBannerSize} style={styles.button}>
-              Set banner size to {bannerSize === 'smartBannerPortrait' ?
-                'mediumRectangle' : 'smartBannerPortrait'}
+            <Text onPress={this.showRewarded} style={styles.button}>
+              Show Rewarded Video and preload next
             </Text>
           </TouchableHighlight>
         </View>
-        <AdMobBanner
-          bannerSize={this.state.bannerSize}
-          testDeviceID="EMULATOR"
-          adUnitID="ca-app-pub-3940256099942544/2934735716"
-        />
       </View>
     );
   }
