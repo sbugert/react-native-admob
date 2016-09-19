@@ -226,7 +226,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../../ios/**";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../node_modules/react-native/React/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -240,7 +240,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../../ios/**";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../node_modules/react-native/React/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
