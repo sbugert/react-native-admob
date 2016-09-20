@@ -1,6 +1,7 @@
 package com.sbugert.rnadmob;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -12,6 +13,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.doubleclick.AppEventListener;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -19,9 +21,9 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
 import java.util.Map;
 
-public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGroup> {
+public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGroup> implements AppEventListener {
 
-  public static final String REACT_CLASS = "RNAdMob";
+  public static final String REACT_CLASS = "RNAdMobDFP";
 
   public static final String PROP_BANNER_SIZE = "bannerSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
@@ -36,7 +38,8 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
     EVENT_WILL_PRESENT("onAdViewWillPresentScreen"),
     EVENT_WILL_DISMISS("onAdViewWillDismissScreen"),
     EVENT_DID_DISMISS("onAdViewDidDismissScreen"),
-    EVENT_WILL_LEAVE_APP("onAdViewWillLeaveApplication");
+    EVENT_WILL_LEAVE_APP("onAdViewWillLeaveApplication"),
+    EVENT_ADMOB_EVENT_RECEIVED("onAdmobDispatchAppEvent");
 
     private final String mName;
 
@@ -58,6 +61,16 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
     return REACT_CLASS;
   }
 
+
+  @Override
+  public void onAppEvent(String name, String info) {
+    String message = String.format("Received app event (%s, %s)", name, info);
+    Log.d("PublisherAdBanner", message);
+    WritableMap event = Arguments.createMap();
+    event.putString(name, info);
+    mEventEmitter.receiveEvent(viewID, Events.EVENT_ADMOB_EVENT_RECEIVED.toString(), event);
+  }
+
   @Override
   protected ReactViewGroup createViewInstance(ThemedReactContext themedReactContext) {
     mThemedReactContext = themedReactContext;
@@ -67,9 +80,10 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
     return view;
    }
 
+  int viewID = -1;
   protected void attachNewAdView(final ReactViewGroup view) {
     final PublisherAdView adView = new PublisherAdView(mThemedReactContext);
-
+    adView.setAppEventListener(this);
     // destroy old AdView if present
     PublisherAdView oldAdView = (PublisherAdView) view.getChildAt(0);
     view.removeAllViews();
@@ -79,6 +93,7 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
   }
 
   protected void attachEvents(final ReactViewGroup view) {
+    viewID = view.getId();
     final PublisherAdView adView = (PublisherAdView) view.getChildAt(0);
     adView.setAdListener(new AdListener() {
       @Override
