@@ -118,7 +118,17 @@ For a full example reference to the [example project](Example).
 |`adViewWillDismissScreen()`                     |
 |`adViewDidDismissScreen()`                      |
 |`adViewWillLeaveApplication()`                  |
-|'admobDispatchAppEvent()' [PublisherBanner Only]|
+
+
+#### PublisherBanner
+
+Same as AdMobBanner, except it has an extra event prop:
+
+|'admobDispatchAppEvent()' |
+
+This handles App events that Admob/DFP can send back to the app.
+More info here: https://developers.google.com/mobile-ads-sdk/docs/dfp/android/banner#ios_app-events
+
 
 #### AdMobInterstitials
 
