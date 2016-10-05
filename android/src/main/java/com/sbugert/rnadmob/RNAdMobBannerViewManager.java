@@ -1,6 +1,8 @@
 package com.sbugert.rnadmob;
 
 import android.support.annotation.Nullable;
+import android.view.View.OnLayoutChangeListener;
+import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -51,6 +53,8 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
 
   private ThemedReactContext mThemedReactContext;
   private RCTEventEmitter mEventEmitter;
+  private ReactViewGroup mView;
+  private String mSizeString;
 
   @Override
   public String getName() {
@@ -61,10 +65,19 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
   protected ReactViewGroup createViewInstance(ThemedReactContext themedReactContext) {
     mThemedReactContext = themedReactContext;
     mEventEmitter = themedReactContext.getJSModule(RCTEventEmitter.class);
-    ReactViewGroup view = new ReactViewGroup(themedReactContext);
-    attachNewAdView(view);
-    return view;
-   }
+    mView = new ReactViewGroup(themedReactContext);
+    attachNewAdView(mView);
+
+    mView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+      public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
+          setBannerSize(mView, mSizeString);
+        }
+      }
+    });
+
+    return mView;
+  }
 
   protected void attachNewAdView(final ReactViewGroup view) {
     final AdView adView = new AdView(mThemedReactContext);
@@ -141,6 +154,7 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
 
   @ReactProp(name = PROP_BANNER_SIZE)
   public void setBannerSize(final ReactViewGroup view, final String sizeString) {
+    mSizeString = sizeString;
     AdSize adSize = getAdSizeFromString(sizeString);
 
     // store old ad unit ID (even if not yet present and thus null)
