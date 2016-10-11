@@ -1,7 +1,7 @@
 [![npm version](https://badge.fury.io/js/react-native-admob.svg)](https://badge.fury.io/js/react-native-admob)
 ## react-native-admob
 
-A react-native module for Google AdMob GADBanner and GADInterstitial (react-native v0.19.0 or newer required).
+A react-native module for Google AdMob GADBanner, DFPBanner and GADInterstitial (react-native v0.19.0 or newer required).
 
 The banner is implemented as a component while the interstitial has an imperative API.
 
@@ -60,7 +60,7 @@ Under `protected List<ReactPackage> getPackages() {`:
 ### Usage
 
 ```javascript
-import { AdMobBanner, AdMobInterstitial } from 'react-native-admob'
+import { AdMobBanner, AdMobInterstitial, PublisherBanner} from 'react-native-admob'
 
 // Display a banner
 <AdMobBanner
@@ -68,6 +68,15 @@ import { AdMobBanner, AdMobInterstitial } from 'react-native-admob'
   adUnitID="your-admob-unit-id"
   testDeviceID="EMULATOR"
   didFailToReceiveAdWithError={this.bannerError} />
+
+// Display a DFP Publisher banner
+<PublisherBanner
+  bannerSize="fullBanner"
+  adUnitID="your-admob-unit-id"
+  testDeviceID="EMULATOR"
+  didFailToReceiveAdWithError={this.bannerError}
+  admobDispatchAppEvent={this.adMobEvent} />
+
 
 // Display an interstitial
 AdMobInterstitial.setAdUnitID('your-admob-unit-id');
@@ -101,14 +110,25 @@ For a full example reference to the [example project](Example).
 ##### Events as function props
 *Corresponding to [Ad lifecycle event callbacks](https://developers.google.com/admob/ios/banner)*
 
-| Prop                                          |
-|-----------------------------------------------|
-|`adViewDidReceiveAd()`                         |
-|`didFailToReceiveAdWithError(errorDescription)`|
-|`adViewWillPresentScreen()`                    |
-|`adViewWillDismissScreen()`                    |
-|`adViewDidDismissScreen()`                     |
-|`adViewWillLeaveApplication()`                 |
+| Prop                                           |
+|------------------------------------------------|
+|`adViewDidReceiveAd()`                          |
+|`didFailToReceiveAdWithError(errorDescription)` |
+|`adViewWillPresentScreen()`                     |
+|`adViewWillDismissScreen()`                     |
+|`adViewDidDismissScreen()`                      |
+|`adViewWillLeaveApplication()`                  |
+
+
+#### PublisherBanner
+
+Same as AdMobBanner, except it has an extra event prop:
+
+|'admobDispatchAppEvent()' |
+
+This handles App events that Admob/DFP can send back to the app.
+More info here: https://developers.google.com/mobile-ads-sdk/docs/dfp/android/banner#ios_app-events
+
 
 #### AdMobInterstitials
 
@@ -146,3 +166,4 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
 ### TODO
 - [ ] Support [Ad Targeting](https://developers.google.com/admob/ios/targeting)
 - [ ] Also use interstitial event names for banner
+- [ ] PublisherBanner [DFPBanner/PublisherAdView should be able to accept multiple adSizes. Currently only caters for a single size]

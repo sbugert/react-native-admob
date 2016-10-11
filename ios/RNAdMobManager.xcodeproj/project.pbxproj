@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CB8C04B1D913E00002BC3EF /* RNDFPBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8C04A1D913E00002BC3EF /* RNDFPBannerView.m */; };
+		0CB8C04E1D9143A6002BC3EF /* RNAdMobDFPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8C04D1D9143A6002BC3EF /* RNAdMobDFPManager.m */; };
 		A962C2531CB27DBD00E508A1 /* RNAdMobInterstitial.m in Sources */ = {isa = PBXBuildFile; fileRef = A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */; };
 		A96DA7841C146DA600FC639B /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DA7811C146DA600FC639B /* BannerView.m */; };
 		A96DA7851C146DA600FC639B /* RNAdMobManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DA7831C146DA600FC639B /* RNAdMobManager.m */; };
@@ -25,6 +27,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0CB8C0491D913E00002BC3EF /* RNDFPBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNDFPBannerView.h; sourceTree = SOURCE_ROOT; };
+		0CB8C04A1D913E00002BC3EF /* RNDFPBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNDFPBannerView.m; sourceTree = SOURCE_ROOT; };
+		0CB8C04C1D9143A6002BC3EF /* RNAdMobDFPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdMobDFPManager.h; sourceTree = SOURCE_ROOT; };
+		0CB8C04D1D9143A6002BC3EF /* RNAdMobDFPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAdMobDFPManager.m; sourceTree = SOURCE_ROOT; };
 		A962C2511CB27DBD00E508A1 /* RNAdMobInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdMobInterstitial.h; sourceTree = SOURCE_ROOT; };
 		A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = RNAdMobInterstitial.m; sourceTree = SOURCE_ROOT; };
 		A96DA7741C146D7200FC639B /* libRNAdMobManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNAdMobManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,12 +70,16 @@
 		A96DA7761C146D7200FC639B /* RNAdMobManager */ = {
 			isa = PBXGroup;
 			children = (
+				0CB8C04C1D9143A6002BC3EF /* RNAdMobDFPManager.h */,
+				0CB8C04D1D9143A6002BC3EF /* RNAdMobDFPManager.m */,
 				A96DA7801C146DA600FC639B /* BannerView.h */,
 				A96DA7811C146DA600FC639B /* BannerView.m */,
 				A96DA7821C146DA600FC639B /* RNAdMobManager.h */,
 				A96DA7831C146DA600FC639B /* RNAdMobManager.m */,
 				A962C2511CB27DBD00E508A1 /* RNAdMobInterstitial.h */,
 				A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */,
+				0CB8C0491D913E00002BC3EF /* RNDFPBannerView.h */,
+				0CB8C04A1D913E00002BC3EF /* RNDFPBannerView.m */,
 			);
 			path = RNAdMobManager;
 			sourceTree = "<group>";
@@ -132,8 +142,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A962C2531CB27DBD00E508A1 /* RNAdMobInterstitial.m in Sources */,
+				0CB8C04B1D913E00002BC3EF /* RNDFPBannerView.m in Sources */,
 				A96DA7841C146DA600FC639B /* BannerView.m in Sources */,
 				A96DA7851C146DA600FC639B /* RNAdMobManager.m in Sources */,
+				0CB8C04E1D9143A6002BC3EF /* RNAdMobDFPManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,7 +238,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../../ios/**";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../node_modules/react-native/React/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -240,7 +252,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../../ios/**";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../react-native/React/**",
+					"$(SRCROOT)/../../../node_modules/react-native/React/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
