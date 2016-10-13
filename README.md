@@ -11,14 +11,14 @@ The banner is implemented as a component while the interstitial has an imperativ
 
 1. `npm i react-native-admob -S`
 2. `rnpm link`
-3. Add [Google AdMob Framework](https://developers.google.com/admob/ios/quick-start#manually_using_the_sdk_download) to your Xcode project. This is only needed for iOS and guarantees your app is using the newest admob version.
+3. Add [Google AdMob Framework](https://firebase.google.com/docs/ios/setup#frameworks) to your Xcode project with CocoaPods or manually. This is only needed for iOS and guarantees your app is using the newest admob version.
 
 #### Manual Installation
 
 ##### iOS
 
 1. `npm i react-native-admob -S`
-2. Add [Google AdMob Framework](https://developers.google.com/admob/ios/quick-start#manually_using_the_sdk_download) to your Xcode project.
+2. Add [Google AdMob Framework](https://firebase.google.com/docs/ios/setup#frameworks) to your Xcode project with CocoaPods or manually. This is only needed for iOS and guarantees your app is using the newest admob version.
 3. Add react-native-admob static library to your Xcode project like explained [here](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#manual-linking). (Step 3 of this guide is not needed)
 
 ##### Android
