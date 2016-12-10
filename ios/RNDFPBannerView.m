@@ -144,7 +144,7 @@ didReceiveAppEvent:(NSString *)name
 - (void)adView:(DFPBannerView *)adView
 didFailToReceiveAdWithError:(GADRequestError *)error {
     if (self.onDidFailToReceiveAdWithError) {
-        self.onDidFailToReceiveAdWithError(@{ @"error": [error localizedDescription] })
+        self.onDidFailToReceiveAdWithError(@{ @"error": [error localizedDescription] });
     }
 }
 

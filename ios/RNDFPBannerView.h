@@ -1,3 +1,4 @@
+#import "RCTComponent.h"
 #import "RCTEventDispatcher.h"
 @import GoogleMobileAds;
 
