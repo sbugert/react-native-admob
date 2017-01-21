@@ -1,7 +1,7 @@
 #import "RNDFPBannerView.h"
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 #import "UIView+React.h"
-#import "RCTLog.h"
+#import <React/RCTLog.h>
 
 @implementation RNDFPBannerView {
     DFPBannerView  *_bannerView;

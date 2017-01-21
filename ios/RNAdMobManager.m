@@ -1,7 +1,7 @@
 #import "RNAdMobManager.h"
 #import "BannerView.h"
 
-#import "RCTBridge.h"
+#import <React/RCTBridge.h>
 
 @implementation RNAdMobManager
 
