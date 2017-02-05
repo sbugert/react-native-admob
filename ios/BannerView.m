@@ -1,7 +1,7 @@
 #import "BannerView.h"
-#import "RCTBridgeModule.h"
-#import "UIView+React.h"
-#import "RCTLog.h"
+#import <React/RCTBridgeModule.h>
+#import <React/UIView+React.h>
+#import <React/RCTLog.h>
 
 @implementation BannerView {
   GADBannerView  *_bannerView;
