@@ -1,6 +1,6 @@
 #import "BannerView.h"
 #import <React/RCTBridgeModule.h>
-#import "UIView+React.h"
+#import <React/UIView+React.h>
 #import <React/RCTLog.h>
 
 @implementation BannerView {
