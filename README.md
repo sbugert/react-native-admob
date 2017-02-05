@@ -7,10 +7,10 @@ The banner is implemented as a component while the interstitial has an imperativ
 
 ### Installation
 
-#### With [`rnpm`](https://github.com/rnpm/rnpm) (recommended)
+#### Automatic Installation (recommended)
 
 1. `npm i react-native-admob -S`
-2. `rnpm link`
+2. `react-native link`
 3. Add [Google AdMob Framework](https://firebase.google.com/docs/ios/setup#frameworks) to your Xcode project with CocoaPods or manually. This is only needed for iOS and guarantees your app is using the newest admob version.
 
 #### Manual Installation
@@ -42,9 +42,24 @@ dependencies {
 }
 ```
 
-**MainActivity.java**
+#### RN < 0.29
 
-On top, where imports are:
+In **MainActivity.java** on top, where imports are:
+```java
+import com.sbugert.rnadmob.RNAdMobPackage;
+```
+
+Under `protected List<ReactPackage> getPackages() {`:  
+```java
+  return Arrays.<ReactPackage>asList(
+    new MainReactPackage(),
+    new RNAdMobPackage()
+  );
+```
+
+#### RN >= 0.29
+
+In **MainAplication.java** on top, where imports are:
 ```java
 import com.sbugert.rnadmob.RNAdMobPackage;
 ```
@@ -85,7 +100,6 @@ AdMobInterstitial.requestAd(AdMobInterstitial.showAd);
 ```
 
 For a full example reference to the [example project](Example).
-
 
 ### Reference
 
