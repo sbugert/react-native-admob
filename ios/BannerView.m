@@ -46,12 +46,7 @@
     GADAdSize size = [self getAdSizeFromString:_bannerSize];
     _bannerView = [[GADBannerView alloc] initWithAdSize:size];
     if(!CGRectEqualToRect(self.bounds, _bannerView.bounds)) {
-      if (self.onSizeChange) {
-        self.onSizeChange(@{
-               @"width": [NSNumber numberWithFloat: _bannerView.bounds.size.width],
-               @"height": [NSNumber numberWithFloat: _bannerView.bounds.size.height]
-        });
-      }
+      [self callOnSizeChange];
     }
     _bannerView.delegate = self;
     _bannerView.adUnitID = _adUnitID;
@@ -66,6 +61,15 @@
     }
 
     [_bannerView loadRequest:request];
+  }
+}
+
+-(void)callOnSizeChange {
+  if (self.onSizeChange) {
+    self.onSizeChange(@{
+      @"width": [NSNumber numberWithFloat: _bannerView.bounds.size.width],
+      @"height": [NSNumber numberWithFloat: _bannerView.bounds.size.height]
+    });
   }
 }
 
@@ -102,6 +106,14 @@
     }
 
     [self loadBanner];
+  }
+}
+
+- (void)setOnSizeChange:(RCTBubblingEventBlock)onSizeChange
+{
+  _onSizeChange = onSizeChange;
+  if (_bannerView) {
+    [self callOnSizeChange];
   }
 }
 

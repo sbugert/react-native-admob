@@ -47,12 +47,7 @@
         _bannerView = [[DFPBannerView alloc] initWithAdSize:size];
         [_bannerView setAppEventDelegate:self]; //added Admob event dispatch listener
         if(!CGRectEqualToRect(self.bounds, _bannerView.bounds)) {
-            if (self.onSizeChange) {
-                self.onSizeChange(@{
-                    @"width": [NSNumber numberWithFloat: _bannerView.bounds.size.width],
-                    @"height": [NSNumber numberWithFloat: _bannerView.bounds.size.height]
-                });
-            }
+            [self callOnSizeChange];
         }
         _bannerView.delegate = self;
         _bannerView.adUnitID = _adUnitID;
@@ -70,6 +65,14 @@
     }
 }
 
+-(void)callOnSizeChange {
+  if (self.onSizeChange) {
+    self.onSizeChange(@{
+      @"width": [NSNumber numberWithFloat: _bannerView.bounds.size.width],
+      @"height": [NSNumber numberWithFloat: _bannerView.bounds.size.height]
+    });
+  }
+}
 
 - (void)adView:(DFPBannerView *)banner
 didReceiveAppEvent:(NSString *)name
@@ -114,6 +117,14 @@ didReceiveAppEvent:(NSString *)name
 
         [self loadBanner];
     }
+}
+
+- (void)setOnSizeChange:(RCTBubblingEventBlock)onSizeChange
+{
+  _onSizeChange = onSizeChange;
+  if (_bannerView) {
+    [self callOnSizeChange];
+  }
 }
 
 -(void)layoutSubviews
