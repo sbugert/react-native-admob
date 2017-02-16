@@ -1,23 +1,11 @@
 #import "RNDFPBannerView.h"
-#import "RCTBridgeModule.h"
-#import "UIView+React.h"
-#import "RCTLog.h"
+#import <React/RCTBridgeModule.h>
+#import <React/UIView+React.h>
+#import <React/RCTLog.h>
 
 @implementation RNDFPBannerView {
     DFPBannerView  *_bannerView;
-    RCTEventDispatcher *_eventDispatcher;
 }
-
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
-{
-    if ((self = [super initWithFrame:CGRectZero])) {
-        _eventDispatcher = eventDispatcher;
-    }
-    return self;
-}
-
-RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
-RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
 
 - (void)insertReactSubview:(UIView *)view atIndex:(NSInteger)atIndex
 {
@@ -59,13 +47,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
         _bannerView = [[DFPBannerView alloc] initWithAdSize:size];
         [_bannerView setAppEventDelegate:self]; //added Admob event dispatch listener
         if(!CGRectEqualToRect(self.bounds, _bannerView.bounds)) {
-            [_eventDispatcher
-             sendInputEventWithName:@"onSizeChange"
-             body:@{
-                    @"target": self.reactTag,
-                    @"width": [NSNumber numberWithFloat: _bannerView.bounds.size.width],
-                    @"height": [NSNumber numberWithFloat: _bannerView.bounds.size.height]
-                    }];
+            [self callOnSizeChange];
         }
         _bannerView.delegate = self;
         _bannerView.adUnitID = _adUnitID;
@@ -78,11 +60,19 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
                 request.testDevices = @[_testDeviceID];
             }
         }
-        
+
         [_bannerView loadRequest:request];
     }
 }
 
+-(void)callOnSizeChange {
+  if (self.onSizeChange) {
+    self.onSizeChange(@{
+      @"width": [NSNumber numberWithFloat: _bannerView.bounds.size.width],
+      @"height": [NSNumber numberWithFloat: _bannerView.bounds.size.height]
+    });
+  }
+}
 
 - (void)adView:(DFPBannerView *)banner
 didReceiveAppEvent:(NSString *)name
@@ -90,7 +80,9 @@ didReceiveAppEvent:(NSString *)name
     NSLog(@"Received app event (%@, %@)", name, info);
     NSMutableDictionary *myDictionary = [[NSMutableDictionary alloc] init];
     myDictionary[name] = info;
-    [_eventDispatcher sendInputEventWithName:@"onAdmobDispatchAppEvent" body:@{ @"target": self.reactTag, name: info }];
+    if (self.onAdmobDispatchAppEvent) {
+        self.onAdmobDispatchAppEvent(@{ name: info });
+    }
 }
 
 - (void)setBannerSize:(NSString *)bannerSize
@@ -104,8 +96,6 @@ didReceiveAppEvent:(NSString *)name
     }
 }
 
-
-
 - (void)setAdUnitID:(NSString *)adUnitID
 {
     if(![adUnitID isEqual:_adUnitID]) {
@@ -113,7 +103,7 @@ didReceiveAppEvent:(NSString *)name
         if (_bannerView) {
             [_bannerView removeFromSuperview];
         }
-        
+
         [self loadBanner];
     }
 }
@@ -124,60 +114,80 @@ didReceiveAppEvent:(NSString *)name
         if (_bannerView) {
             [_bannerView removeFromSuperview];
         }
-        
+
         [self loadBanner];
     }
+}
+
+- (void)setOnSizeChange:(RCTBubblingEventBlock)onSizeChange
+{
+  _onSizeChange = onSizeChange;
+  if (_bannerView) {
+    [self callOnSizeChange];
+  }
 }
 
 -(void)layoutSubviews
 {
     [super layoutSubviews ];
-    
-    _bannerView.frame = CGRectMake(
-                                   self.bounds.origin.x,
-                                   self.bounds.origin.x,
-                                   _bannerView.frame.size.width,
-                                   _bannerView.frame.size.height);
+
+    self.frame = CGRectMake(
+       self.bounds.origin.x,
+       self.bounds.origin.x,
+       _bannerView.frame.size.width,
+       _bannerView.frame.size.height);
+
     [self addSubview:_bannerView];
 }
 
 - (void)removeFromSuperview
 {
-    _eventDispatcher = nil;
     [super removeFromSuperview];
 }
 
 /// Tells the delegate an ad request loaded an ad.
 - (void)adViewDidReceiveAd:(DFPBannerView *)adView {
-    [_eventDispatcher sendInputEventWithName:@"onAdViewDidReceiveAd" body:@{ @"target": self.reactTag }];
+    if (self.onAdViewDidReceiveAd) {
+        self.onAdViewDidReceiveAd(@{});
+    }
 }
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(DFPBannerView *)adView
 didFailToReceiveAdWithError:(GADRequestError *)error {
-    [_eventDispatcher sendInputEventWithName:@"onDidFailToReceiveAdWithError" body:@{ @"target": self.reactTag, @"error": [error localizedDescription] }];
+    if (self.onDidFailToReceiveAdWithError) {
+        self.onDidFailToReceiveAdWithError(@{ @"error": [error localizedDescription] });
+    }
 }
 
 /// Tells the delegate that a full screen view will be presented in response
 /// to the user clicking on an ad.
 - (void)adViewWillPresentScreen:(DFPBannerView *)adView {
-    [_eventDispatcher sendInputEventWithName:@"onAdViewWillPresentScreen" body:@{ @"target": self.reactTag }];
+    if (self.onAdViewWillPresentScreen) {
+        self.onAdViewWillPresentScreen(@{});
+    }
 }
 
 /// Tells the delegate that the full screen view will be dismissed.
 - (void)adViewWillDismissScreen:(DFPBannerView *)adView {
-    [_eventDispatcher sendInputEventWithName:@"onAdViewWillDismissScreen" body:@{ @"target": self.reactTag }];
+    if (self.onAdViewWillDismissScreen) {
+        self.onAdViewWillDismissScreen(@{});
+    }
 }
 
 /// Tells the delegate that the full screen view has been dismissed.
 - (void)adViewDidDismissScreen:(DFPBannerView *)adView {
-    [_eventDispatcher sendInputEventWithName:@"onAdViewDidDismissScreen" body:@{ @"target": self.reactTag }];
+    if (self.onAdViewDidDismissScreen) {
+        self.onAdViewDidDismissScreen(@{});
+    }
 }
 
 /// Tells the delegate that a user click will open another app (such as
 /// the App Store), backgrounding the current app.
 - (void)adViewWillLeaveApplication:(DFPBannerView *)adView {
-    [_eventDispatcher sendInputEventWithName:@"onAdViewWillLeaveApplication" body:@{ @"target": self.reactTag }];
+    if (self.onAdViewWillLeaveApplication) {
+        self.onAdViewWillLeaveApplication(@{});
+    }
 }
 
 @end
