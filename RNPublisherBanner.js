@@ -21,6 +21,9 @@ export default class PublisherBanner extends React.Component {
   onSizeChange(event) {
     const { height, width } = event.nativeEvent;
     this.setState({ style: { width, height } });
+    if (typeof this.props.onSizeChange === 'function') {
+      this.props.onSizeChange(width, height)
+    }
   }
 
   render() {
