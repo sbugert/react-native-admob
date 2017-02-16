@@ -32,7 +32,7 @@ export default class PublisherBanner extends React.Component {
       <View style={this.props.style}>
         <RNBanner
           style={this.state.style}
-          onSizeChange={this.onSizeChange.bind(this)}
+          onSizeChange={this.onSizeChange}
           onAdViewDidReceiveAd={this.props.adViewDidReceiveAd}
           onDidFailToReceiveAdWithError={(event) => didFailToReceiveAdWithError(event.nativeEvent.error)}
           onAdViewWillPresentScreen={this.props.adViewWillPresentScreen}
