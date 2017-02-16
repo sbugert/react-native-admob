@@ -1,3 +1,4 @@
+#import <React/RCTComponent.h>
 #import <React/RCTEventDispatcher.h>
 @import GoogleMobileAds;
 
@@ -9,7 +10,14 @@
 @property (nonatomic, copy) NSString *adUnitID;
 @property (nonatomic, copy) NSString *testDeviceID;
 
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
+@property (nonatomic, copy) RCTBubblingEventBlock onSizeChange;
+@property (nonatomic, copy) RCTBubblingEventBlock onAdViewDidReceiveAd;
+@property (nonatomic, copy) RCTBubblingEventBlock onDidFailToReceiveAdWithError;
+@property (nonatomic, copy) RCTBubblingEventBlock onAdViewWillPresentScreen;
+@property (nonatomic, copy) RCTBubblingEventBlock onAdViewWillDismissScreen;
+@property (nonatomic, copy) RCTBubblingEventBlock onAdViewDidDismissScreen;
+@property (nonatomic, copy) RCTBubblingEventBlock onAdViewWillLeaveApplication;
+
 - (GADAdSize)getAdSizeFromString:(NSString *)bannerSize;
 - (void)loadBanner;
 
