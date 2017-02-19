@@ -66,7 +66,7 @@ In **MainAplication.java** on top, where imports are:
 import com.sbugert.rnadmob.RNAdMobPackage;
 ```
 
-Under `protected List<ReactPackage> getPackages() {`:  
+Under `protected List<ReactPackage> getPackages() {`:
 ```java
   return Arrays.<ReactPackage>asList(
     new MainReactPackage(),
@@ -88,20 +88,20 @@ import {
 <AdMobBanner
   bannerSize="fullBanner"
   adUnitID="your-admob-unit-id"
-  testDeviceID="EMULATOR"
+  testDeviceIDs={['EMULATOR']}
   didFailToReceiveAdWithError={this.bannerError} />
 
 // Display a DFP Publisher banner
 <PublisherBanner
   bannerSize="fullBanner"
   adUnitID="your-admob-unit-id"
-  testDeviceID="EMULATOR"
+  testDeviceIDs={['EMULATOR']}
   didFailToReceiveAdWithError={this.bannerError}
   admobDispatchAppEvent={this.adMobEvent} />
 
 // Display an interstitial
 AdMobInterstitial.setAdUnitID('your-admob-unit-id');
-AdMobInterstitial.setTestDeviceID('EMULATOR');
+AdMobInterstitial.setTestDeviceIDs(['EMULATOR']);
 AdMobInterstitial.requestAd(AdMobInterstitial.showAd);
 
 // Display a rewarded ad
@@ -161,12 +161,12 @@ More info here: https://developers.google.com/mobile-ads-sdk/docs/dfp/android/ba
 | Name                      | Description                                                                                                     |
 |---------------------------|-----------------------------------------------------------------------------------------------------------------|
 |`setAdUnitID(adUnitID)`    | sets the AdUnit ID for all future ad requests.                                                                  |
-|`setTestDeviceID(deviceID)`| sets the test device ID                                                                                         |
+|`setTestDeviceIDs(deviceIDs)`| sets the test device IDs                                                                                         |
 |`requestAd(callback)`      | requests an interstitial and calls callback when `interstitialDidLoad` or`interstitialDidFailToLoad` event fires|
 |`showAd(callback)`         | shows an interstitial if it is ready and calls callback when `interstitialDidOpen` event fires                  |
 |`isReady(callback)`        | calls callback with boolean whether interstitial is ready to be shown                                           |
 
-*For simulators/emulators you can use `'EMULATOR'` for the test device ID.*  
+*For simulators/emulators you can use `'EMULATOR'` for the test device ID.*
 *Note: `tryShowNewInterstitial()` is deprecated as of v1.1.0 and can be replaced by calling `requestAd` with `showAd` as callback.*
 
 ##### Events

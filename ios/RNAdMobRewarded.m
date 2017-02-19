@@ -2,7 +2,7 @@
 
 @implementation RNAdMobRewarded {
   NSString *_adUnitID;
-  NSString *_testDeviceID;
+  NSArray *_testDeviceIDs;
   RCTResponseSenderBlock _requestAdCallback;
   RCTResponseSenderBlock _showAdCallback;
 }
@@ -29,9 +29,15 @@ RCT_EXPORT_METHOD(setAdUnitID:(NSString *)adUnitID)
   _adUnitID = adUnitID;
 }
 
-RCT_EXPORT_METHOD(setTestDeviceID:(NSString *)testDeviceID)
+RCT_EXPORT_METHOD(setTestDeviceIDs:(NSArray *)testDeviceIDs)
 {
-  _testDeviceID = testDeviceID;
+  for (NSString* testDeviceID in testDeviceIDs){
+    if (testDeviceID == (id)[NSNull null] || testDeviceID.length == 0) {
+      RCTLogError(@"Test device ID cannot be null.");
+      return;
+    }
+  }
+  _testDeviceIDs = testDeviceIDs;
 }
 
 RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
@@ -39,13 +45,19 @@ RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
   _requestAdCallback = callback;
   [GADRewardBasedVideoAd sharedInstance].delegate = self;
   GADRequest *request = [GADRequest request];
-  if(_testDeviceID) {
-    if([_testDeviceID isEqualToString:@"EMULATOR"]) {
-      request.testDevices = @[kGADSimulatorID];
-    } else {
-      request.testDevices = @[_testDeviceID];
+
+  if (_testDeviceIDs) {
+    NSMutableArray *testDevices = [NSMutableArray new];
+    for (NSString* testDeviceID in _testDeviceIDs){
+      if ([testDeviceID isEqualToString:@"EMULATOR"]) {
+        [testDevices addObject:kGADSimulatorID];
+      } else {
+        [testDevices addObject:testDeviceID];
+      }
     }
+    request.testDevices = testDevices;
   }
+
   [[GADRewardBasedVideoAd sharedInstance] loadRequest:request
                                          withAdUnitID:_adUnitID];
 }

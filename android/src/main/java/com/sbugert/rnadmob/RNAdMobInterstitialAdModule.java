@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -18,7 +19,7 @@ import com.google.android.gms.ads.InterstitialAd;
 public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
   InterstitialAd mInterstitialAd;
   String adUnitID;
-  String testDeviceID;
+  ReadableArray testDeviceIDs;
   Callback requestAdCallback;
   Callback showAdCallback;
 
@@ -89,8 +90,8 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void setTestDeviceID(String testDeviceID) {
-    this.testDeviceID = testDeviceID;
+  public void setTestDeviceIDs(ReadableArray testDeviceIDs) {
+    this.testDeviceIDs = testDeviceIDs;
   }
 
   @ReactMethod
@@ -103,11 +104,16 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
         } else {
           requestAdCallback = callback;
           AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-          if (testDeviceID != null){
-            if (testDeviceID.equals("EMULATOR")) {
-              adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-            } else {
-              adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+          if (testDeviceIDs != null) {
+            for (int i = 0; i < testDeviceIDs.size(); i++) {
+              String testDeviceID = testDeviceIDs.getString(i);
+              if (testDeviceID != null) {
+                if (testDeviceID.equals("EMULATOR")) {
+                  adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+                } else {
+                  adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+                }
+              }
             }
           }
           AdRequest adRequest = adRequestBuilder.build();

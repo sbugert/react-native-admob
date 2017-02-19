@@ -57,7 +57,7 @@ const removeAllListeners = () => {
 const tryShowNewInterstitial = (testID) => {
   console.warn(`tryShowNewInterstitial method is deprecated and will be removed in the next major release, please use requestAd() and showAd() directly.\n\nExample: AdMobInterstitial.requestAd(AdMobInterstitial.showAd)`);
   if (testID) {
-    RNAdMobInterstitial.setTestDeviceID(testID);
+    RNAdMobInterstitial.setTestDeviceIDs([testID]);
   }
 
   RNAdMobInterstitial.isReady((isReady) => {
@@ -77,6 +77,10 @@ module.exports = {
   addEventListener,
   removeEventListener,
   removeAllListeners,
+  setTestDeviceID: (id) => {
+    RNAdMobInterstitial.setTestDeviceIDs([id]);
+    console.warn(`setTestDeviceID will be deprecated soon. Please use setTestDeviceIDs instead.`);
+  },
   setAdUnitId: (id) => {
     RNAdMobInterstitial.setAdUnitID(id);
     console.warn(`setAdUnitId will be deprecated soon. Please use setAdUnitID instead.`);

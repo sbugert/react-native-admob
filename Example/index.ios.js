@@ -12,7 +12,7 @@ import { AdMobRewarded } from 'react-native-admob';
 export default class Example extends Component {
 
   componentDidMount() {
-    AdMobRewarded.setTestDeviceID('EMULATOR');
+    AdMobRewarded.setTestDeviceID(['EMULATOR']);
     AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
 
     AdMobRewarded.addEventListener('rewardedVideoDidRewardUser',
@@ -58,6 +58,12 @@ export default class Example extends Component {
             </Text>
           </TouchableHighlight>
         </View>
+
+        <AdMobBanner
+          bannerSize={this.state.bannerSize}
+          testDeviceIDs={['EMULATOR']}
+          adUnitID="ca-app-pub-3940256099942544/2934735716"
+        />
       </View>
     );
   }
