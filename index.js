@@ -4,7 +4,7 @@ import {
 
 import AdMobBanner from './RNAdMobBanner';
 import AdMobInterstitial from './RNAdMobInterstitial';
-import AdMobRewarded from './RNAdMobRewarded';
 import PublisherBanner from './RNPublisherBanner';
+import AdMobRewarded from './RNAdMobRewarded';
 
 module.exports = { AdMobBanner, AdMobInterstitial, PublisherBanner, AdMobRewarded };
