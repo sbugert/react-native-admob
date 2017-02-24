@@ -1,7 +1,11 @@
 #import "RNAdMobDFPManager.h"
 #import "RNDFPBannerView.h"
 
+#if __has_include(<React/RCTBridge.h>)
+#import <React/RCTBridge.h>
+#else
 #import "RCTBridge.h"
+#endif
 
 @implementation RNAdMobDFPManager
 
@@ -34,4 +38,3 @@ RCT_EXPORT_VIEW_PROPERTY(onAdViewDidDismissScreen, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdViewWillLeaveApplication, RCTBubblingEventBlock)
 
 @end
-

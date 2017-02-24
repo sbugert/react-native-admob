@@ -7,10 +7,10 @@ The banner is implemented as a component while the interstitial has an imperativ
 
 ### Installation
 
-#### With [`rnpm`](https://github.com/rnpm/rnpm) (recommended)
+#### Automatic Installation (recommended)
 
 1. `npm i react-native-admob -S`
-2. `rnpm link`
+2. `react-native link`
 3. Add [Google AdMob Framework](https://firebase.google.com/docs/ios/setup#frameworks) to your Xcode project with CocoaPods or manually. This is only needed for iOS and guarantees your app is using the newest admob version.
 
 #### Manual Installation
@@ -42,9 +42,26 @@ dependencies {
 }
 ```
 
-**MainActivity.java**
+**MainApplication.java**
 
-On top, where imports are:
+#### RN < 0.29
+
+In **MainActivity.java** on top, where imports are:
+```java
+import com.sbugert.rnadmob.RNAdMobPackage;
+```
+
+Under `protected List<ReactPackage> getPackages() {`:  
+```java
+  return Arrays.<ReactPackage>asList(
+    new MainReactPackage(),
+    new RNAdMobPackage()
+  );
+```
+
+#### RN >= 0.29
+
+In **MainAplication.java** on top, where imports are:
 ```java
 import com.sbugert.rnadmob.RNAdMobPackage;
 ```
@@ -60,7 +77,12 @@ Under `protected List<ReactPackage> getPackages() {`:
 ### Usage
 
 ```javascript
-import { AdMobBanner, AdMobInterstitial, PublisherBanner} from 'react-native-admob'
+import { 
+  AdMobBanner, 
+  AdMobInterstitial, 
+  PublisherBanner,
+  AdMobRewarded
+} from 'react-native-admob'
 
 // Display a banner
 <AdMobBanner
@@ -77,15 +99,17 @@ import { AdMobBanner, AdMobInterstitial, PublisherBanner} from 'react-native-adm
   didFailToReceiveAdWithError={this.bannerError}
   admobDispatchAppEvent={this.adMobEvent} />
 
-
 // Display an interstitial
 AdMobInterstitial.setAdUnitID('your-admob-unit-id');
 AdMobInterstitial.setTestDeviceID('EMULATOR');
 AdMobInterstitial.requestAd(AdMobInterstitial.showAd);
+
+// Display a rewarded ad
+AdMobRewarded.setAdUnitID('your-admob-unit-id');
+AdMobRewarded.requestAd(AdMobRewarded.showAd);
 ```
 
 For a full example reference to the [example project](Example).
-
 
 ### Reference
 
@@ -159,6 +183,30 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
 |`interstitialWillLeaveApplication`        |`interstitialWillLeaveApplication`|`onAdLeftApplication`|
 
 *Note that `interstitialWillLeaveApplication` and `onAdLeftApplication` are not exactly the same but share one event in this library.*
+
+
+#### AdMobRewarded
+
+Opens a rewarded AdMob ad.
+
+##### Methods
+| Name                      | Description                                                                                                     |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------|
+|`setAdUnitID(adUnitID)`    | sets the AdUnit ID for all future ad requests.                                                                  |
+|`setTestDeviceID(deviceID)`| sets the test device ID                                                                                         |
+|`requestAd(callback)`      | requests a rewarded ad|
+|`showAd(callback)`         | shows a rewarded if it is ready                  |
+
+##### Events
+
+| iOS                                        | *this library*                    | Android                          |
+|--------------------------------------------|-----------------------------------|----------------------------------|
+|`rewardBasedVideoAd:didRewardUserWithReward`|`rewardedVideoDidRewardUser`       |`onRewarded`                      |
+|`rewardBasedVideoAdDidReceiveAd`            |`rewardedVideoDidLoad`             |`onRewardedVideoAdLoaded`         |
+|`rewardBasedVideoAd:didFailToLoadWithError` |`rewardedVideoDidFailToLoad`       |`onRewardedVideoAdFailedToLoad`   |
+|`rewardBasedVideoAdDidOpen`                 |`rewardedVideoDidOpen`             |`onRewardedVideoAdOpened`         |
+|`rewardBasedVideoAdDidClose`                |`rewardedVideoDidClose`            |`onRewardedVideoAdClosed`         |
+|`rewardBasedVideoAdWillLeaveApplication`    |`rewardedVideoWillLeaveApplication`|`onRewardedVideoAdLeftApplication`|
 
 
 ---

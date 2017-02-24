@@ -1,7 +1,14 @@
 #import "BannerView.h"
+
+#if __has_include(<React/RCTBridgeModule.h>)
+#import <React/RCTBridgeModule.h>
+#import <React/UIView+React.h>
+#import <React/RCTLog.h>
+#else
 #import "RCTBridgeModule.h"
 #import "UIView+React.h"
 #import "RCTLog.h"
+#endif
 
 @implementation BannerView {
   GADBannerView  *_bannerView;
@@ -35,13 +42,13 @@
     return kGADAdSizeSmartBannerPortrait;
   } else if ([bannerSize isEqualToString:@"smartBannerLandscape"]) {
     return kGADAdSizeSmartBannerLandscape;
-  }
-  else {
+  } else {
     return kGADAdSizeBanner;
   }
 }
 
--(void)loadBanner {
+-(void)loadBanner 
+{
   if (_adUnitID && _bannerSize) {
     GADAdSize size = [self getAdSizeFromString:_bannerSize];
     _bannerView = [[GADBannerView alloc] initWithAdSize:size];
@@ -64,7 +71,6 @@
         request.testDevices = @[_testDeviceID];
       }
     }
-
     [_bannerView loadRequest:request];
   }
 }
@@ -80,8 +86,6 @@
   }
 }
 
-
-
 - (void)setAdUnitID:(NSString *)adUnitID
 {
   if(![adUnitID isEqual:_adUnitID]) {
@@ -89,10 +93,10 @@
     if (_bannerView) {
       [_bannerView removeFromSuperview];
     }
-
     [self loadBanner];
   }
 }
+
 - (void)setTestDeviceID:(NSString *)testDeviceID
 {
   if(![testDeviceID isEqual:_testDeviceID]) {
@@ -100,16 +104,14 @@
     if (_bannerView) {
       [_bannerView removeFromSuperview];
     }
-
     [self loadBanner];
   }
 }
 
 -(void)layoutSubviews
 {
-  [super layoutSubviews ];
-
-  _bannerView.frame = CGRectMake(
+  [super layoutSubviews];  
+  self.frame = CGRectMake(
     self.bounds.origin.x,
     self.bounds.origin.x,
     _bannerView.frame.size.width,

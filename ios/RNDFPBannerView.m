@@ -1,7 +1,14 @@
 #import "RNDFPBannerView.h"
+
+#if __has_include(<React/RCTBridgeModule.h>)
+#import <React/RCTBridgeModule.h>
+#import <React/UIView+React.h>
+#import <React/RCTLog.h>
+#else
 #import "RCTBridgeModule.h"
 #import "UIView+React.h"
 #import "RCTLog.h"
+#endif
 
 @implementation RNDFPBannerView {
     DFPBannerView  *_bannerView;
@@ -65,7 +72,7 @@
                 request.testDevices = @[_testDeviceID];
             }
         }
-        
+
         [_bannerView loadRequest:request];
     }
 }
@@ -100,7 +107,7 @@ didReceiveAppEvent:(NSString *)name
         if (_bannerView) {
             [_bannerView removeFromSuperview];
         }
-        
+
         [self loadBanner];
     }
 }
@@ -111,7 +118,6 @@ didReceiveAppEvent:(NSString *)name
         if (_bannerView) {
             [_bannerView removeFromSuperview];
         }
-        
         [self loadBanner];
     }
 }
@@ -119,7 +125,7 @@ didReceiveAppEvent:(NSString *)name
 -(void)layoutSubviews
 {
     [super layoutSubviews ];
-    
+
     _bannerView.frame = CGRectMake(
                                    self.bounds.origin.x,
                                    self.bounds.origin.x,
