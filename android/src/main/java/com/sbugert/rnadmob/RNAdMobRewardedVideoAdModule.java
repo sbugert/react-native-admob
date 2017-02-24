@@ -40,7 +40,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         reward.putInt("amount", rewardItem.getAmount());
         reward.putString("type", rewardItem.getType());
 
-        sendEvent("didRewardUserWithReward", reward);
+        sendEvent("rewardedVideoDidRewardUser", reward);
     }
 
     @Override

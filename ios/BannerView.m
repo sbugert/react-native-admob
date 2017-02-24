@@ -71,7 +71,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     _bannerView.rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
     GADRequest *request = [GADRequest request];
     if(_testDeviceID) {
-      if(_testDeviceID == @"EMULATOR") {
+      if([_testDeviceID isEqualToString:@"EMULATOR"]) {
         request.testDevices = @[kGADSimulatorID];
       } else {
         request.testDevices = @[_testDeviceID];
@@ -113,7 +113,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     if (_bannerView) {
       [_bannerView removeFromSuperview];
     }
-    
+
     [self loadBanner];
   }
 }

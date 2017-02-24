@@ -47,7 +47,7 @@ RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
     }
   }
   [[GADRewardBasedVideoAd sharedInstance] loadRequest:request
-                                          withAdUnitID:_adUnitID];
+                                         withAdUnitID:_adUnitID];
 }
 
 RCT_EXPORT_METHOD(showAd:(RCTResponseSenderBlock)callback)
@@ -71,7 +71,7 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd
    didRewardUserWithReward:(GADAdReward *)reward {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@" " body:@{@"type": reward.type, @"amount": reward.amount}];
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidRewardUser" body:@{@"type": reward.type, @"amount": reward.amount}];
 }
 
 - (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {

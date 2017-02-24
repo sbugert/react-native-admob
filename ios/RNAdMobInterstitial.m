@@ -39,7 +39,7 @@ RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
 
     GADRequest *request = [GADRequest request];
     if(_testDeviceID) {
-      if(_testDeviceID == @"EMULATOR") {
+      if([_testDeviceID isEqualToString:@"EMULATOR"]) {
         request.testDevices = @[kGADSimulatorID];
       } else {
         request.testDevices = @[_testDeviceID];
