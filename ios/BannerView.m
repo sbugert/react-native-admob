@@ -47,13 +47,13 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     return kGADAdSizeSmartBannerPortrait;
   } else if ([bannerSize isEqualToString:@"smartBannerLandscape"]) {
     return kGADAdSizeSmartBannerLandscape;
-  }
-  else {
+  } else {
     return kGADAdSizeBanner;
   }
 }
 
--(void)loadBanner {
+-(void)loadBanner 
+{
   if (_adUnitID && _bannerSize) {
     GADAdSize size = [self getAdSizeFromString:_bannerSize];
     _bannerView = [[GADBannerView alloc] initWithAdSize:size];
@@ -77,7 +77,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
         request.testDevices = @[_testDeviceID];
       }
     }
-
     [_bannerView loadRequest:request];
   }
 }
@@ -93,8 +92,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
   }
 }
 
-
-
 - (void)setAdUnitID:(NSString *)adUnitID
 {
   if(![adUnitID isEqual:_adUnitID]) {
@@ -102,10 +99,10 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     if (_bannerView) {
       [_bannerView removeFromSuperview];
     }
-
     [self loadBanner];
   }
 }
+
 - (void)setTestDeviceID:(NSString *)testDeviceID
 {
   if(![testDeviceID isEqual:_testDeviceID]) {
@@ -113,21 +110,18 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     if (_bannerView) {
       [_bannerView removeFromSuperview];
     }
-
     [self loadBanner];
   }
 }
 
 -(void)layoutSubviews
 {
-  [super layoutSubviews ];
-  
+  [super layoutSubviews ];  
   self.frame = CGRectMake(
     self.bounds.origin.x,
     self.bounds.origin.x,
     _bannerView.frame.size.width,
-    _bannerView.frame.size.height);
-  
+    _bannerView.frame.size.height);  
   [self addSubview:_bannerView];
 }
 
@@ -138,35 +132,41 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
 }
 
 /// Tells the delegate an ad request loaded an ad.
-- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+- (void)adViewDidReceiveAd:(GADBannerView *)adView 
+{
   [_eventDispatcher sendInputEventWithName:@"onAdViewDidReceiveAd" body:@{ @"target": self.reactTag }];
 }
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(GADBannerView *)adView
-didFailToReceiveAdWithError:(GADRequestError *)error {
+didFailToReceiveAdWithError:(GADRequestError *)error 
+{
   [_eventDispatcher sendInputEventWithName:@"onDidFailToReceiveAdWithError" body:@{ @"target": self.reactTag, @"error": [error localizedDescription] }];
 }
 
 /// Tells the delegate that a full screen view will be presented in response
 /// to the user clicking on an ad.
-- (void)adViewWillPresentScreen:(GADBannerView *)adView {
+- (void)adViewWillPresentScreen:(GADBannerView *)adView 
+{
   [_eventDispatcher sendInputEventWithName:@"onAdViewWillPresentScreen" body:@{ @"target": self.reactTag }];
 }
 
 /// Tells the delegate that the full screen view will be dismissed.
-- (void)adViewWillDismissScreen:(GADBannerView *)adView {
+- (void)adViewWillDismissScreen:(GADBannerView *)adView 
+{
   [_eventDispatcher sendInputEventWithName:@"onAdViewWillDismissScreen" body:@{ @"target": self.reactTag }];
 }
 
 /// Tells the delegate that the full screen view has been dismissed.
-- (void)adViewDidDismissScreen:(GADBannerView *)adView {
+- (void)adViewDidDismissScreen:(GADBannerView *)adView 
+{
   [_eventDispatcher sendInputEventWithName:@"onAdViewDidDismissScreen" body:@{ @"target": self.reactTag }];
 }
 
 /// Tells the delegate that a user click will open another app (such as
 /// the App Store), backgrounding the current app.
-- (void)adViewWillLeaveApplication:(GADBannerView *)adView {
+- (void)adViewWillLeaveApplication:(GADBannerView *)adView 
+{
   [_eventDispatcher sendInputEventWithName:@"onAdViewWillLeaveApplication" body:@{ @"target": self.reactTag }];
 }
 
