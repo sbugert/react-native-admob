@@ -42,6 +42,8 @@ dependencies {
 }
 ```
 
+**MainApplication.java**
+
 #### RN < 0.29
 
 In **MainActivity.java** on top, where imports are:
