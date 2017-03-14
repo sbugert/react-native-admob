@@ -12,19 +12,7 @@
 
 @implementation BannerView {
   GADBannerView  *_bannerView;
-  RCTEventDispatcher *_eventDispatcher;
 }
-
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
-{
-  if ((self = [super initWithFrame:CGRectZero])) {
-    _eventDispatcher = eventDispatcher;
-  }
-  return self;
-}
-
-RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
-RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
 
 - (void)insertReactSubview:(UIView *)view atIndex:(NSInteger)atIndex
 {
@@ -65,13 +53,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
     GADAdSize size = [self getAdSizeFromString:_bannerSize];
     _bannerView = [[GADBannerView alloc] initWithAdSize:size];
     if(!CGRectEqualToRect(self.bounds, _bannerView.bounds)) {
-      [_eventDispatcher
-        sendInputEventWithName:@"onSizeChange"
-        body:@{
-               @"target": self.reactTag,
+      if (self.onSizeChange) {
+        self.onSizeChange(@{
                @"width": [NSNumber numberWithFloat: _bannerView.bounds.size.width],
                @"height": [NSNumber numberWithFloat: _bannerView.bounds.size.height]
-               }];
+        });
+      }
     }
     _bannerView.delegate = self;
     _bannerView.adUnitID = _adUnitID;
@@ -132,49 +119,49 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
   [self addSubview:_bannerView];
 }
 
-- (void)removeFromSuperview
-{
-  _eventDispatcher = nil;
-  [super removeFromSuperview];
-}
-
 /// Tells the delegate an ad request loaded an ad.
-- (void)adViewDidReceiveAd:(GADBannerView *)adView 
-{
-  [_eventDispatcher sendInputEventWithName:@"onAdViewDidReceiveAd" body:@{ @"target": self.reactTag }];
+- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  if (self.onAdViewDidReceiveAd) {
+    self.onAdViewDidReceiveAd(@{});
+  }
 }
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(GADBannerView *)adView
-didFailToReceiveAdWithError:(GADRequestError *)error 
-{
-  [_eventDispatcher sendInputEventWithName:@"onDidFailToReceiveAdWithError" body:@{ @"target": self.reactTag, @"error": [error localizedDescription] }];
+didFailToReceiveAdWithError:(GADRequestError *)error {
+  if (self.onDidFailToReceiveAdWithError) {
+    self.onDidFailToReceiveAdWithError(@{@"error": [error localizedDescription]});
+  }
 }
 
 /// Tells the delegate that a full screen view will be presented in response
 /// to the user clicking on an ad.
-- (void)adViewWillPresentScreen:(GADBannerView *)adView 
-{
-  [_eventDispatcher sendInputEventWithName:@"onAdViewWillPresentScreen" body:@{ @"target": self.reactTag }];
+- (void)adViewWillPresentScreen:(GADBannerView *)adView {
+  if (self.onAdViewWillPresentScreen) {
+    self.onAdViewWillPresentScreen(@{});
+  }
 }
 
 /// Tells the delegate that the full screen view will be dismissed.
-- (void)adViewWillDismissScreen:(GADBannerView *)adView 
-{
-  [_eventDispatcher sendInputEventWithName:@"onAdViewWillDismissScreen" body:@{ @"target": self.reactTag }];
+- (void)adViewWillDismissScreen:(GADBannerView *)adView {
+  if (self.onAdViewWillDismissScreen) {
+    self.onAdViewWillDismissScreen(@{});
+  }
 }
 
 /// Tells the delegate that the full screen view has been dismissed.
-- (void)adViewDidDismissScreen:(GADBannerView *)adView 
-{
-  [_eventDispatcher sendInputEventWithName:@"onAdViewDidDismissScreen" body:@{ @"target": self.reactTag }];
+- (void)adViewDidDismissScreen:(GADBannerView *)adView {
+  if (self.onAdViewDidDismissScreen) {
+    self.onAdViewDidDismissScreen(@{});
+  }
 }
 
 /// Tells the delegate that a user click will open another app (such as
 /// the App Store), backgrounding the current app.
-- (void)adViewWillLeaveApplication:(GADBannerView *)adView 
-{
-  [_eventDispatcher sendInputEventWithName:@"onAdViewWillLeaveApplication" body:@{ @"target": self.reactTag }];
+- (void)adViewWillLeaveApplication:(GADBannerView *)adView {
+  if (self.onAdViewWillLeaveApplication) {
+    self.onAdViewWillLeaveApplication(@{});
+  }
 }
 
 @end
