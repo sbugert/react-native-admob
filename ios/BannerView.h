@@ -1,12 +1,10 @@
-#if __has_include(<React/RCTEventDispatcher.h>)
+#if __has_include(<React/RCTComponent.h>)
 #import <React/RCTComponent.h>
 #else
 #import "RCTComponent.h"
 #endif
 
 @import GoogleMobileAds;
-
-@class RCTEventDispatcher;
 
 @interface BannerView : UIView <GADBannerViewDelegate>
 

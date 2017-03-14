@@ -8,8 +8,6 @@
   RCTResponseSenderBlock _showAdCallback;
 }
 
-@synthesize bridge = _bridge;
-
 - (dispatch_queue_t)methodQueue
 {
   return dispatch_get_main_queue();
@@ -71,27 +69,37 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 #pragma mark delegate events
 
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidLoad" body:nil];
+  if (self.onInterstitialDidLoad) {
+    self.onInterstitialDidLoad(@{});
+  }
   _requestAdCallback(@[[NSNull null]]);
 }
 
 - (void)interstitial:(GADInterstitial *)interstitial
 didFailToReceiveAdWithError:(GADRequestError *)error {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidFailToLoad" body:@{@"name": [error description]}];
+  if (self.onInterstitialDidFailToLoad) {
+    self.onInterstitialDidFailToLoad(@{@"name": [error description]});
+  }
   _requestAdCallback(@[[error description]]);
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidOpen" body:nil];
+  if (self.onInterstitialDidOpen) {
+    self.onInterstitialDidOpen(@{});
+  }
   _showAdCallback(@[[NSNull null]]);
 }
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidClose" body:nil];
+  if (self.onInterstitialDidClose) {
+    self.onInterstitialDidClose(@{});
+  }
 }
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialWillLeaveApplication" body:nil];
+  if (self.onInterstitialWillLeaveApplication) {
+    self.onInterstitialWillLeaveApplication(@{});
+  }
 }
 
 @end

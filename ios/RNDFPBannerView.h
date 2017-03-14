@@ -1,12 +1,10 @@
-#if __has_include(<React/RCTEventDispatcher.h>)
+#if __has_include(<React/RCTComponent.h>)
 #import <React/RCTComponent.h>
 #else
 #import "RCTComponent.h"
 #endif
 
 @import GoogleMobileAds;
-
-@class RCTEventDispatcher;
 
 @interface RNDFPBannerView : UIView <GADBannerViewDelegate>
 
@@ -23,7 +21,6 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewDidDismissScreen;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewWillLeaveApplication;
 
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
 - (GADAdSize)getAdSizeFromString:(NSString *)bannerSize;
 - (void)loadBanner;
 
