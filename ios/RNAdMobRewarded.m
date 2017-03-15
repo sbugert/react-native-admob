@@ -7,6 +7,8 @@
   RCTResponseSenderBlock _showAdCallback;
 }
 
+@synthesize bridge = _bridge;
+
 + (void)initialize
 {
   NSLog(@"initialize");
@@ -69,22 +71,16 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd
    didRewardUserWithReward:(GADAdReward *)reward {
-  if (self.onRewardedVideoDidRewardUser) {
-    self.onRewardedVideoDidRewardUser(@{@"type": reward.type, @"amount": reward.amount});
-  }
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidRewardUser" body:@{@"type": reward.type, @"amount": reward.amount}];
 }
 
 - (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  if (self.onRewardedVideoDidLoad) {
-    self.onRewardedVideoDidLoad(@{});
-  }
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidLoad" body:nil];
   _requestAdCallback(@[[NSNull null]]);
 }
 
 - (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  if (self.onRewardedVideoDidOpen) {
-    self.onRewardedVideoDidOpen(@{});
-  }
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidOpen" body:nil];
   _showAdCallback(@[[NSNull null]]);
 }
 
@@ -93,22 +89,16 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 }
 
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  if (self.onRewardedVideoDidClose) {
-    self.onRewardedVideoDidClose(@{});
-  }
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidClose" body:nil];
 }
 
 - (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  if (self.onRewardedVideoWillLeaveApplication) {
-    self.onRewardedVideoWillLeaveApplication(@{});
-  }
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoWillLeaveApplication" body:nil];
 }
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd
     didFailToLoadWithError:(NSError *)error {
-  if (self.onRewardedVideoDidFailToLoad) {
-    self.onRewardedVideoDidFailToLoad(@{@"name": [error description]});
-  }
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidFailToLoad" body:@{@"name": [error description]}];
   _requestAdCallback(@[[error description]]);
 }
 
