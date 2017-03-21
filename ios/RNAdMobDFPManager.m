@@ -15,21 +15,7 @@ RCT_EXPORT_MODULE();
 
 - (UIView *)view
 {
-  return [[RNDFPBannerView alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
-}
-
-- (NSArray *) customDirectEventTypes
-{
-  return @[
-           @"onSizeChange",
-           @"onAdViewDidReceiveAd",
-           @"onDidFailToReceiveAdWithError",
-           @"onAdViewWillPresentScreen",
-           @"onAdViewWillDismissScreen",
-           @"onAdViewDidDismissScreen",
-           @"onAdViewWillLeaveApplication",
-           @"onAdmobDispatchAppEvent"
-           ];
+  return [[RNDFPBannerView alloc] init];
 }
 
 - (dispatch_queue_t)methodQueue
@@ -41,5 +27,14 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_VIEW_PROPERTY(bannerSize, NSString);
 RCT_EXPORT_VIEW_PROPERTY(adUnitID, NSString);
 RCT_EXPORT_VIEW_PROPERTY(testDeviceID, NSString);
+
+RCT_EXPORT_VIEW_PROPERTY(onSizeChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdmobDispatchAppEvent, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdViewDidReceiveAd, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onDidFailToReceiveAdWithError, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdViewWillPresentScreen, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdViewWillDismissScreen, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdViewDidDismissScreen, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdViewWillLeaveApplication, RCTBubblingEventBlock)
 
 @end
