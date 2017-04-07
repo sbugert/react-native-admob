@@ -85,7 +85,12 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void setAdUnitID(String adUnitID) {
+    if(this.adUnitID != null){
+        return;
+    }
+
     mInterstitialAd.setAdUnitId(adUnitID);
+    this.adUnitID = adUnitID;
   }
 
   @ReactMethod
