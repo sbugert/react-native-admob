@@ -24,7 +24,7 @@ export default class AdMobNativeExpress extends React.Component {
   }
 
   render() {
-    const { adUnitID, testDeviceID, bannerSize, style, didFailToReceiveAdWithError } = this.props;
+    const { adUnitID, testDeviceID, bannerWidth, bannerHeight, style, didFailToReceiveAdWithError } = this.props;
     return (
       <View style={this.props.style}>
         <RNBanner
@@ -38,7 +38,9 @@ export default class AdMobNativeExpress extends React.Component {
           onAdViewWillLeaveApplication={this.props.adViewWillLeaveApplication}
           testDeviceID={testDeviceID}
           adUnitID={adUnitID}
-          bannerSize={bannerSize} />
+          bannerWidth={bannerWidth}
+          bannerHeight={bannerHeight}
+          />
       </View>
     );
   }
@@ -48,19 +50,11 @@ AdMobNativeExpress.propTypes = {
   style: View.propTypes.style,
 
   /**
-   * AdMob iOS library banner size constants
-   * (https://developers.google.com/admob/ios/banner)
-   * banner (320x50, Standard Banner for Phones and Tablets)
-   * largeBanner (320x100, Large Banner for Phones and Tablets)
-   * mediumRectangle (300x250, IAB Medium Rectangle for Phones and Tablets)
-   * fullBanner (468x60, IAB Full-Size Banner for Tablets)
-   * leaderboard (728x90, IAB Leaderboard for Tablets)
-   * smartBannerPortrait (Screen width x 32|50|90, Smart Banner for Phones and Tablets)
-   * smartBannerLandscape (Screen width x 32|50|90, Smart Banner for Phones and Tablets)
-   *
-   * banner is default
+   * Native Express size
+   * (https://firebase.google.com/docs/admob/android/native-express#choose_a_size)
    */
-  bannerSize: React.PropTypes.string,
+  bannerWidth: React.PropTypes.number,
+  bannerHeight: React.PropTypes.number,
 
   /**
    * AdMob ad unit ID
@@ -84,4 +78,8 @@ AdMobNativeExpress.propTypes = {
   ...View.propTypes,
 };
 
-AdMobNativeExpress.defaultProps = { bannerSize: 'smartBannerPortrait', didFailToReceiveAdWithError: () => {} };
+AdMobNativeExpress.defaultProps = {
+  bannerWidth: 400,
+  bannerHeight: 300,
+  didFailToReceiveAdWithError: () => {}
+};

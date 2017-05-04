@@ -24,11 +24,14 @@ public class RNAdMobNativeExpressViewManager extends SimpleViewManager<ReactView
 
   public static final String REACT_CLASS = "RNAdMobNativeExpress";
 
-  public static final String PROP_BANNER_SIZE = "bannerSize";
+  public static final String PROP_BANNER_HEIGHT = "bannerHeight";
+  public static final String PROP_BANNER_WIDTH = "bannerWidth";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
   public static final String PROP_TEST_DEVICE_ID = "testDeviceID";
 
   private String testDeviceID = null;
+  private Integer bannerWidth;
+  private Integer bannerHeight;
 
   public enum Events {
     EVENT_SIZE_CHANGE("onSizeChange"),
@@ -54,7 +57,6 @@ public class RNAdMobNativeExpressViewManager extends SimpleViewManager<ReactView
   private ThemedReactContext mThemedReactContext;
   private RCTEventEmitter mEventEmitter;
   private ReactViewGroup mView;
-  private String mSizeString;
 
   @Override
   public String getName() {
@@ -71,7 +73,7 @@ public class RNAdMobNativeExpressViewManager extends SimpleViewManager<ReactView
     mView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
       public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
-          setBannerSize(mView, mSizeString);
+          setBannerSize(mView, bannerWidth, bannerHeight);
         }
       }
     });
@@ -152,10 +154,20 @@ public class RNAdMobNativeExpressViewManager extends SimpleViewManager<ReactView
     return builder.build();
   }
 
-  @ReactProp(name = PROP_BANNER_SIZE)
-  public void setBannerSize(final ReactViewGroup view, final String sizeString) {
-    mSizeString = sizeString;
-    AdSize adSize = getAdSizeFromString(sizeString);
+  @ReactProp(name = PROP_BANNER_WIDTH)
+  public void setBannerWidth(final ReactViewGroup view, final Integer bannerWidth) {
+    this.bannerWidth = bannerWidth;
+  }
+
+  @ReactProp(name = PROP_BANNER_HEIGHT)
+  public void setBannerHeight(final ReactViewGroup view, final Integer bannerHeight) {
+    this.bannerHeight = bannerHeight;
+  }
+
+  public void setBannerSize(final ReactViewGroup view, final Integer bannerWidth, final Integer bannerHeight) {
+    this.bannerWidth = bannerWidth;
+    this.bannerHeight = bannerHeight;
+    AdSize adSize = new AdSize(this.bannerWidth, this.bannerHeight);
 
     // store old ad unit ID (even if not yet present and thus null)
     NativeExpressAdView oldAdView = (NativeExpressAdView) view.getChildAt(0);
@@ -167,19 +179,9 @@ public class RNAdMobNativeExpressViewManager extends SimpleViewManager<ReactView
     newAdView.setAdUnitId(adUnitId);
 
     // send measurements to js to style the AdView in react
-    int width;
-    int height;
     WritableMap event = Arguments.createMap();
-    if (adSize == AdSize.SMART_BANNER) {
-      width = (int) PixelUtil.toDIPFromPixel(adSize.getWidthInPixels(mThemedReactContext));
-      height = (int) PixelUtil.toDIPFromPixel(adSize.getHeightInPixels(mThemedReactContext));
-    }
-    else {
-      width = adSize.getWidth();
-      height = adSize.getHeight();
-    }
-    event.putDouble("width", width);
-    event.putDouble("height", height);
+    event.putDouble("width", adSize.getWidth());
+    event.putDouble("height", adSize.getHeight());
     mEventEmitter.receiveEvent(view.getId(), Events.EVENT_SIZE_CHANGE.toString(), event);
 
     loadAd(newAdView);
@@ -216,30 +218,5 @@ public class RNAdMobNativeExpressViewManager extends SimpleViewManager<ReactView
       AdRequest adRequest = adRequestBuilder.build();
       adView.loadAd(adRequest);
     }
-  }
-
-
-  private AdSize getAdSizeFromString(String adSize) {
-    return new AdSize(AdSize.FULL_WIDTH, 300);
-    // switch (adSize) {
-    //   case "banner":
-    //     return AdSize.BANNER;
-    //   case "largeBanner":
-    //     return AdSize.LARGE_BANNER;
-    //   case "mediumRectangle":
-    //     return AdSize.MEDIUM_RECTANGLE;
-    //   case "fullBanner":
-    //     return AdSize.FULL_BANNER;
-    //   case "leaderBoard":
-    //     return AdSize.LEADERBOARD;
-    //   case "smartBannerPortrait":
-    //     return AdSize.SMART_BANNER;
-    //   case "smartBannerLandscape":
-    //     return AdSize.SMART_BANNER;
-    //   case "smartBanner":
-    //     return AdSize.SMART_BANNER;
-    //   default:
-    //     return AdSize.BANNER;
-    // }
   }
 }

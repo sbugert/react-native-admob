@@ -6,7 +6,7 @@ import {
   NativeEventEmitter,
 } from 'react-native';
 
-// const RNBanner = requireNativeComponent('RNAdMobDFP', PublisherBanner);
+const RNBanner = requireNativeComponent('RNAdMobDFP', PublisherBanner);
 
 export default class PublisherBanner extends React.Component {
 
