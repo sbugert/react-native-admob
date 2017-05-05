@@ -48,6 +48,19 @@
     }
 }
 
+-(NSArray *) getValidAdSizes:(NSString *)bannerSize
+{
+    NSMutableArray *validAdSizes = [NSMutableArray array];
+    
+    NSArray * adSizes = [_bannerSize componentsSeparatedByString:@","];
+    for(NSString *adSize in adSizes) {
+        GADAdSize gadAdSize =[self getAdSizeFromString:adSize];
+        [validAdSizes addObject:@(gadAdSize)];
+    }
+    
+    return validAdSizes;
+}
+
 -(void)loadBanner {
     if (_adUnitID && _bannerSize) {
         NSArray * adSizes = [_bannerSize componentsSeparatedByString:@","];
