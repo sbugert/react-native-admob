@@ -38,8 +38,8 @@ export default class AdMobNativeExpress extends React.Component {
           onAdViewWillLeaveApplication={this.props.adViewWillLeaveApplication}
           testDeviceID={testDeviceID}
           adUnitID={adUnitID}
-          bannerWidth={bannerWidth}
-          bannerHeight={bannerHeight}
+          bannerWidth={parseInt(bannerWidth)}
+          bannerHeight={parseInt(bannerHeight)}
           />
       </View>
     );
