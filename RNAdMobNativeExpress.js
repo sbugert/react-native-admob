@@ -1,20 +1,13 @@
-import React from 'react';
-import {
-  NativeModules,
-  requireNativeComponent,
-  View,
-  NativeEventEmitter,
-} from 'react-native';
+import React, { Component } from 'react';
+import { Platform, requireNativeComponent, View } from 'react-native';
+import _isEqual from 'lodash/isEqual';
 
-const RNBanner = requireNativeComponent('RNAdMobNativeExpress', AdMobNativeExpress);
-
-export default class AdMobNativeExpress extends React.Component {
-
+export default class AdMobNativeExpress extends Component {
   constructor() {
     super();
     this.onSizeChange = this.onSizeChange.bind(this);
     this.state = {
-      style: {},
+      style: {}
     };
   }
 
@@ -23,8 +16,15 @@ export default class AdMobNativeExpress extends React.Component {
     this.setState({ style: { width, height } });
   }
 
+  shouldComponentUpdate (nextProps, nextState) {
+    return !_isEqual(this.props, nextProps) || !_isEqual(this.state, nextState)
+  }
+
   render() {
-    const { adUnitID, testDeviceID, bannerWidth, bannerHeight, style, didFailToReceiveAdWithError } = this.props;
+    if (Platform.OS === 'ios') return null
+
+    const RNBanner = requireNativeComponent('RNAdMobNativeExpress', AdMobNativeExpress);
+    const { adUnitID, testDeviceID, bannerWidth, bannerHeight, didFailToReceiveAdWithError } = this.props;
     return (
       <View style={this.props.style}>
         <RNBanner
@@ -67,7 +67,7 @@ AdMobNativeExpress.propTypes = {
   testDeviceID: React.PropTypes.string,
 
   /**
-   * AdMob iOS library events
+   * AdMob library events
    */
   adViewDidReceiveAd: React.PropTypes.func,
   didFailToReceiveAdWithError: React.PropTypes.func,
