@@ -36,10 +36,10 @@ export default class AdMobNativeExpress extends Component {
           onAdViewWillDismissScreen={this.props.adViewWillDismissScreen}
           onAdViewDidDismissScreen={this.props.adViewDidDismissScreen}
           onAdViewWillLeaveApplication={this.props.adViewWillLeaveApplication}
-          testDeviceID={testDeviceID}
-          adUnitID={adUnitID}
           bannerWidth={parseInt(bannerWidth)}
           bannerHeight={parseInt(bannerHeight)}
+          testDeviceID={testDeviceID}
+          adUnitID={adUnitID}
           />
       </View>
     );
