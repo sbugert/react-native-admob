@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
@@ -20,7 +21,7 @@ import com.google.android.gms.ads.AdRequest;
 public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule implements RewardedVideoAdListener {
     RewardedVideoAd mRewardedVideoAd;
     String adUnitID;
-    String testDeviceID;
+    ReadableArray testDeviceIDs;
     Callback requestAdCallback;
     Callback showAdCallback;
 
@@ -104,8 +105,8 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     }
 
     @ReactMethod
-    public void setTestDeviceID(String testDeviceID) {
-        this.testDeviceID = testDeviceID;
+    public void setTestDeviceIDs(ReadableArray testDeviceIDs) {
+        this.testDeviceIDs = testDeviceIDs;
     }
 
     @ReactMethod
@@ -124,11 +125,16 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
 
                     AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
 
-                    if (testDeviceID != null){
-                        if (testDeviceID.equals("EMULATOR")) {
-                            adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-                        } else {
-                            adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+                    if (testDeviceIDs != null) {
+                        for (int i = 0; i < testDeviceIDs.size(); i++) {
+                            String testDeviceID = testDeviceIDs.getString(i);
+                            if (testDeviceID != null) {
+                                if (testDeviceID.equals("EMULATOR")) {
+                                    adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+                                } else {
+                                    adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+                                }
+                            }
                         }
                     }
 

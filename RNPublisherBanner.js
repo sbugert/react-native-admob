@@ -24,7 +24,14 @@ export default class PublisherBanner extends React.Component {
   }
 
   render() {
-    const { adUnitID, testDeviceID, bannerSize, style, didFailToReceiveAdWithError,admobDispatchAppEvent } = this.props;
+    const { adUnitID, bannerSize, style, didFailToReceiveAdWithError,admobDispatchAppEvent } = this.props;
+    let testDeviceIDs;
+    if (this.props.testDeviceID) {
+      console.warn(`testDeviceID will be deprecated soon. Please use testDeviceIDs instead.`);
+      testDeviceIDs = [ this.props.testDeviceID ];
+    } else {
+      testDeviceIDs = this.props.testDeviceIDs;
+    }
     return (
       <View style={this.props.style}>
         <RNBanner
@@ -37,7 +44,7 @@ export default class PublisherBanner extends React.Component {
           onAdViewDidDismissScreen={this.props.adViewDidDismissScreen}
           onAdViewWillLeaveApplication={this.props.adViewWillLeaveApplication}
           onAdmobDispatchAppEvent={(event) => admobDispatchAppEvent(event)}
-          testDeviceID={testDeviceID}
+          testDeviceIDs={testDeviceIDs}
           adUnitID={adUnitID}
           bannerSize={bannerSize} />
       </View>
@@ -69,9 +76,9 @@ PublisherBanner.propTypes = {
   adUnitID: React.PropTypes.string,
 
   /**
-   * Test device ID
+   * Test device IDs
    */
-  testDeviceID: React.PropTypes.string,
+  testDeviceIDs: React.PropTypes.arrayOf(React.PropTypes.string),
 
   /**
    * AdMob iOS library events

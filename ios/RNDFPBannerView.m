@@ -65,12 +65,17 @@
         _bannerView.adUnitID = _adUnitID;
         _bannerView.rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
         GADRequest *request = [GADRequest request];
-        if(_testDeviceID) {
-            if([_testDeviceID isEqualToString:@"EMULATOR"]) {
-                request.testDevices = @[kGADSimulatorID];
+
+        if (_testDeviceIDs) {
+          NSMutableArray *testDevices = [NSMutableArray new];
+          for (NSString* testDeviceID in _testDeviceIDs){
+            if ([testDeviceID isEqualToString:@"EMULATOR"]) {
+              [testDevices addObject:kGADSimulatorID];
             } else {
-                request.testDevices = @[_testDeviceID];
+              [testDevices addObject:testDeviceID];
             }
+          }
+          request.testDevices = testDevices;
         }
 
         [_bannerView loadRequest:request];
@@ -111,10 +116,16 @@ didReceiveAppEvent:(NSString *)name
         [self loadBanner];
     }
 }
-- (void)setTestDeviceID:(NSString *)testDeviceID
+- (void)setTestDeviceIDs:(NSString *)testDeviceIDs
 {
-    if(![testDeviceID isEqual:_testDeviceID]) {
-        _testDeviceID = testDeviceID;
+    if(![testDeviceIDs isEqual:_testDeviceIDs]) {
+        for (NSString* testDeviceID in testDeviceIDs){
+          if (testDeviceID == (id)[NSNull null] || testDeviceID.length == 0) {
+            RCTLogError(@"Test device ID cannot be null.");
+            return;
+          }
+        }
+        _testDeviceIDs = testDeviceIDs;
         if (_bannerView) {
             [_bannerView removeFromSuperview];
         }

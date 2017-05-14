@@ -1,9 +1,11 @@
-#if __has_include(<React/RCTEventDispatcher.h>)
-#import <React/RCTEventDispatcher.h>
+#if __has_include(<React/RCTBridgeModule.h>)
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTLog.h>
 #else
-#import "RCTEventDispatcher.h"
 #import "RCTBridgeModule.h"
+#import "RCTEventDispatcher.h"
+#import "RCTLog.h"
 #endif
 
 @import GoogleMobileAds;

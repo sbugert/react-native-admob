@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -26,9 +27,9 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
 
   public static final String PROP_BANNER_SIZE = "bannerSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
-  public static final String PROP_TEST_DEVICE_ID = "testDeviceID";
+  public static final String PROP_TEST_DEVICE_IDS = "testDeviceIDs";
 
-  private String testDeviceID = null;
+  private ReadableArray testDeviceIDs = null;
 
   public enum Events {
     EVENT_SIZE_CHANGE("onSizeChange"),
@@ -198,19 +199,24 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
     loadAd(newAdView);
   }
 
-  @ReactProp(name = PROP_TEST_DEVICE_ID)
-  public void setPropTestDeviceID(final ReactViewGroup view, final String testDeviceID) {
-    this.testDeviceID = testDeviceID;
+  @ReactProp(name = PROP_TEST_DEVICE_IDS)
+  public void setPropTestDeviceIDs(final ReactViewGroup view, final ReadableArray testDeviceIDs) {
+    this.testDeviceIDs = testDeviceIDs;
   }
 
   private void loadAd(final AdView adView) {
     if (adView.getAdSize() != null && adView.getAdUnitId() != null) {
       AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-      if (testDeviceID != null){
-        if (testDeviceID.equals("EMULATOR")) {
-          adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-        } else {
-          adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+      if (testDeviceIDs != null) {
+        for (int i = 0; i < testDeviceIDs.size(); i++) {
+          String testDeviceID = testDeviceIDs.getString(i);
+          if (testDeviceID != null) {
+            if (testDeviceID.equals("EMULATOR")) {
+              adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+            } else {
+              adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+            }
+          }
         }
       }
       AdRequest adRequest = adRequestBuilder.build();
