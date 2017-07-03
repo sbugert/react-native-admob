@@ -15,6 +15,7 @@ export default class AdMobNativeExpress extends Component {
   }
 
   onSizeChange(event) {
+    console.log(event);
     const { height, width } = event.nativeEvent;
     this.setState({ style: { width, height } });
   }

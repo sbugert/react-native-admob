@@ -10,8 +10,8 @@
 
 @interface RNAdMobNativeExpressView : UIView <GADNativeExpressAdViewDelegate>
 
-@property (nonatomic, copy) NSString *bannerWidth;
-@property (nonatomic, copy) NSString *bannerHeight;
+@property (nonatomic, copy) NSNumber *bannerWidth;
+@property (nonatomic, copy) NSNumber *bannerHeight;
 @property (nonatomic, copy) NSString *adUnitID;
 @property (nonatomic, copy) NSString *testDeviceID;
 
