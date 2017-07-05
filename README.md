@@ -197,6 +197,10 @@ Opens a rewarded AdMob ad.
 |`requestAd(callback)`      | requests a rewarded ad|
 |`showAd(callback)`         | shows a rewarded if it is ready                  |
 
+###### Note
+
+It's a good practice to check if Ads are ready with `NativeModules.RNAdMobRewarded.isReady()`
+
 ##### Events
 
 | iOS                                        | *this library*                    | Android                          |
