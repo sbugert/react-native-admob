@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Platform, requireNativeComponent, View } from 'react-native';
+import { Platform, requireNativeComponent, View, ViewPropTypes } from 'react-native';
 import _isEqual from 'lodash/isEqual';
+import PropTypes from 'prop-types';
 
 const RNBanner = requireNativeComponent('RNAdMobNativeExpress', AdMobNativeExpress);
-
 
 export default class AdMobNativeExpress extends Component {
   constructor() {
@@ -15,7 +15,6 @@ export default class AdMobNativeExpress extends Component {
   }
 
   onSizeChange(event) {
-    console.log(event);
     const { height, width } = event.nativeEvent;
     this.setState({ style: { width, height } });
   }
@@ -25,8 +24,6 @@ export default class AdMobNativeExpress extends Component {
   }
 
   render() {
-    // if (Platform.OS === 'ios') return null
-
     const { adUnitID, testDeviceID, bannerWidth, bannerHeight, didFailToReceiveAdWithError } = this.props;
     return (
       <View style={this.props.style}>
@@ -50,35 +47,35 @@ export default class AdMobNativeExpress extends Component {
 }
 
 AdMobNativeExpress.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
 
   /**
    * Native Express size
    * (https://firebase.google.com/docs/admob/android/native-express#choose_a_size)
    */
-  bannerWidth: React.PropTypes.number,
-  bannerHeight: React.PropTypes.number,
+  bannerWidth: PropTypes.number,
+  bannerHeight: PropTypes.number,
 
   /**
    * AdMob ad unit ID
    */
-  adUnitID: React.PropTypes.string,
+  adUnitID: PropTypes.string,
 
   /**
    * Test device ID
    */
-  testDeviceID: React.PropTypes.string,
+  testDeviceID: PropTypes.string,
 
   /**
    * AdMob library events
    */
-  adViewDidReceiveAd: React.PropTypes.func,
-  didFailToReceiveAdWithError: React.PropTypes.func,
-  adViewWillPresentScreen: React.PropTypes.func,
-  adViewWillDismissScreen: React.PropTypes.func,
-  adViewDidDismissScreen: React.PropTypes.func,
-  adViewWillLeaveApplication: React.PropTypes.func,
-  ...View.propTypes,
+  adViewDidReceiveAd: PropTypes.func,
+  didFailToReceiveAdWithError: PropTypes.func,
+  adViewWillPresentScreen: PropTypes.func,
+  adViewWillDismissScreen: PropTypes.func,
+  adViewDidDismissScreen: PropTypes.func,
+  adViewWillLeaveApplication: PropTypes.func,
+  ...ViewPropTypes,
 };
 
 AdMobNativeExpress.defaultProps = {
