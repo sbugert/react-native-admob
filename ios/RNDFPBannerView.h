@@ -24,7 +24,6 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewDidDismissScreen;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewWillLeaveApplication;
 
-// - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
 - (void)loadBanner;
 
 @end
