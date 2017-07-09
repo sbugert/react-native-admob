@@ -1,18 +1,19 @@
 #if __has_include(<React/RCTComponent.h>)
-#import <React/RCTComponent.h>
+#import <React/RCTView.h>
 #else
-#import "RCTComponent.h"
+#import "RCTView.h"
 #endif
 
 @import GoogleMobileAds;
 
 @class RCTEventDispatcher;
 
-@interface RNDFPBannerView : UIView <GADBannerViewDelegate>
+@interface RNDFPBannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate, GADAppEventDelegate>
 
-@property (nonatomic, copy) NSString *bannerSize;
 @property (nonatomic, copy) NSString *adUnitID;
-@property (nonatomic, copy) NSString *testDeviceID;
+@property (nonatomic, copy) NSString *adSize;
+@property (nonatomic, copy) NSArray *validAdSizes;
+@property (nonatomic, copy) NSArray *testDevices;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onSizeChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdmobDispatchAppEvent;
@@ -23,8 +24,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewDidDismissScreen;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewWillLeaveApplication;
 
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
-- (GADAdSize)getAdSizeFromString:(NSString *)bannerSize;
+// - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
 - (void)loadBanner;
 
 @end
