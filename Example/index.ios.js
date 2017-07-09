@@ -6,10 +6,26 @@ import {
   View,
   Platform,
   TouchableHighlight,
+  Button,
+  ScrollView,
 } from 'react-native';
-import { AdMobRewarded } from 'react-native-admob';
+import { AdMobRewarded, PublisherBanner } from 'react-native-admob';
+
+const BannerExample = ({ style, title, children, ...props }) => (
+  <View {...props} style={[styles.example, style]}>
+    <Text style={styles.title}>{title}</Text>
+    <View>
+      {children}
+    </View>
+  </View>
+);
 
 export default class Example extends Component {
+
+  constructor() {
+    super();
+    this.state = {};
+  }
 
   componentDidMount() {
     AdMobRewarded.setTestDeviceID('EMULATOR');
@@ -51,13 +67,45 @@ export default class Example extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <TouchableHighlight>
-            <Text onPress={this.showRewarded} style={styles.button}>
-              Show Rewarded Video and preload next
-            </Text>
-          </TouchableHighlight>
-        </View>
+        <ScrollView>
+          <BannerExample title="Rewarded">
+            <Button
+              title="Show Rewarded Video and preload next"
+              onPress={this.showRewarded}
+            />
+          </BannerExample>
+          <BannerExample title="Ad Sizes">
+            <PublisherBanner
+              adSize="banner"
+              validAdSizes={['banner', 'largeBanner', 'mediumRectangle']}
+              adUnitID="/6499/example/APIDemo/AdSizes"
+              ref={el => (this._adSizesExample = el)}
+            />
+            <Button
+              title="Load"
+              onPress={() => this._adSizesExample.loadBanner()}
+            />
+          </BannerExample>
+          <BannerExample title="App Events" style={this.state.appEventsExampleStyle}>
+            <PublisherBanner
+              style={{ height: 50 }}
+              adUnitID="/6499/example/APIDemo/AppEvents"
+              onAdmobDispatchAppEvent={(event) => {
+                if (event.name === 'color') {
+                  this.setState({
+                    appEventsExampleStyle: { backgroundColor: event.info },
+                  });
+                }
+              }}
+              ref={el => (this._appEventsExample = el)}
+            />
+            <Button
+              title="Load"
+              onPress={() => this._appEventsExample.loadBanner()}
+              style={styles.button}
+            />
+          </BannerExample>
+        </ScrollView>
       </View>
     );
   }
@@ -66,12 +114,13 @@ export default class Example extends Component {
 const styles = StyleSheet.create({
   container: {
     marginTop: (Platform.OS === 'ios') ? 30 : 10,
-    flex: 1,
-    alignItems: 'center',
   },
-  button: {
-    color: '#333333',
-    marginBottom: 15,
+  example: {
+    paddingVertical: 10,
+  },
+  title: {
+    margin: 10,
+    fontSize: 20,
   },
 });
 
