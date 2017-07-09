@@ -20,11 +20,15 @@ const BannerExample = ({ style, title, children, ...props }) => (
   </View>
 );
 
+const bannerWidths = [200, 250, 320];
+
 export default class Example extends Component {
 
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      fluidSizeIndex: 0,
+    };
   }
 
   componentDidMount() {
@@ -74,7 +78,7 @@ export default class Example extends Component {
               onPress={this.showRewarded}
             />
           </BannerExample>
-          <BannerExample title="Ad Sizes">
+          <BannerExample title="DFP - Multiple Ad Sizes">
             <PublisherBanner
               adSize="banner"
               validAdSizes={['banner', 'largeBanner', 'mediumRectangle']}
@@ -86,7 +90,7 @@ export default class Example extends Component {
               onPress={() => this._adSizesExample.loadBanner()}
             />
           </BannerExample>
-          <BannerExample title="App Events" style={this.state.appEventsExampleStyle}>
+          <BannerExample title="DFP - App Events" style={this.state.appEventsExampleStyle}>
             <PublisherBanner
               style={{ height: 50 }}
               adUnitID="/6499/example/APIDemo/AppEvents"
@@ -102,6 +106,34 @@ export default class Example extends Component {
             <Button
               title="Load"
               onPress={() => this._appEventsExample.loadBanner()}
+              style={styles.button}
+            />
+          </BannerExample>
+          <BannerExample title="DFP - Fluid Ad Size">
+            <View
+              style={[
+                { backgroundColor: '#f3f', paddingVertical: 10 },
+                this.state.fluidAdSizeExampleStyle,
+              ]}
+            >
+              <PublisherBanner
+                adSize="fluid"
+                adUnitID="/6499/example/APIDemo/Fluid"
+                ref={el => (this._appFluidAdSizeExample = el)}
+                style={{ flex: 1 }}
+              />
+            </View>
+            <Button
+              title="Change Banner Width"
+              onPress={() => this.setState(prevState => ({
+                fluidSizeIndex: prevState.fluidSizeIndex + 1,
+                fluidAdSizeExampleStyle: { width: bannerWidths[prevState.fluidSizeIndex % bannerWidths.length] },
+              }))}
+              style={styles.button}
+            />
+            <Button
+              title="Load"
+              onPress={() => this._appFluidAdSizeExample.loadBanner()}
               style={styles.button}
             />
           </BannerExample>
