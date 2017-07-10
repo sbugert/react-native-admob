@@ -59,6 +59,8 @@ class AdMobBanner extends Component {
   }
 }
 
+AdMobBanner.simulatorId = Platform.OS === 'android' ? 'EMULATOR' : NativeModules.RNGADBannerViewManager.simulatorId;
+
 AdMobBanner.propTypes = {
   ...View.propTypes,
 
