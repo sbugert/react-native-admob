@@ -27,7 +27,7 @@ class AdMobBanner extends Component {
   loadBanner() {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this._bannerView),
-      UIManager.RNAdMob.Commands.loadBanner,
+      UIManager.RNGADBannerView.Commands.loadBanner,
       null,
     );
   }
@@ -48,7 +48,7 @@ class AdMobBanner extends Component {
 
   render() {
     return (
-      <RNAdMob
+      <RNGADBannerView
         {...this.props}
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
@@ -102,6 +102,6 @@ AdMobBanner.propTypes = {
 AdMobBanner.defaultProps = {
 };
 
-const RNAdMob = requireNativeComponent('RNAdMob', AdMobBanner);
+const RNGADBannerView = requireNativeComponent('RNGADBannerView', AdMobBanner);
 
 export default AdMobBanner;

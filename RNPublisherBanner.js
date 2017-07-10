@@ -28,7 +28,7 @@ class PublisherBanner extends Component {
   loadBanner() {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this._bannerView),
-      UIManager.RNAdMobDFP.Commands.loadBanner,
+      UIManager.RNDFPBannerView.Commands.loadBanner,
       null,
     );
   }
@@ -56,7 +56,7 @@ class PublisherBanner extends Component {
 
   render() {
     return (
-      <RNAdMobDFP
+      <RNDFPBannerView
         {...this.props}
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
@@ -68,7 +68,7 @@ class PublisherBanner extends Component {
   }
 }
 
-PublisherBanner.simulatorId = Platform.OS === 'android' ? 'EMULATOR' : NativeModules.RNAdMobDFPManager.simulatorId;
+PublisherBanner.simulatorId = Platform.OS === 'android' ? 'EMULATOR' : NativeModules.RNDFPBannerViewManager.simulatorId;
 
 PublisherBanner.propTypes = {
   ...View.propTypes,
@@ -119,6 +119,6 @@ PublisherBanner.propTypes = {
 PublisherBanner.defaultProps = {
 };
 
-const RNAdMobDFP = requireNativeComponent('RNAdMobDFP', PublisherBanner);
+const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);
 
 export default PublisherBanner;

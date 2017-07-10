@@ -2,15 +2,16 @@
 
 #if __has_include(<React/RCTBridgeModule.h>)
 #import <React/RCTBridgeModule.h>
-#import <React/RCTLog.h>
+#import <React/UIView+React.h>
 #else
 #import "RCTBridgeModule.h"
-#import "RCTLog.h"
+#import "UIView+React.h"
 #endif
 
 #include "RCTConvert+GADAdSize.h"
 
-@implementation RNDFPBannerView {
+@implementation RNDFPBannerView
+{
     DFPBannerView  *_bannerView;
 }
 
@@ -40,17 +41,10 @@
     return self;
 }
 
-RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
-
 - (void)loadBanner {
     GADRequest *request = [GADRequest request];
     request.testDevices = _testDevices;
     [_bannerView loadRequest:request];
-}
-
-- (void)setAdSize:(GADAdSize)adSize
-{
-    _bannerView.adSize = adSize;
 }
 
 - (void)setValidAdSizes:(NSArray *)adSizes
@@ -65,16 +59,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
         }
     }];
     _bannerView.validAdSizes = validAdSizes;
-}
-
-- (void)setAdUnitID:(NSString *)adUnitID
-{
-    _bannerView.adUnitID = adUnitID;
-}
-
-- (void)setTestDevices:(NSArray *)testDevices
-{
-    _testDevices = testDevices;
 }
 
 -(void)layoutSubviews

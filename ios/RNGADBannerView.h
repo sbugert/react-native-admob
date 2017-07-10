@@ -8,11 +8,8 @@
 
 @class RCTEventDispatcher;
 
-@interface BannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate>
+@interface RNGADBannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate>
 
-@property (nonatomic, copy) NSString *adUnitID;
-@property (nonatomic, assign) GADAdSize adSize;
-@property (nonatomic, copy) NSArray *validAdSizes;
 @property (nonatomic, copy) NSArray *testDevices;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onSizeChange;
