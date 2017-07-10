@@ -9,7 +9,12 @@ import {
   Button,
   ScrollView,
 } from 'react-native';
-import { AdMobRewarded, PublisherBanner } from 'react-native-admob';
+
+import {
+  AdMobRewarded,
+  AdMobBanner,
+  PublisherBanner,
+} from 'react-native-admob';
 
 const BannerExample = ({ style, title, children, ...props }) => (
   <View {...props} style={[styles.example, style]}>
@@ -72,6 +77,17 @@ export default class Example extends Component {
     return (
       <View style={styles.container}>
         <ScrollView>
+          <BannerExample title="AdMob - Basic">
+            <AdMobBanner
+              adSize="banner"
+              adUnitID="ca-app-pub-3940256099942544/2934735716"
+              ref={el => (this._basicExample = el)}
+            />
+            <Button
+              title="Reload"
+              onPress={() => this._basicExample.loadBanner()}
+            />
+          </BannerExample>
           <BannerExample title="Rewarded">
             <Button
               title="Show Rewarded Video and preload next"
@@ -86,7 +102,7 @@ export default class Example extends Component {
               ref={el => (this._adSizesExample = el)}
             />
             <Button
-              title="Load"
+              title="Reload"
               onPress={() => this._adSizesExample.loadBanner()}
             />
           </BannerExample>
@@ -104,7 +120,7 @@ export default class Example extends Component {
               ref={el => (this._appEventsExample = el)}
             />
             <Button
-              title="Load"
+              title="Reload"
               onPress={() => this._appEventsExample.loadBanner()}
               style={styles.button}
             />
@@ -132,7 +148,7 @@ export default class Example extends Component {
               style={styles.button}
             />
             <Button
-              title="Load"
+              title="Reload"
               onPress={() => this._appFluidAdSizeExample.loadBanner()}
               style={styles.button}
             />
