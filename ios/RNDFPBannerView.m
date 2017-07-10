@@ -42,15 +42,15 @@
 
 RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
--(void)loadBanner {
+- (void)loadBanner {
     GADRequest *request = [GADRequest request];
     request.testDevices = _testDevices;
     [_bannerView loadRequest:request];
 }
 
-- (void)setAdSize:(NSString *)adSize
+- (void)setAdSize:(GADAdSize)adSize
 {
-    _bannerView.adSize = [RCTConvert GADAdSize:adSize];
+    _bannerView.adSize = adSize;
 }
 
 - (void)setValidAdSizes:(NSArray *)adSizes
@@ -81,11 +81,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 {
     [super layoutSubviews];
     _bannerView.frame = self.bounds;
-}
-
-- (void)removeFromSuperview
-{
-    [super removeFromSuperview];
 }
 
 # pragma mark GADBannerViewDelegate

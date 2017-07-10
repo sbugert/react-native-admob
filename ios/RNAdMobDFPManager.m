@@ -35,7 +35,7 @@ RCT_EXPORT_METHOD(loadBanner:(nonnull NSNumber *)reactTag)
     }];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(adSize, NSString)
+RCT_EXPORT_VIEW_PROPERTY(adSize, GADAdSize)
 RCT_EXPORT_VIEW_PROPERTY(adUnitID, NSString)
 RCT_EXPORT_VIEW_PROPERTY(validAdSizes, NSArray)
 RCT_EXPORT_VIEW_PROPERTY(testDevices, NSArray)

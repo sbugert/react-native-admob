@@ -11,7 +11,7 @@
 @interface RNDFPBannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate, GADAppEventDelegate>
 
 @property (nonatomic, copy) NSString *adUnitID;
-@property (nonatomic, copy) NSString *adSize;
+@property (nonatomic, assign) GADAdSize adSize;
 @property (nonatomic, copy) NSArray *validAdSizes;
 @property (nonatomic, copy) NSArray *testDevices;
 
