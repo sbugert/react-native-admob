@@ -60,17 +60,8 @@ class PublisherBanner extends Component {
         {...this.props}
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
-        onAdViewDidReceiveAd={this.props.onAdViewDidReceiveAd}
         onDidFailToReceiveAdWithError={this.handleDidFailToReceiveAdWithError}
-        onAdViewWillPresentScreen={this.props.onAdViewWillPresentScreen}
-        onAdViewWillDismissScreen={this.props.onAdViewWillDismissScreen}
-        onAdViewDidDismissScreen={this.props.onAdViewDidDismissScreen}
-        onAdViewWillLeaveApplication={this.props.onAdViewWillLeaveApplication}
         onAdmobDispatchAppEvent={this.handleAdmobDispatchAppEvent}
-        testDevices={this.props.testDevices}
-        adUnitID={this.props.adUnitID}
-        validAdSizes={this.props.validAdSizes}
-        adSize={this.props.adSize}
         ref={el => (this._bannerView = el)}
       />
     );
@@ -108,7 +99,7 @@ PublisherBanner.propTypes = {
   adUnitID: React.PropTypes.string,
 
   /**
-   * Test device ID
+   * Array of test devices. Use PublisherBanner.simulatorId for the simulator
    */
   testDevices: React.PropTypes.arrayOf(React.PropTypes.string),
 
@@ -128,12 +119,6 @@ PublisherBanner.propTypes = {
 PublisherBanner.defaultProps = {
 };
 
-const RNAdMobDFP = requireNativeComponent('RNAdMobDFP', PublisherBanner, {
-  nativeOnly: {
-    onSizeChange: true,
-    onDidFailToReceiveAdWithError: true,
-    onAdmobDispatchAppEvent: true,
-  },
-});
+const RNAdMobDFP = requireNativeComponent('RNAdMobDFP', PublisherBanner);
 
 export default PublisherBanner;
