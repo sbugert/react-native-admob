@@ -1,51 +1,66 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   NativeModules,
   requireNativeComponent,
   View,
   NativeEventEmitter,
+  Platform,
+  UIManager,
+  findNodeHandle,
 } from 'react-native';
 
-const RNBanner = requireNativeComponent('RNAdMob', AdMobBanner);
-
-export default class AdMobBanner extends React.Component {
+class AdMobBanner extends Component {
 
   constructor() {
     super();
-    this.onSizeChange = this.onSizeChange.bind(this);
+    this.handleSizeChange = this.handleSizeChange.bind(this);
+    this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(this);
     this.state = {
       style: {},
     };
   }
 
-  onSizeChange(event) {
+  componentDidMount() {
+    this.loadBanner();
+  }
+
+  loadBanner() {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this._bannerView),
+      UIManager.RNAdMob.Commands.loadBanner,
+      null,
+    );
+  }
+
+  handleSizeChange(event) {
     const { height, width } = event.nativeEvent;
     this.setState({ style: { width, height } });
+    if (this.props.onSizeChange) {
+      this.props.onSizeChange({ width, height });
+    }
+  }
+
+  handleDidFailToReceiveAdWithError(event) {
+    if (this.props.onDidFailToReceiveAdWithError) {
+      this.props.onDidFailToReceiveAdWithError(event.nativeEvent.error);
+    }
   }
 
   render() {
-    const { adUnitID, testDeviceID, bannerSize, style, didFailToReceiveAdWithError } = this.props;
     return (
-      <View style={this.props.style}>
-        <RNBanner
-          style={this.state.style}
-          onSizeChange={this.onSizeChange.bind(this)}
-          onAdViewDidReceiveAd={this.props.adViewDidReceiveAd}
-          onDidFailToReceiveAdWithError={(event) => didFailToReceiveAdWithError(event.nativeEvent.error)}
-          onAdViewWillPresentScreen={this.props.adViewWillPresentScreen}
-          onAdViewWillDismissScreen={this.props.adViewWillDismissScreen}
-          onAdViewDidDismissScreen={this.props.adViewDidDismissScreen}
-          onAdViewWillLeaveApplication={this.props.adViewWillLeaveApplication}
-          testDeviceID={testDeviceID}
-          adUnitID={adUnitID}
-          bannerSize={bannerSize} />
-      </View>
+      <RNAdMob
+        {...this.props}
+        style={[this.props.style, this.state.style]}
+        onSizeChange={this.handleSizeChange}
+        onDidFailToReceiveAdWithError={this.handleDidFailToReceiveAdWithError}
+        ref={el => (this._bannerView = el)}
+      />
     );
   }
 }
 
 AdMobBanner.propTypes = {
-  style: View.propTypes.style,
+  ...View.propTypes,
 
   /**
    * AdMob iOS library banner size constants
@@ -60,7 +75,7 @@ AdMobBanner.propTypes = {
    *
    * banner is default
    */
-  bannerSize: React.PropTypes.string,
+  adSize: React.PropTypes.string,
 
   /**
    * AdMob ad unit ID
@@ -68,20 +83,25 @@ AdMobBanner.propTypes = {
   adUnitID: React.PropTypes.string,
 
   /**
-   * Test device ID
+   * Array of test devices. Use AdMobBanner.simulatorId for the simulator
    */
-  testDeviceID: React.PropTypes.string,
+  testDevices: React.PropTypes.arrayOf(React.PropTypes.string),
 
   /**
    * AdMob iOS library events
    */
-  adViewDidReceiveAd: React.PropTypes.func,
-  didFailToReceiveAdWithError: React.PropTypes.func,
-  adViewWillPresentScreen: React.PropTypes.func,
-  adViewWillDismissScreen: React.PropTypes.func,
-  adViewDidDismissScreen: React.PropTypes.func,
-  adViewWillLeaveApplication: React.PropTypes.func,
-  ...View.propTypes,
+  onSizeChange: React.PropTypes.func,
+  onAdViewDidReceiveAd: React.PropTypes.func,
+  onDidFailToReceiveAdWithError: React.PropTypes.func,
+  onAdViewWillPresentScreen: React.PropTypes.func,
+  onAdViewWillDismissScreen: React.PropTypes.func,
+  onAdViewDidDismissScreen: React.PropTypes.func,
+  onAdViewWillLeaveApplication: React.PropTypes.func,
 };
 
-AdMobBanner.defaultProps = { bannerSize: 'smartBannerPortrait', didFailToReceiveAdWithError: () => {} };
+AdMobBanner.defaultProps = {
+};
+
+const RNAdMob = requireNativeComponent('RNAdMob', AdMobBanner);
+
+export default AdMobBanner;
