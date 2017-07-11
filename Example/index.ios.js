@@ -37,7 +37,7 @@ export default class Example extends Component {
   }
 
   componentDidMount() {
-    AdMobRewarded.setTestDeviceID('EMULATOR');
+    AdMobRewarded.setTestDevices([AdMobRewarded.simulatorId]);
     AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
 
     AdMobRewarded.addEventListener('rewardedVideoDidRewardUser',
@@ -51,6 +51,9 @@ export default class Example extends Component {
     );
     AdMobRewarded.addEventListener('rewardedVideoDidOpen',
       () => console.log('rewardedVideoDidOpen')
+    );
+    AdMobRewarded.addEventListener('rewardedVideoDidStartPlaying',
+      () => console.log('rewardedVideoDidStartPlaying')
     );
     AdMobRewarded.addEventListener('rewardedVideoDidClose',
       () => {

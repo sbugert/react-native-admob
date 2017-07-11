@@ -1,105 +1,144 @@
 #import "RNAdMobRewarded.h"
 
+#if __has_include(<React/RCTUtils.h>)
+#import <React/RCTUtils.h>
+#else
+#import "RCTUtils.h"
+#endif
+
 @implementation RNAdMobRewarded {
-  NSString *_adUnitID;
-  NSString *_testDeviceID;
-  RCTResponseSenderBlock _requestAdCallback;
-  RCTResponseSenderBlock _showAdCallback;
-}
-
-@synthesize bridge = _bridge;
-
-+ (void)initialize
-{
-  NSLog(@"initialize");
-  [GADRewardBasedVideoAd sharedInstance].delegate = self;
+    NSString *_adUnitID;
+    NSArray *_testDevices;
+    RCTResponseSenderBlock _requestAdCallback;
+    RCTResponseSenderBlock _showAdCallback;
+    BOOL hasListeners;
 }
 
 - (dispatch_queue_t)methodQueue
 {
-  return dispatch_get_main_queue();
+    return dispatch_get_main_queue();
 }
 
 RCT_EXPORT_MODULE();
+
+- (NSArray<NSString *> *)supportedEvents
+{
+    return @[
+             @"rewardedVideoDidRewardUser",
+             @"rewardedVideoDidLoad",
+             @"rewardedVideoDidFailToLoad",
+             @"rewardedVideoDidOpen",
+             @"rewardedVideoDidStartPlaying",
+             @"rewardedVideoDidClose",
+             @"rewardedVideoWillLeaveApplication"];
+}
 
 #pragma mark exported methods
 
 RCT_EXPORT_METHOD(setAdUnitID:(NSString *)adUnitID)
 {
-  _adUnitID = adUnitID;
+    _adUnitID = adUnitID;
 }
 
-RCT_EXPORT_METHOD(setTestDeviceID:(NSString *)testDeviceID)
+RCT_EXPORT_METHOD(setTestDevices:(NSArray *)testDevices)
 {
-  _testDeviceID = testDeviceID;
+    _testDevices = testDevices;
 }
 
 RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
 {
-  _requestAdCallback = callback;
-  [GADRewardBasedVideoAd sharedInstance].delegate = self;
-  GADRequest *request = [GADRequest request];
-  if(_testDeviceID) {
-    if([_testDeviceID isEqualToString:@"EMULATOR"]) {
-      request.testDevices = @[kGADSimulatorID];
-    } else {
-      request.testDevices = @[_testDeviceID];
-    }
-  }
-  [[GADRewardBasedVideoAd sharedInstance] loadRequest:request
-                                         withAdUnitID:_adUnitID];
+    _requestAdCallback = callback;
+    [GADRewardBasedVideoAd sharedInstance].delegate = self;
+    GADRequest *request = [GADRequest request];
+    request.testDevices = _testDevices;
+    [[GADRewardBasedVideoAd sharedInstance] loadRequest:request
+                                           withAdUnitID:_adUnitID];
 }
 
 RCT_EXPORT_METHOD(showAd:(RCTResponseSenderBlock)callback)
 {
-  if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
-    _showAdCallback = callback;
-    [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:[UIApplication sharedApplication].delegate.window.rootViewController];
-  }
-  else {
-    callback(@[@"Ad is not ready."]); // TODO: make proper error via RCTUtils.h
-  }
+    if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
+        _showAdCallback = callback;
+        UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+        UIViewController *rootViewController = [keyWindow rootViewController];
+        [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:rootViewController];
+    }
+    else {
+        callback(@[RCTMakeError(@"Ad is not ready", nil, nil)]);
+    }
 }
 
 RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 {
-  callback(@[[NSNumber numberWithBool:[[GADRewardBasedVideoAd sharedInstance] isReady]]]);
+    callback(@[[NSNumber numberWithBool:[[GADRewardBasedVideoAd sharedInstance] isReady]]]);
 }
 
+- (NSDictionary<NSString *,id> *)constantsToExport
+{
+    return @{
+             @"simulatorId": kGADSimulatorID
+             };
+}
 
-#pragma mark delegate events
+- (void)startObserving
+{
+    hasListeners = YES;
+    [GADRewardBasedVideoAd sharedInstance].delegate = self;
+}
+
+- (void)stopObserving
+{
+    hasListeners = NO;
+    [GADRewardBasedVideoAd sharedInstance].delegate = nil;
+}
+
+#pragma mark GADRewardBasedVideoAdDelegate
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd
    didRewardUserWithReward:(GADAdReward *)reward {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidRewardUser" body:@{@"type": reward.type, @"amount": reward.amount}];
+    if (hasListeners) {
+        [self sendEventWithName:@"rewardedVideoDidRewardUser" body:@{@"type": reward.type, @"amount": reward.amount}];
+    }
 }
 
 - (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidLoad" body:nil];
-  _requestAdCallback(@[[NSNull null]]);
+    if (hasListeners) {
+        [self sendEventWithName:@"rewardedVideoDidLoad" body:nil];
+    }
+    _requestAdCallback(@[[NSNull null]]);
 }
 
 - (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidOpen" body:nil];
-  _showAdCallback(@[[NSNull null]]);
+    if (hasListeners) {
+        [self sendEventWithName:@"rewardedVideoDidOpen" body:nil];
+    }
+    _showAdCallback(@[[NSNull null]]);
 }
 
 - (void)rewardBasedVideoAdDidStartPlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  NSLog(@"Reward based video ad started playing.");
+    if (hasListeners) {
+        [self sendEventWithName:@"rewardedVideoDidStartPlaying" body:nil];
+    }
 }
 
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidClose" body:nil];
+    if (hasListeners) {
+        [self sendEventWithName:@"rewardedVideoDidClose" body:nil];
+    }
 }
 
 - (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoWillLeaveApplication" body:nil];
+    if (hasListeners) {
+        [self sendEventWithName:@"rewardedVideoWillLeaveApplication" body:nil];
+    }
 }
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd
     didFailToLoadWithError:(NSError *)error {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"rewardedVideoDidFailToLoad" body:@{@"name": [error description]}];
-  _requestAdCallback(@[[error description]]);
+    if (hasListeners) {
+        [self sendEventWithName:@"rewardedVideoDidFailToLoad" body:@{@"name": [error description]}];
+    }
+    _requestAdCallback(@[RCTJSErrorFromNSError(error)]);
 }
 
 @end

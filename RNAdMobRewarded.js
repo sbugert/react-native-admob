@@ -1,46 +1,20 @@
 'use strict';
 
 import {
+  Platform,
   NativeModules,
-  DeviceEventEmitter,
+  NativeEventEmitter,
 } from 'react-native';
 
 const RNAdMobRewarded = NativeModules.RNAdMobRewarded;
 
-const eventHandlers = {
-  rewardedVideoDidRewardUser: new Map(),
-  rewardedVideoDidLoad: new Map(),
-  rewardedVideoDidFailToLoad: new Map(),
-  rewardedVideoDidOpen: new Map(),
-  rewardedVideoDidClose: new Map(),
-  rewardedVideoWillLeaveApplication: new Map(),
-};
+const adMobRewardedEmitter = new NativeEventEmitter(RNAdMobRewarded);
+
+const eventHandlers = {};
 
 const addEventListener = (type, handler) => {
-  switch (type) {
-    case 'rewardedVideoDidRewardUser':
-      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, (type, amount) => {
-        handler(type, amount);
-      }));
-      break;
-    case 'rewardedVideoDidLoad':
-      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
-      break;
-    case 'rewardedVideoDidFailToLoad':
-      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, (error) => { handler(error); }));
-      break;
-    case 'rewardedVideoDidOpen':
-      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
-      break;
-    case 'rewardedVideoDidClose':
-      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
-      break;
-    case 'rewardedVideoWillLeaveApplication':
-      eventHandlers[type].set(handler, DeviceEventEmitter.addListener(type, handler));
-      break;
-    default:
-      console.log(`Event with type ${type} does not exist.`);
-  }
+  eventHandlers[type] = eventHandlers[type] || new Map();
+  eventHandlers[type].set(handler, adMobRewardedEmitter.addListener(type, handler));
 }
 
 const removeEventListener = (type, handler) => {
@@ -52,12 +26,13 @@ const removeEventListener = (type, handler) => {
 }
 
 const removeAllListeners = () => {
-  DeviceEventEmitter.removeAllListeners('rewardedVideoDidRewardUser');
-  DeviceEventEmitter.removeAllListeners('rewardedVideoDidLoad');
-  DeviceEventEmitter.removeAllListeners('rewardedVideoDidFailToLoad');
-  DeviceEventEmitter.removeAllListeners('rewardedVideoDidOpen');
-  DeviceEventEmitter.removeAllListeners('rewardedVideoDidClose');
-  DeviceEventEmitter.removeAllListeners('rewardedVideoWillLeaveApplication');
+  const types = Object.keys(eventHandlers);
+  types.forEach(type => (
+    eventHandlers[type].forEach((subscription, key, map) => {
+      subscription.remove();
+      map.delete(key);
+    })
+  ));
 };
 
 module.exports = {
@@ -67,4 +42,5 @@ module.exports = {
   addEventListener,
   removeEventListener,
   removeAllListeners,
+  simulatorId: Platform.OS === 'android' ? 'EMULATOR' : RNAdMobRewarded.simulatorId,
 };
