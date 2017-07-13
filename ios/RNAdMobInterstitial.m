@@ -1,14 +1,19 @@
 #import "RNAdMobInterstitial.h"
 
+#if __has_include(<React/RCTUtils.h>)
+#import <React/RCTUtils.h>
+#else
+#import "RCTUtils.h"
+#endif
+
 @implementation RNAdMobInterstitial {
   GADInterstitial  *_interstitial;
   NSString *_adUnitID;
-  NSString *_testDeviceID;
+  NSArray *_testDevices;
   RCTResponseSenderBlock _requestAdCallback;
   RCTResponseSenderBlock _showAdCallback;
+  BOOL hasListeners;
 }
-
-@synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue
 {
@@ -17,6 +22,16 @@
 
 RCT_EXPORT_MODULE();
 
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[
+           @"interstitialDidLoad",
+           @"interstitialDidFailToLoad",
+           @"interstitialDidOpen",
+           @"interstitialDidClose",
+           @"interstitialWillLeaveApplication"];
+}
+
 #pragma mark exported methods
 
 RCT_EXPORT_METHOD(setAdUnitID:(NSString *)adUnitID)
@@ -24,9 +39,9 @@ RCT_EXPORT_METHOD(setAdUnitID:(NSString *)adUnitID)
   _adUnitID = adUnitID;
 }
 
-RCT_EXPORT_METHOD(setTestDeviceID:(NSString *)testDeviceID)
+RCT_EXPORT_METHOD(setTestDevices:(NSArray *)testDevices)
 {
-  _testDeviceID = testDeviceID;
+  _testDevices = testDevices;
 }
 
 RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
@@ -35,19 +50,15 @@ RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
     _requestAdCallback = callback;
 
     _interstitial = [[GADInterstitial alloc] initWithAdUnitID:_adUnitID];
-    _interstitial.delegate = self;
+    if (hasListeners) {
+      _interstitial.delegate = self;
+    }
 
     GADRequest *request = [GADRequest request];
-    if(_testDeviceID) {
-      if([_testDeviceID isEqualToString:@"EMULATOR"]) {
-        request.testDevices = @[kGADSimulatorID];
-      } else {
-        request.testDevices = @[_testDeviceID];
-      }
-    }
+    request.testDevices = _testDevices;
     [_interstitial loadRequest:request];
   } else {
-    callback(@[@"Ad is already loaded."]); // TODO: make proper error via RCTUtils.h
+    callback(@[RCTMakeError(@"Ad is already loaded.", nil, nil)]);
   }
 }
 
@@ -58,7 +69,7 @@ RCT_EXPORT_METHOD(showAd:(RCTResponseSenderBlock)callback)
     [_interstitial presentFromRootViewController:[UIApplication sharedApplication].delegate.window.rootViewController];
   }
   else {
-    callback(@[@"Ad is not ready."]); // TODO: make proper error via RCTUtils.h
+    callback(@[RCTMakeError(@"Ad is not ready.", nil, nil)]);
   }
 }
 
@@ -67,31 +78,63 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
   callback(@[[NSNumber numberWithBool:[_interstitial isReady]]]);
 }
 
+- (NSDictionary<NSString *,id> *)constantsToExport
+{
+  return @{
+           @"simulatorId": kGADSimulatorID
+           };
+}
 
-#pragma mark delegate events
+- (void)startObserving
+{
+  hasListeners = YES;
+  if (_interstitial) {
+    _interstitial.delegate = self;
+  }
+}
+
+- (void)stopObserving
+{
+  hasListeners = NO;
+  if (_interstitial) {
+    _interstitial.delegate = nil;
+  }
+}
+
+#pragma mark GADInterstitialDelegate
 
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidLoad" body:nil];
+  if (hasListeners) {
+    [self sendEventWithName:@"interstitialDidLoad" body:nil];
+  }
   _requestAdCallback(@[[NSNull null]]);
 }
 
 - (void)interstitial:(GADInterstitial *)interstitial
 didFailToReceiveAdWithError:(GADRequestError *)error {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidFailToLoad" body:@{@"name": [error description]}];
+  if (hasListeners) {
+    [self sendEventWithName:@"interstitialDidFailToLoad" body:@{@"name": [error description]}];
+  }
   _requestAdCallback(@[[error description]]);
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidOpen" body:nil];
+  if (hasListeners){
+    [self sendEventWithName:@"interstitialDidOpen" body:nil];
+  }
   _showAdCallback(@[[NSNull null]]);
 }
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidClose" body:nil];
+  if (hasListeners) {
+    [self sendEventWithName:@"interstitialDidClose" body:nil];
+  }
 }
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialWillLeaveApplication" body:nil];
+  if (hasListeners) {
+    [self sendEventWithName:@"interstitialWillLeaveApplication" body:nil];
+  }
 }
 
 @end
