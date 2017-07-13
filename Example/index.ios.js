@@ -11,8 +11,9 @@ import {
 } from 'react-native';
 
 import {
-  AdMobRewarded,
   AdMobBanner,
+  AdMobRewarded,
+  AdMobInterstitial,
   PublisherBanner,
 } from 'react-native-admob';
 
@@ -66,14 +67,43 @@ export default class Example extends Component {
     );
 
     AdMobRewarded.requestAd((error) => error && console.log(error));
+
+    AdMobInterstitial.setTestDevices([AdMobRewarded.simulatorId]);
+    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/4411468910');
+
+    AdMobInterstitial.addEventListener('interstitialDidLoad',
+      () => console.log('interstitialDidLoad')
+    );
+    AdMobInterstitial.addEventListener('interstitialDidFailToLoad',
+      (error) => console.log('interstitialDidFailToLoad', error)
+    );
+    AdMobInterstitial.addEventListener('interstitialDidOpen',
+      () => console.log('interstitialDidOpen')
+    );
+    AdMobInterstitial.addEventListener('interstitialDidClose',
+      () => {
+        console.log('interstitialDidClose');
+        AdMobInterstitial.requestAd((error) => error && console.log(error));
+      }
+    );
+    AdMobInterstitial.addEventListener('interstitialWillLeaveApplication',
+      () => console.log('interstitialWillLeaveApplication')
+    );
+
+    AdMobInterstitial.requestAd((error) => error && console.log(error));
   }
 
   componentWillUnmount() {
     AdMobRewarded.removeAllListeners();
+    AdMobInterstitial.removeAllListeners();
   }
 
   showRewarded() {
     AdMobRewarded.showAd((error) => error && console.log(error));
+  }
+
+  showInterstitial() {
+    AdMobInterstitial.showAd((error) => error && console.log(error));
   }
 
   render() {
@@ -95,6 +125,12 @@ export default class Example extends Component {
             <Button
               title="Show Rewarded Video and preload next"
               onPress={this.showRewarded}
+            />
+          </BannerExample>
+          <BannerExample title="Interstitial">
+            <Button
+              title="Show Interstitial and preload next"
+              onPress={this.showInterstitial}
             />
           </BannerExample>
           <BannerExample title="DFP - Multiple Ad Sizes">
