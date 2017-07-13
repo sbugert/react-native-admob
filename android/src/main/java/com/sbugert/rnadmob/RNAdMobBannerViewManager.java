@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -18,17 +19,18 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> {
 
-  public static final String REACT_CLASS = "RNAdMob";
+  public static final String REACT_CLASS = "RNGADBannerView";
 
   public static final String PROP_BANNER_SIZE = "bannerSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
-  public static final String PROP_TEST_DEVICE_ID = "testDeviceID";
+  public static final String PROP_TEST_DEVICES = "testDevices";
 
-  private String testDeviceID = null;
+  private String[] testDevices;
 
   public enum Events {
     EVENT_SIZE_CHANGE("onSizeChange"),
@@ -198,19 +200,18 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
     loadAd(newAdView);
   }
 
-  @ReactProp(name = PROP_TEST_DEVICE_ID)
-  public void setPropTestDeviceID(final ReactViewGroup view, final String testDeviceID) {
-    this.testDeviceID = testDeviceID;
+  @ReactProp(name = PROP_TEST_DEVICES)
+  public void setPropTestDevices(final ReactViewGroup view, final ReadableArray testDevices) {
+    ArrayList<Object> list = testDevices.toArrayList();
+    this.testDevices = list.toArray(new String[list.size()]);
   }
 
   private void loadAd(final AdView adView) {
     if (adView.getAdSize() != null && adView.getAdUnitId() != null) {
       AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-      if (testDeviceID != null){
-        if (testDeviceID.equals("EMULATOR")) {
-          adRequestBuilder = adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-        } else {
-          adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+      if (testDevices != null) {
+        for (int i = 0; i < testDevices.length; i++) {
+          adRequestBuilder.addTestDevice(testDevices[i]);
         }
       }
       AdRequest adRequest = adRequestBuilder.build();

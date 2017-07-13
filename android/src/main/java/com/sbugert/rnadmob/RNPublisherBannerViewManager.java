@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -19,17 +20,19 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGroup> implements AppEventListener {
 
-  public static final String REACT_CLASS = "RNAdMobDFP";
+  public static final String REACT_CLASS = "RNDFPBannerView";
 
   public static final String PROP_BANNER_SIZE = "bannerSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
-  public static final String PROP_TEST_DEVICE_ID = "testDeviceID";
+  public static final String PROP_TEST_DEVICES = "testDevices";
 
-  private String testDeviceID = null;
+  String[] testDevices;
 
   public enum Events {
     EVENT_SIZE_CHANGE("onSizeChange"),
@@ -202,26 +205,24 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
     loadAd(newAdView);
   }
 
-  @ReactProp(name = PROP_TEST_DEVICE_ID)
-  public void setPropTestDeviceID(final ReactViewGroup view, final String testDeviceID) {
-    this.testDeviceID = testDeviceID;
+  @ReactProp(name = PROP_TEST_DEVICES)
+  public void setPropTestDevices(final ReactViewGroup view, final ReadableArray testDevices) {
+    ArrayList<Object> list = testDevices.toArrayList();
+    this.testDevices = list.toArray(new String[list.size()]);
   }
 
   private void loadAd(final PublisherAdView adView) {
     if (adView.getAdSizes() != null && adView.getAdUnitId() != null) {
       PublisherAdRequest.Builder adRequestBuilder = new PublisherAdRequest.Builder();
-      if (testDeviceID != null){
-        if (testDeviceID.equals("EMULATOR")) {
-          adRequestBuilder = adRequestBuilder.addTestDevice(PublisherAdRequest.DEVICE_ID_EMULATOR);
-        } else {
-          adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
+      if (testDevices != null) {
+        for (int i = 0; i < testDevices.length; i++) {
+          adRequestBuilder.addTestDevice(testDevices[i]);
         }
       }
       PublisherAdRequest adRequest = adRequestBuilder.build();
       adView.loadAd(adRequest);
     }
   }
-
 
   private AdSize getAdSizeFromString(String adSize) {
     switch (adSize) {
@@ -244,5 +245,13 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
       default:
         return AdSize.BANNER;
     }
+  }
+
+  @javax.annotation.Nullable
+  @Override
+  public Map<String, Object> getConstants() {
+    final Map<String, Object> constants = new HashMap<>();
+    constants.put("simulatorId", PublisherAdRequest.DEVICE_ID_EMULATOR);
+    return constants;
   }
 }
