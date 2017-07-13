@@ -28,7 +28,7 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
 
   public static final String REACT_CLASS = "RNDFPBannerView";
 
-  public static final String PROP_BANNER_SIZE = "bannerSize";
+  public static final String PROP_AD_SIZE = "adSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
   public static final String PROP_TEST_DEVICES = "testDevices";
 
@@ -158,7 +158,7 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
     return builder.build();
   }
 
-  @ReactProp(name = PROP_BANNER_SIZE)
+  @ReactProp(name = PROP_AD_SIZE)
   public void setBannerSize(final ReactViewGroup view, final String sizeString) {
     AdSize adSize = getAdSizeFromString(sizeString);
     AdSize[] adSizes = new AdSize[1];

@@ -26,7 +26,7 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
 
   public static final String REACT_CLASS = "RNGADBannerView";
 
-  public static final String PROP_BANNER_SIZE = "bannerSize";
+  public static final String PROP_AD_SIZE = "adSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
   public static final String PROP_TEST_DEVICES = "testDevices";
 
@@ -154,7 +154,7 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactViewGroup> 
     return builder.build();
   }
 
-  @ReactProp(name = PROP_BANNER_SIZE)
+  @ReactProp(name = PROP_AD_SIZE)
   public void setBannerSize(final ReactViewGroup view, final String sizeString) {
     mSizeString = sizeString;
     AdSize adSize = getAdSizeFromString(sizeString);
