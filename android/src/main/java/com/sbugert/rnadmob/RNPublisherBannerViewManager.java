@@ -32,6 +32,8 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
   public static final String PROP_AD_UNIT_ID = "adUnitID";
   public static final String PROP_TEST_DEVICES = "testDevices";
 
+  public static final int COMMAND_LOAD_BANNER = 1;
+
   String[] testDevices;
 
   public enum Events {
@@ -253,5 +255,21 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
     final Map<String, Object> constants = new HashMap<>();
     constants.put("simulatorId", PublisherAdRequest.DEVICE_ID_EMULATOR);
     return constants;
+  }
+
+  @javax.annotation.Nullable
+  @Override
+  public Map<String, Integer> getCommandsMap() {
+    return MapBuilder.of("loadBanner", COMMAND_LOAD_BANNER);
+  }
+
+  @Override
+  public void receiveCommand(ReactViewGroup root, int commandId, @javax.annotation.Nullable ReadableArray args) {
+    switch (commandId) {
+      case COMMAND_LOAD_BANNER:
+        PublisherAdView adView = (PublisherAdView) root.getChildAt(0);
+        this.loadAd(adView);
+        break;
+    }
   }
 }
