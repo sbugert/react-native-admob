@@ -1,0 +1,17 @@
+{
+  "env": {
+    "es6": true
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "comma-dangle": ["error", "always-multiline"],
+    "react/jsx-handler-names": "error"
+  }
+}

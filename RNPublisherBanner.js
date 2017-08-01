@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import {
   NativeModules,
   requireNativeComponent,
-  View,
-  NativeEventEmitter,
   Platform,
   UIManager,
   findNodeHandle,

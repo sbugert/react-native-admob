@@ -1,7 +1,4 @@
-'use strict';
-
 import {
-  Platform,
   NativeModules,
   NativeEventEmitter,
 } from 'react-native';
@@ -23,7 +20,7 @@ const removeEventListener = (type, handler) => {
   }
   eventHandlers[type].get(handler).remove();
   eventHandlers[type].delete(handler);
-}
+};
 
 const removeAllListeners = () => {
   const types = Object.keys(eventHandlers);
@@ -35,7 +32,7 @@ const removeAllListeners = () => {
   ));
 };
 
-module.exports = {
+export default {
   ...RNAdMobInterstitial,
   requestAd: (cb = () => {}) => RNAdMobInterstitial.requestAd(cb), // requestAd callback is optional
   showAd: (cb = () => {}) => RNAdMobInterstitial.showAd(cb),       // showAd callback is optional

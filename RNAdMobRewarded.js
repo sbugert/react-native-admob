@@ -1,5 +1,3 @@
-'use strict';
-
 import {
   Platform,
   NativeModules,
@@ -15,7 +13,7 @@ const eventHandlers = {};
 const addEventListener = (type, handler) => {
   eventHandlers[type] = eventHandlers[type] || new Map();
   eventHandlers[type].set(handler, adMobRewardedEmitter.addListener(type, handler));
-}
+};
 
 const removeEventListener = (type, handler) => {
   if (!eventHandlers[type].has(handler)) {
@@ -23,7 +21,7 @@ const removeEventListener = (type, handler) => {
   }
   eventHandlers[type].get(handler).remove();
   eventHandlers[type].delete(handler);
-}
+};
 
 const removeAllListeners = () => {
   const types = Object.keys(eventHandlers);
@@ -35,7 +33,7 @@ const removeAllListeners = () => {
   ));
 };
 
-module.exports = {
+export default {
   ...RNAdMobRewarded,
   requestAd: (cb = () => {}) => RNAdMobRewarded.requestAd(cb), // requestAd callback is optional
   showAd: (cb = () => {}) => RNAdMobRewarded.showAd(cb),       // showAd callback is optional
