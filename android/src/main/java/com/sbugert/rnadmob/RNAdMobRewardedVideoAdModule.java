@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.ads.MobileAds;
@@ -108,7 +109,8 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
 
     @ReactMethod
     public void setTestDevices(ReadableArray testDevices) {
-      ArrayList<Object> list = testDevices.toArrayList();
+      ReadableNativeArray nativeArray = (ReadableNativeArray)testDevices;
+      ArrayList<Object> list = nativeArray.toArrayList();
       this.testDevices = list.toArray(new String[list.size()]);
     }
 

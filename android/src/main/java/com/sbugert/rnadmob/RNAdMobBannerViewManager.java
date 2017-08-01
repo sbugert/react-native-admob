@@ -7,6 +7,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -200,7 +201,8 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactAdView> {
 
   @ReactProp(name = PROP_TEST_DEVICES)
   public void setPropTestDevices(final ReactAdView view, final ReadableArray testDevices) {
-    ArrayList<Object> list = testDevices.toArrayList();
+    ReadableNativeArray nativeArray = (ReadableNativeArray)testDevices;
+    ArrayList<Object> list = nativeArray.toArrayList();
     view.setTestDevices(list.toArray(new String[list.size()]));
   }
 
