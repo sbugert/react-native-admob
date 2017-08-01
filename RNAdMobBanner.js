@@ -7,7 +7,9 @@ import {
   Platform,
   UIManager,
   findNodeHandle,
+  ViewPropTypes,
 } from 'react-native';
+import { string, func, arrayOf } from 'prop-types';
 
 class AdMobBanner extends Component {
 
@@ -62,7 +64,7 @@ class AdMobBanner extends Component {
 AdMobBanner.simulatorId = Platform.OS === 'android' ? 'EMULATOR' : NativeModules.RNGADBannerViewManager.simulatorId;
 
 AdMobBanner.propTypes = {
-  ...View.propTypes,
+  ...ViewPropTypes,
 
   /**
    * AdMob iOS library banner size constants
@@ -77,31 +79,28 @@ AdMobBanner.propTypes = {
    *
    * banner is default
    */
-  adSize: React.PropTypes.string,
+  adSize: string,
 
   /**
    * AdMob ad unit ID
    */
-  adUnitID: React.PropTypes.string,
+  adUnitID: string,
 
   /**
    * Array of test devices. Use AdMobBanner.simulatorId for the simulator
    */
-  testDevices: React.PropTypes.arrayOf(React.PropTypes.string),
+  testDevices: arrayOf(string),
 
   /**
    * AdMob iOS library events
    */
-  onSizeChange: React.PropTypes.func,
-  onAdViewDidReceiveAd: React.PropTypes.func,
-  onDidFailToReceiveAdWithError: React.PropTypes.func,
-  onAdViewWillPresentScreen: React.PropTypes.func,
-  onAdViewWillDismissScreen: React.PropTypes.func,
-  onAdViewDidDismissScreen: React.PropTypes.func,
-  onAdViewWillLeaveApplication: React.PropTypes.func,
-};
-
-AdMobBanner.defaultProps = {
+  onSizeChange: func,
+  onAdViewDidReceiveAd: func,
+  onDidFailToReceiveAdWithError: func,
+  onAdViewWillPresentScreen: func,
+  onAdViewWillDismissScreen: func,
+  onAdViewDidDismissScreen: func,
+  onAdViewWillLeaveApplication: func,
 };
 
 const RNGADBannerView = requireNativeComponent('RNGADBannerView', AdMobBanner);
