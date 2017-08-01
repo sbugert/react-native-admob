@@ -71,6 +71,11 @@
 
 /// Tells the delegate an ad request loaded an ad.
 - (void)adViewDidReceiveAd:(DFPBannerView *)adView {
+    if (self.onSizeChange) {
+      self.onSizeChange(@{
+                          @"width": @(adView.frame.size.width),
+                          @"height": @(adView.frame.size.height) });
+    }
     if (self.onAdViewDidReceiveAd) {
         self.onAdViewDidReceiveAd(@{});
     }
