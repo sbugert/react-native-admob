@@ -136,6 +136,7 @@ For a full example reference to the [example project](Example).
 
 | Prop                                           |
 |------------------------------------------------|
+|`onSizeChange(width, height)`                   |
 |`adViewDidReceiveAd()`                          |
 |`didFailToReceiveAdWithError(errorDescription)` |
 |`adViewWillPresentScreen()`                     |
