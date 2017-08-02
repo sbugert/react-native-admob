@@ -1,4 +1,14 @@
-import { arrayOf, func, string } from 'prop-types';
+import {
+  arrayOf,
+  bool,
+  func,
+  instanceOf,
+  number,
+  object,
+  oneOf,
+  shape,
+  string,
+} from 'prop-types';
 import React, { Component } from 'react';
 import {
   findNodeHandle,
@@ -114,6 +124,62 @@ PublisherBanner.propTypes = {
   onAdClosed: func,
   onAdLeftApplication: func,
   onAppEvent: func,
+
+  targeting: shape({
+    /**
+     * Arbitrary object of custom targeting information.
+     */
+    customTargeting: object,
+
+    /**
+     * Array of exclusion labels.
+     */
+    categoryExclusions: arrayOf(string),
+
+    /**
+     * Array of keyword strings.
+     */
+    keywords: arrayOf(string),
+
+    /**
+     * When using backfill or an SDK mediation creative, gender can be supplied
+     * in the ad request for targeting purposes.
+     */
+    gender: oneOf(['unknown', 'male', 'female']),
+
+    /**
+     * When using backfill or an SDK mediation creative, birthday can be supplied
+     * in the ad request for targeting purposes.
+     */
+    birthday: instanceOf(Date),
+
+    /**
+     * Indicate that you want Google to treat your content as child-directed.
+     */
+    childDirectedTreatment: bool,
+
+    /**
+     * Applications that monetize content matching a webpage's content may pass
+     * a content URL for keyword targeting.
+     */
+    contentURL: string,
+
+    /**
+     * You can set a publisher provided identifier (PPID) for use in frequency
+     * capping, audience segmentation and targeting, sequential ad rotation, and
+     * other audience-based ad delivery controls across devices.
+     */
+    publisherProvidedID: string,
+
+    /**
+     * The user’s current location may be used to deliver more relevant ads.
+     */
+    location: shape({
+      latitude: number,
+      longitude: number,
+      accuracy: number,
+    }),
+  }),
 };
 
 const RNDFPBannerView = requireNativeComponent(

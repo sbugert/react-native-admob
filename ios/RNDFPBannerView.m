@@ -12,6 +12,7 @@
 #endif
 
 #include "RCTConvert+GADAdSize.h"
+#include "RCTConvert+GADGender.h"
 
 @implementation RNDFPBannerView
 {
@@ -53,8 +54,51 @@
 #pragma clang diagnostic pop
 
 - (void)loadBanner {
-    GADRequest *request = [GADRequest request];
+    DFPRequest *request = [DFPRequest request];
     request.testDevices = _testDevices;
+
+    if (_targeting != nil) {
+        NSDictionary *customTargeting = [_targeting objectForKey:@"customTargeting"];
+        if (customTargeting != nil) {
+            request.customTargeting = customTargeting;
+        }
+        NSArray *categoryExclusions = [_targeting objectForKey:@"categoryExclusions"];
+        if (categoryExclusions != nil) {
+            request.categoryExclusions = categoryExclusions;
+        }
+        NSArray *keywords = [_targeting objectForKey:@"keywords"];
+        if (keywords != nil) {
+            request.keywords = keywords;
+        }
+        NSString *gender = [_targeting objectForKey:@"gender"];
+        if (gender != nil) {
+            request.gender = [RCTConvert GADGender:gender];
+        }
+        NSDate *birthday = [_targeting objectForKey:@"birthday"];
+        if (birthday != nil) {
+            request.birthday = [RCTConvert NSDate:birthday];
+        }
+        id childDirectedTreatment = [_targeting objectForKey:@"childDirectedTreatment"];
+        if (childDirectedTreatment != nil) {
+            [request tagForChildDirectedTreatment:childDirectedTreatment];
+        }
+        NSString *contentURL = [_targeting objectForKey:@"contentURL"];
+        if (contentURL != nil) {
+            request.contentURL = contentURL;
+        }
+        NSString *publisherProvidedID = [_targeting objectForKey:@"publisherProvidedID"];
+        if (publisherProvidedID != nil) {
+            request.publisherProvidedID = publisherProvidedID;
+        }
+        NSDictionary *location = [_targeting objectForKey:@"location"];
+        if (location != nil) {
+            CGFloat latitude = [[location objectForKey:@"latitude"] doubleValue];
+            CGFloat longitude = [[location objectForKey:@"longitude"] doubleValue];
+            CGFloat accuracy = [[location objectForKey:@"accuracy"] doubleValue];
+            [request setLocationWithLatitude:latitude longitude:longitude accuracy:accuracy];
+        }
+    }
+    
     [_bannerView loadRequest:request];
 }
 
