@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   NativeModules,
   requireNativeComponent,
-  Platform,
   UIManager,
   findNodeHandle,
   ViewPropTypes,
@@ -70,7 +69,11 @@ class PublisherBanner extends Component {
   }
 }
 
-PublisherBanner.simulatorId = Platform.OS === 'android' ? 'EMULATOR' : NativeModules.RNDFPBannerViewManager.simulatorId;
+Object.defineProperty(PublisherBanner, 'simulatorId', {
+  get() {
+    return NativeModules.RNDFPBannerViewManager.simulatorId;
+  },
+});
 
 PublisherBanner.propTypes = {
   ...ViewPropTypes,

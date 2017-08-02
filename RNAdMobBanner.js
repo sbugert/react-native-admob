@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   NativeModules,
   requireNativeComponent,
-  Platform,
   UIManager,
   findNodeHandle,
   ViewPropTypes,
@@ -61,7 +60,11 @@ class AdMobBanner extends Component {
   }
 }
 
-AdMobBanner.simulatorId = Platform.OS === 'android' ? 'EMULATOR' : NativeModules.RNGADBannerViewManager.simulatorId;
+Object.defineProperty(AdMobBanner, 'simulatorId', {
+  get() {
+    return NativeModules.RNGADBannerViewManager.simulatorId;
+  },
+});
 
 AdMobBanner.propTypes = {
   ...ViewPropTypes,
