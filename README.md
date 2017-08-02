@@ -26,47 +26,32 @@ The banner is implemented as a component while the interstitial has an imperativ
 1. `npm i react-native-admob -S`
 2. Make the following additions to the given files:
 
-**android/settings.gradle**
+**`android/settings.gradle`**
 
-```
-include ':RNAdMob', ':app'
-project(':RNAdMob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-admob/android')
+```groovy
+include ':react-native-admob'
+project(':react-native-admob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-admob/android')
 ```
 
-**android/app/build.gradle**
+**`android/app/build.gradle`**
 
-```
+```groovy
 dependencies {
-   ...
-   compile project(':RNAdMob')
+   // ...
+   compile project(':react-native-admob')
 }
 ```
 
-**MainApplication.java**
-
-#### RN < 0.29
-
-In **MainActivity.java** on top, where imports are:
-```java
-import com.sbugert.rnadmob.RNAdMobPackage;
-```
-
-Under `protected List<ReactPackage> getPackages() {`:  
-```java
-  return Arrays.<ReactPackage>asList(
-    new MainReactPackage(),
-    new RNAdMobPackage()
-  );
-```
-
-#### RN >= 0.29
+**`MainApplication.java`**
 
 In **MainAplication.java** on top, where imports are:
+
 ```java
 import com.sbugert.rnadmob.RNAdMobPackage;
 ```
 
-Under `protected List<ReactPackage> getPackages() {`:  
+Under `protected List<ReactPackage> getPackages() {`:
+
 ```java
   return Arrays.<ReactPackage>asList(
     new MainReactPackage(),
@@ -77,36 +62,38 @@ Under `protected List<ReactPackage> getPackages() {`:
 ### Usage
 
 ```javascript
-import { 
-  AdMobBanner, 
-  AdMobInterstitial, 
+import {
+  AdMobBanner,
+  AdMobInterstitial,
   PublisherBanner,
-  AdMobRewarded
+  AdMobRewarded,
 } from 'react-native-admob'
 
 // Display a banner
 <AdMobBanner
-  bannerSize="fullBanner"
+  adSize="fullBanner"
   adUnitID="your-admob-unit-id"
-  testDeviceID="EMULATOR"
-  didFailToReceiveAdWithError={this.bannerError} />
+  testDevices={[AdMobBanner.simulatorId]}
+  onDidFailToReceiveAdWithError={error => console.error(error)}
+/>
 
 // Display a DFP Publisher banner
 <PublisherBanner
-  bannerSize="fullBanner"
+  adSize="fullBanner"
   adUnitID="your-admob-unit-id"
-  testDeviceID="EMULATOR"
-  didFailToReceiveAdWithError={this.bannerError}
-  admobDispatchAppEvent={this.adMobEvent} />
+  testDevices={[PublisherBanner.simulatorId]}
+  onDidFailToReceiveAdWithError={error => console.error(error)}
+  onAdmobDispatchAppEvent={event => console.log(event.name, event.info)}
+/>
 
 // Display an interstitial
 AdMobInterstitial.setAdUnitID('your-admob-unit-id');
-AdMobInterstitial.setTestDeviceID('EMULATOR');
-AdMobInterstitial.requestAd(AdMobInterstitial.showAd);
+AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
 
 // Display a rewarded ad
 AdMobRewarded.setAdUnitID('your-admob-unit-id');
-AdMobRewarded.requestAd(AdMobRewarded.showAd);
+AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
 ```
 
 For a full example reference to the [example project](Example).
@@ -115,7 +102,8 @@ For a full example reference to the [example project](Example).
 
 #### AdMobBanner
 
-##### bannerSize property
+##### adSize property
+
 *Corresponding to [iOS framework banner size constants](https://developers.google.com/admob/ios/banner)*
 
 | Prop value              | Description                                 | Size                  |
@@ -125,51 +113,53 @@ For a full example reference to the [example project](Example).
 |`mediumRectangle`        |IAB Medium Rectangle for Phones and Tablets  |300x250                |
 |`fullBanner`             |IAB Full-Size Banner for Tablet              |468x60                 |
 |`leaderboard`            |IAB Leaderboard for Tablets                  |728x90                 |
-|**`smartBannerPortrait`**|Smart Banner for Phones and Tablets (default)|Screen width x 32|50|90|
+|`smartBannerPortrait`    |Smart Banner for Phones and Tablets (default)|Screen width x 32|50|90|
 |`smartBannerLandscape`   |Smart Banner for Phones and Tablets          |Screen width x 32|50|90|
 
 *Note: There is no `smartBannerPortrait` and `smartBannerLandscape` on Android. Both prop values will map to `smartBanner`*
 
-
 ##### Events as function props
+
 *Corresponding to [Ad lifecycle event callbacks](https://developers.google.com/admob/ios/banner)*
 
 | Prop                                           |
 |------------------------------------------------|
-|`adViewDidReceiveAd()`                          |
-|`didFailToReceiveAdWithError(errorDescription)` |
-|`adViewWillPresentScreen()`                     |
-|`adViewWillDismissScreen()`                     |
-|`adViewDidDismissScreen()`                      |
-|`adViewWillLeaveApplication()`                  |
+|`onAdViewDidReceiveAd()`                        |
+|`onDidFailToReceiveAdWithError(error)`          |
+|`onAdViewWillPresentScreen()`                   |
+|`onAdViewWillDismissScreen()`                   |
+|`onAdViewDidDismissScreen()`                    |
+|`onAdViewWillLeaveApplication()`                |
 
 
 #### PublisherBanner
 
 Same as AdMobBanner, except it has an extra event prop:
 
-|'admobDispatchAppEvent()' |
+| Prop                            |                                        |
+|`onAdmobDispatchAppEvent(event)` | Event has a `name` and `info` property |
 
-This handles App events that Admob/DFP can send back to the app.
-More info here: https://developers.google.com/mobile-ads-sdk/docs/dfp/android/banner#ios_app-events
+This handles App events that AdMob/DFP can send back to the app.
+More info here: https://developers.google.com/mobile-ads-sdk/docs/dfp/ios/banner#app_events
 
+And also has an additional `validAdSizes` property, which accepts an array of ad sizes which may be eligible to be served.
 
-#### AdMobInterstitials
+#### AdMobInterstitial
 
 ##### Methods
 
-| Name                      | Description                                                                                                     |
-|---------------------------|-----------------------------------------------------------------------------------------------------------------|
-|`setAdUnitID(adUnitID)`    | sets the AdUnit ID for all future ad requests.                                                                  |
-|`setTestDeviceID(deviceID)`| sets the test device ID                                                                                         |
-|`requestAd(callback)`      | requests an interstitial and calls callback when `interstitialDidLoad` or`interstitialDidFailToLoad` event fires|
-|`showAd(callback)`         | shows an interstitial if it is ready and calls callback when `interstitialDidOpen` event fires                  |
-|`isReady(callback)`        | calls callback with boolean whether interstitial is ready to be shown                                           |
+| Name                      | Description                                                                                    |
+|---------------------------|------------------------------------------------------------------------------------------------|
+|`setAdUnitID(adUnitID)`    | sets the AdUnit ID for all future ad requests.                                                 |
+|`setTestDevices(devices)`  | sets the devices which are served test ads                                                     |
+|`requestAd()`              | requests an interstitial and returns a promise, which resolves on load and rejects on error    |
+|`showAd()`                 | shows an interstitial and returns a promise, which resolves when ready and otherwise rejects   |
+|`isReady(callback)`        | calls callback with boolean whether interstitial is ready to be shown                          |
 
-*For simulators/emulators you can use `'EMULATOR'` for the test device ID.*  
-*Note: `tryShowNewInterstitial()` is deprecated as of v1.1.0 and can be replaced by calling `requestAd` with `showAd` as callback.*
+*For simulators/emulators you can use `AdMobInterstitial.simulatorId` for the test device ID.*
 
 ##### Events
+
 Unfortunately, events are not consistent across iOS and Android. To have one unified API, new event names are introduced for pairs that are roughly equivalent.
 
 | iOS                                      | *this library*                   | Android             |
@@ -190,12 +180,14 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
 Opens a rewarded AdMob ad.
 
 ##### Methods
-| Name                      | Description                                                                                                     |
-|---------------------------|-----------------------------------------------------------------------------------------------------------------|
-|`setAdUnitID(adUnitID)`    | sets the AdUnit ID for all future ad requests.                                                                  |
-|`setTestDeviceID(deviceID)`| sets the test device ID                                                                                         |
-|`requestAd(callback)`      | requests a rewarded ad|
-|`showAd(callback)`         | shows a rewarded if it is ready                  |
+
+| Name                      | Description                                                                                    |
+|---------------------------|------------------------------------------------------------------------------------------------|
+|`setAdUnitID(adUnitID)`    | sets the AdUnit ID for all future ad requests                                                  |
+|`setTestDevices(devices)`  | sets the devices which are served test ads                                                     |
+|`requestAd()`              | requests an rewarded ad and returns a promise, which resolves on load and rejects on error     |
+|`showAd()`                 | shows an rewarded ad and returns a promise, which resolves when ready and otherwise rejects    |
+|`isReady(callback)`        | calls callback with boolean whether interstitial is ready to be shown                          |
 
 ##### Events
 
@@ -212,6 +204,6 @@ Opens a rewarded AdMob ad.
 ---
 
 ### TODO
+
 - [ ] Support [Ad Targeting](https://developers.google.com/admob/ios/targeting)
 - [ ] Also use interstitial event names for banner
-- [ ] PublisherBanner [DFPBanner/PublisherAdView should be able to accept multiple adSizes. Currently only caters for a single size]

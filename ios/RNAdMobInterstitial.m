@@ -1,14 +1,19 @@
 #import "RNAdMobInterstitial.h"
 
+#if __has_include(<React/RCTUtils.h>)
+#import <React/RCTUtils.h>
+#else
+#import "RCTUtils.h"
+#endif
+
 @implementation RNAdMobInterstitial {
   GADInterstitial  *_interstitial;
   NSString *_adUnitID;
-  NSString *_testDeviceID;
-  RCTResponseSenderBlock _requestAdCallback;
-  RCTResponseSenderBlock _showAdCallback;
+  NSArray *_testDevices;
+  RCTPromiseResolveBlock _requestAdResolve;
+  RCTPromiseRejectBlock _requestAdReject;
+  BOOL hasListeners;
 }
-
-@synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue
 {
@@ -17,6 +22,16 @@
 
 RCT_EXPORT_MODULE();
 
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[
+           @"interstitialDidLoad",
+           @"interstitialDidFailToLoad",
+           @"interstitialDidOpen",
+           @"interstitialDidClose",
+           @"interstitialWillLeaveApplication"];
+}
+
 #pragma mark exported methods
 
 RCT_EXPORT_METHOD(setAdUnitID:(NSString *)adUnitID)
@@ -24,41 +39,39 @@ RCT_EXPORT_METHOD(setAdUnitID:(NSString *)adUnitID)
   _adUnitID = adUnitID;
 }
 
-RCT_EXPORT_METHOD(setTestDeviceID:(NSString *)testDeviceID)
+RCT_EXPORT_METHOD(setTestDevices:(NSArray *)testDevices)
 {
-  _testDeviceID = testDeviceID;
+  _testDevices = testDevices;
 }
 
-RCT_EXPORT_METHOD(requestAd:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
+  _requestAdResolve = nil;
+  _requestAdReject = nil;
+
   if ([_interstitial hasBeenUsed] || _interstitial == nil) {
-    _requestAdCallback = callback;
+    _requestAdResolve = resolve;
+    _requestAdReject = reject;
 
     _interstitial = [[GADInterstitial alloc] initWithAdUnitID:_adUnitID];
     _interstitial.delegate = self;
 
     GADRequest *request = [GADRequest request];
-    if(_testDeviceID) {
-      if([_testDeviceID isEqualToString:@"EMULATOR"]) {
-        request.testDevices = @[kGADSimulatorID];
-      } else {
-        request.testDevices = @[_testDeviceID];
-      }
-    }
+    request.testDevices = _testDevices;
     [_interstitial loadRequest:request];
   } else {
-    callback(@[@"Ad is already loaded."]); // TODO: make proper error via RCTUtils.h
+    reject(@"E_AD_ALREADY_LOADED", @"Ad is already loaded.", nil);
   }
 }
 
-RCT_EXPORT_METHOD(showAd:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(showAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
   if ([_interstitial isReady]) {
-    _showAdCallback = callback;
     [_interstitial presentFromRootViewController:[UIApplication sharedApplication].delegate.window.rootViewController];
+    resolve(nil);
   }
   else {
-    callback(@[@"Ad is not ready."]); // TODO: make proper error via RCTUtils.h
+    reject(@"E_AD_NOT_READY", @"Ad is not ready.", nil);
   }
 }
 
@@ -67,31 +80,56 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
   callback(@[[NSNumber numberWithBool:[_interstitial isReady]]]);
 }
 
-
-#pragma mark delegate events
-
-- (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidLoad" body:nil];
-  _requestAdCallback(@[[NSNull null]]);
+- (NSDictionary<NSString *,id> *)constantsToExport
+{
+  return @{
+           @"simulatorId": kGADSimulatorID
+           };
 }
 
-- (void)interstitial:(GADInterstitial *)interstitial
-didFailToReceiveAdWithError:(GADRequestError *)error {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidFailToLoad" body:@{@"name": [error description]}];
-  _requestAdCallback(@[[error description]]);
+- (void)startObserving
+{
+  hasListeners = YES;
 }
 
-- (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidOpen" body:nil];
-  _showAdCallback(@[[NSNull null]]);
+- (void)stopObserving
+{
+  hasListeners = NO;
 }
 
-- (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialDidClose" body:nil];
+#pragma mark GADInterstitialDelegate
+
+- (void)interstitialDidReceiveAd:(__unused GADInterstitial *)ad {
+  if (hasListeners) {
+    [self sendEventWithName:@"interstitialDidLoad" body:nil];
+  }
+  _requestAdResolve(nil);
 }
 
-- (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"interstitialWillLeaveApplication" body:nil];
+- (void)interstitial:(__unused GADInterstitial *)interstitial didFailToReceiveAdWithError:(GADRequestError *)error {
+  if (hasListeners) {
+    NSDictionary *jsError = RCTJSErrorFromCodeMessageAndNSError(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
+    [self sendEventWithName:@"interstitialDidFailToLoad" body:jsError];
+  }
+  _requestAdReject(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
+}
+
+- (void)interstitialWillPresentScreen:(__unused GADInterstitial *)ad {
+  if (hasListeners){
+    [self sendEventWithName:@"interstitialDidOpen" body:nil];
+  }
+}
+
+- (void)interstitialDidDismissScreen:(__unused GADInterstitial *)ad {
+  if (hasListeners) {
+    [self sendEventWithName:@"interstitialDidClose" body:nil];
+  }
+}
+
+- (void)interstitialWillLeaveApplication:(__unused GADInterstitial *)ad {
+  if (hasListeners) {
+    [self sendEventWithName:@"interstitialWillLeaveApplication" body:nil];
+  }
 }
 
 @end
