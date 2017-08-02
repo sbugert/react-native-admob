@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -26,8 +27,8 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
   InterstitialAd mInterstitialAd;
   String adUnitID;
   String[] testDevices;
-  Callback requestAdCallback;
-  Callback showAdCallback;
+
+  private Promise mRequestAdPromise;
 
   @Override
   public String getName() {
@@ -45,7 +46,6 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
           @Override
           public void onAdClosed() {
             sendEvent("interstitialDidClose", null);
-            showAdCallback.invoke();
           }
           @Override
           public void onAdFailedToLoad(int errorCode) {
@@ -65,9 +65,10 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                 errorString = "ERROR_CODE_NO_FILL";
                 break;
             }
-            event.putString("error", errorString);
+
+            event.putString("message", errorString);
             sendEvent("interstitialDidFailToLoad", event);
-            requestAdCallback.invoke(errorString);
+            mRequestAdPromise.reject(errorString, errorString);
           }
           @Override
           public void onAdLeftApplication() {
@@ -76,7 +77,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
           @Override
           public void onAdLoaded() {
             sendEvent("interstitialDidLoad", null);
-            requestAdCallback.invoke();
+            mRequestAdPromise.resolve(null);
           }
           @Override
           public void onAdOpened() {
@@ -103,14 +104,14 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void requestAd(final Callback callback) {
+  public void requestAd(final Promise promise) {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
       public void run () {
         if (mInterstitialAd.isLoaded() || mInterstitialAd.isLoading()) {
-          callback.invoke("Ad is already loaded."); // TODO: make proper error
+          promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
         } else {
-          requestAdCallback = callback;
+          mRequestAdPromise = promise;
           AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
           if (testDevices != null) {
             for (int i = 0; i < testDevices.length; i++) {
@@ -125,15 +126,15 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void showAd(final Callback callback) {
+  public void showAd(final Promise promise) {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
       public void run () {
         if (mInterstitialAd.isLoaded()) {
-          showAdCallback = callback;
           mInterstitialAd.show();
+          promise.resolve(null);
         } else {
-          callback.invoke("Ad is not ready."); // TODO: make proper error
+          promise.reject("E_AD_NOT_READY", "Ad is not ready.");
         }
       }
     });

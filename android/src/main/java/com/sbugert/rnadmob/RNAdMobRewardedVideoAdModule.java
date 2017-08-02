@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -25,8 +26,8 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     RewardedVideoAd mRewardedVideoAd;
     String adUnitID;
     String[] testDevices;
-    Callback requestAdCallback;
-    Callback showAdCallback;
+
+    private Promise mRequestAdPromise;
 
     @Override
     public String getName() {
@@ -50,7 +51,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     @Override
     public void onRewardedVideoAdLoaded() {
         sendEvent("rewardedVideoDidLoad", null);
-        requestAdCallback.invoke();
+        mRequestAdPromise.resolve(null);
     }
 
     @Override
@@ -93,9 +94,9 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
             break;
         }
 
-        event.putString("error", errorString);
+        event.putString("message", errorString);
         sendEvent("rewardedVideoDidFailToLoad", event);
-        requestAdCallback.invoke(errorString);
+        mRequestAdPromise.reject(errorString, errorString);
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
@@ -115,7 +116,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     }
 
     @ReactMethod
-    public void requestAd(final Callback callback) {
+    public void requestAd(final Promise promise) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
@@ -124,9 +125,9 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
                 RNAdMobRewardedVideoAdModule.this.mRewardedVideoAd.setRewardedVideoAdListener(RNAdMobRewardedVideoAdModule.this);
 
                 if (mRewardedVideoAd.isLoaded()) {
-                    callback.invoke("Ad is already loaded."); // TODO: make proper error
+                    promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
                 } else {
-                    requestAdCallback = callback;
+                    mRequestAdPromise = promise;
 
                     AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
 
@@ -144,15 +145,15 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     }
 
     @ReactMethod
-    public void showAd(final Callback callback) {
+    public void showAd(final Promise promise) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
                 if (mRewardedVideoAd.isLoaded()) {
-                    showAdCallback = callback;
                     mRewardedVideoAd.show();
+                    promise.resolve(null);
                 } else {
-                    callback.invoke("Ad is not ready."); // TODO: make proper error
+                    promise.reject("E_AD_NOT_READY", "Ad is not ready.");
                 }
             }
         });
