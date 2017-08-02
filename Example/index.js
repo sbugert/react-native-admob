@@ -42,7 +42,7 @@ export default class Example extends Component {
     AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
 
     AdMobRewarded.addEventListener('rewardedVideoDidRewardUser',
-      (type, amount) => console.log('rewardedVideoDidRewardUser', type, amount)
+      (reward) => console.log('rewardedVideoDidRewardUser', reward)
     );
     AdMobRewarded.addEventListener('rewardedVideoDidLoad',
       () => console.log('rewardedVideoDidLoad')
