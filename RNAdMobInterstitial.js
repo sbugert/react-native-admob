@@ -9,9 +9,23 @@ const adMobInterstitialEmitter = new NativeEventEmitter(RNAdMobInterstitial);
 
 const eventHandlers = {};
 
+const createErrorFromErrorData = (errorData) => {
+  const {
+    message,
+    ...extraErrorInfo
+  } = errorData || {};
+  const error = new Error(message);
+  error.framesToPop = 1;
+  return Object.assign(error, extraErrorInfo);
+}
+
 const addEventListener = (type, handler) => {
   eventHandlers[type] = eventHandlers[type] || new Map();
-  eventHandlers[type].set(handler, adMobInterstitialEmitter.addListener(type, handler));
+  if (type === 'interstitialDidFailToLoad') {
+    eventHandlers[type].set(handler, adMobInterstitialEmitter.addListener(type, error => handler(createErrorFromErrorData(error))));
+  } else {
+    eventHandlers[type].set(handler, adMobInterstitialEmitter.addListener(type, handler));
+  }
 };
 
 const removeEventListener = (type, handler) => {
@@ -34,8 +48,6 @@ const removeAllListeners = () => {
 
 export default {
   ...RNAdMobInterstitial,
-  requestAd: (cb = () => {}) => RNAdMobInterstitial.requestAd(cb), // requestAd callback is optional
-  showAd: (cb = () => {}) => RNAdMobInterstitial.showAd(cb),       // showAd callback is optional
   addEventListener,
   removeEventListener,
   removeAllListeners,

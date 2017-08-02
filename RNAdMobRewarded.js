@@ -10,9 +10,23 @@ const adMobRewardedEmitter = new NativeEventEmitter(RNAdMobRewarded);
 
 const eventHandlers = {};
 
+const createErrorFromErrorData = (errorData) => {
+  const {
+    message,
+    ...extraErrorInfo
+  } = errorData || {};
+  const error = new Error(message);
+  error.framesToPop = 1;
+  return Object.assign(error, extraErrorInfo);
+}
+
 const addEventListener = (type, handler) => {
   eventHandlers[type] = eventHandlers[type] || new Map();
-  eventHandlers[type].set(handler, adMobRewardedEmitter.addListener(type, handler));
+  if (type === 'rewardedVideoDidFailToLoad') {
+    eventHandlers[type].set(handler, adMobRewardedEmitter.addListener(type, error => handler(createErrorFromErrorData(error))));
+  } else {
+    eventHandlers[type].set(handler, adMobRewardedEmitter.addListener(type, handler));
+  }
 };
 
 const removeEventListener = (type, handler) => {
@@ -35,8 +49,6 @@ const removeAllListeners = () => {
 
 export default {
   ...RNAdMobRewarded,
-  requestAd: (cb = () => {}) => RNAdMobRewarded.requestAd(cb), // requestAd callback is optional
-  showAd: (cb = () => {}) => RNAdMobRewarded.showAd(cb),       // showAd callback is optional
   addEventListener,
   removeEventListener,
   removeAllListeners,
