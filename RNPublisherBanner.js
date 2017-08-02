@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { string, func, arrayOf } from 'prop-types';
 
+import { createErrorFromErrorData } from './utils';
+
 class PublisherBanner extends Component {
 
   constructor() {
@@ -50,7 +52,7 @@ class PublisherBanner extends Component {
 
   handleDidFailToReceiveAdWithError(event) {
     if (this.props.onDidFailToReceiveAdWithError) {
-      this.props.onDidFailToReceiveAdWithError(event.nativeEvent.error);
+      this.props.onDidFailToReceiveAdWithError(createErrorFromErrorData(event.nativeEvent.error));
     }
   }
 

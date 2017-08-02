@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { string, func, arrayOf } from 'prop-types';
 
+import { createErrorFromErrorData } from './utils';
+
 class AdMobBanner extends Component {
 
   constructor() {
@@ -42,7 +44,7 @@ class AdMobBanner extends Component {
 
   handleDidFailToReceiveAdWithError(event) {
     if (this.props.onDidFailToReceiveAdWithError) {
-      this.props.onDidFailToReceiveAdWithError(event.nativeEvent.error);
+      this.props.onDidFailToReceiveAdWithError(createErrorFromErrorData(event.nativeEvent.error));
     }
   }
 

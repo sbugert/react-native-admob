@@ -1,24 +1,15 @@
 import {
-  Platform,
   NativeModules,
   NativeEventEmitter,
 } from 'react-native';
+
+import { createErrorFromErrorData } from './utils';
 
 const RNAdMobRewarded = NativeModules.RNAdMobRewarded;
 
 const adMobRewardedEmitter = new NativeEventEmitter(RNAdMobRewarded);
 
 const eventHandlers = {};
-
-const createErrorFromErrorData = (errorData) => {
-  const {
-    message,
-    ...extraErrorInfo
-  } = errorData || {};
-  const error = new Error(message);
-  error.framesToPop = 1;
-  return Object.assign(error, extraErrorInfo);
-}
 
 const addEventListener = (type, handler) => {
   eventHandlers[type] = eventHandlers[type] || new Map();
@@ -52,5 +43,4 @@ export default {
   addEventListener,
   removeEventListener,
   removeAllListeners,
-  simulatorId: Platform.OS === 'android' ? 'EMULATOR' : RNAdMobRewarded.simulatorId,
 };

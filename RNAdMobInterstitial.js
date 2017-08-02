@@ -3,21 +3,13 @@ import {
   NativeEventEmitter,
 } from 'react-native';
 
+import { createErrorFromErrorData } from './utils';
+
 const RNAdMobInterstitial = NativeModules.RNAdMobInterstitial;
 
 const adMobInterstitialEmitter = new NativeEventEmitter(RNAdMobInterstitial);
 
 const eventHandlers = {};
-
-const createErrorFromErrorData = (errorData) => {
-  const {
-    message,
-    ...extraErrorInfo
-  } = errorData || {};
-  const error = new Error(message);
-  error.framesToPop = 1;
-  return Object.assign(error, extraErrorInfo);
-}
 
 const addEventListener = (type, handler) => {
   eventHandlers[type] = eventHandlers[type] || new Map();
