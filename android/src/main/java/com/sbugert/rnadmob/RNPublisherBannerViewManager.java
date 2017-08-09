@@ -30,13 +30,24 @@ import java.util.Map;
 
 class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
+  private Context mContext;
+
   protected PublisherAdView adView;
+
   String[] testDevices;
   AdSize[] validAdSizes;
+  String adUnitID;
   AdSize adSize;
 
   public ReactPublisherAdView(final Context context) {
     super(context);
+    this.createAdView();
+  }
+
+  private void createAdView() {
+    if (this.adView != null) this.adView.destroy();
+
+    final Context context = getContext();
     this.adView = new PublisherAdView(context);
     this.adView.setAppEventListener(this);
     this.adView.setAdListener(new AdListener() {
@@ -145,6 +156,12 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
   }
 
   public void setAdUnitID(String adUnitID) {
+    if (this.adUnitID != null) {
+      // We can only set adUnitID once, so when it was previously set we have
+      // to recreate the view
+      this.createAdView();
+    }
+    this.adUnitID = adUnitID;
     this.adView.setAdUnitId(adUnitID);
   }
 

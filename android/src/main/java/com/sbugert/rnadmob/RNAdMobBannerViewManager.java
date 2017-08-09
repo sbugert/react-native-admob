@@ -26,11 +26,22 @@ import java.util.Map;
 
 class ReactAdView extends ReactViewGroup {
 
+  private Context mContext;
+
   protected AdView adView;
+
+  String adUnitID;
   String[] testDevices;
 
   public ReactAdView(final Context context) {
     super(context);
+    this.createAdView();
+  }
+
+  private void createAdView() {
+    if (this.adView != null) this.adView.destroy();
+
+    final Context context = getContext();
     this.adView = new AdView(context);
     this.adView.setAdListener(new AdListener() {
       @Override
@@ -121,6 +132,12 @@ class ReactAdView extends ReactViewGroup {
   }
 
   public void setAdUnitID(String adUnitID) {
+    if (this.adUnitID != null) {
+      // We can only set adUnitID once, so when it was previously set we have
+      // to recreate the view
+      this.createAdView();
+    }
+    this.adUnitID = adUnitID;
     this.adView.setAdUnitId(adUnitID);
   }
 
