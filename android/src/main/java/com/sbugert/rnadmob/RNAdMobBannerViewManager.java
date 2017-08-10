@@ -246,15 +246,15 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactAdView> {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
-  public Map<String, Object> getConstants() {
+  public Map<String, Object> getExportedViewConstants() {
     final Map<String, Object> constants = new HashMap<>();
     constants.put("simulatorId", AdRequest.DEVICE_ID_EMULATOR);
     return constants;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public Map<String, Integer> getCommandsMap() {
     return MapBuilder.of("loadBanner", COMMAND_LOAD_BANNER);

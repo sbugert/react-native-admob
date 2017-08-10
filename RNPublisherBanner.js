@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  NativeModules,
   requireNativeComponent,
   UIManager,
   findNodeHandle,
@@ -71,7 +70,7 @@ class PublisherBanner extends Component {
 
 Object.defineProperty(PublisherBanner, 'simulatorId', {
   get() {
-    return NativeModules.RNDFPBannerViewManager.simulatorId;
+    return UIManager.RNDFPBannerView.Constants.simulatorId;
   },
 });
 

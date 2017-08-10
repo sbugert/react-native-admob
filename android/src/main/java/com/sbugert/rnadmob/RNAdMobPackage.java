@@ -28,9 +28,9 @@ public class RNAdMobPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        List<ViewManager> managers = new ArrayList<>();
-        managers.add(new RNAdMobBannerViewManager());
-        managers.add(new RNPublisherBannerViewManager());
-        return managers;
+      return Arrays.<ViewManager>asList(
+          new RNAdMobBannerViewManager(),
+          new RNPublisherBannerViewManager()
+      );
     }
 }
