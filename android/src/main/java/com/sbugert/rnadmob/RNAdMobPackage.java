@@ -21,7 +21,7 @@ public class RNAdMobPackage implements ReactPackage {
         );
     }
 
-    @Override
+    // Deprecated from RN 0.47.0
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
     }
