@@ -102,7 +102,9 @@ import {
 // Display an interstitial
 AdMobInterstitial.setAdUnitID('your-admob-unit-id');
 AdMobInterstitial.setTestDeviceID('EMULATOR');
-AdMobInterstitial.requestAd(AdMobInterstitial.showAd);
+AdMobInterstitial.requestAd(error => {
+  AdMobInterstitial.showAd((error) => { });
+});
 
 // Display a rewarded ad
 AdMobRewarded.setAdUnitID('your-admob-unit-id');
