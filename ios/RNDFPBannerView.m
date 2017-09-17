@@ -64,7 +64,12 @@
         _bannerView.delegate = self;
         _bannerView.adUnitID = _adUnitID;
         _bannerView.rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-        GADRequest *request = [GADRequest request];
+        DFPRequest *request = [DFPRequest request];
+
+        if (_customTargeting) {
+            request.customTargeting = _customTargeting;
+        }
+
         if(_testDeviceID) {
             if([_testDeviceID isEqualToString:@"EMULATOR"]) {
                 request.testDevices = @[kGADSimulatorID];
@@ -115,6 +120,17 @@ didReceiveAppEvent:(NSString *)name
 {
     if(![testDeviceID isEqual:_testDeviceID]) {
         _testDeviceID = testDeviceID;
+        if (_bannerView) {
+            [_bannerView removeFromSuperview];
+        }
+        [self loadBanner];
+    }
+}
+
+- (void)setCustomTargeting:(NSDictionary *)customTargeting
+{
+    if(![customTargeting isEqual:_customTargeting]) {
+        _customTargeting = customTargeting;
         if (_bannerView) {
             [_bannerView removeFromSuperview];
         }
