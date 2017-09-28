@@ -68,7 +68,7 @@
 - (void)adView:(__unused GADBannerView *)adView
 didFailToReceiveAdWithError:(GADRequestError *)error {
     if (self.onDidFailToReceiveAdWithError) {
-        self.onDidFailToReceiveAdWithError(@{@"error": [error localizedDescription]});
+        self.onDidFailToReceiveAdWithError(@{ @"error": @{ @"message": [error localizedDescription] } });
     }
 }
 
