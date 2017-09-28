@@ -187,6 +187,10 @@ Accepts a function. Called when the view has been dismissed.
 
 Accepts a function. Called when a user click will open another app (such as the App Store), backgrounding the current app.
 
+##### `onSizeChange`
+
+Accepts a function. Called when the size of the banner changes. The function is called with an object containing the width and the height.
+
 
 *Above names correspond to the [Ad lifecycle event callbacks](https://developers.google.com/admob/ios/banner#implementing_banner_events)*
 
