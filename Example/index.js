@@ -48,7 +48,7 @@ export default class Example extends Component {
       () => console.log('rewardedVideoDidLoad')
     );
     AdMobRewarded.addEventListener('rewardedVideoDidFailToLoad',
-      (error) => console.log('rewardedVideoDidFailToLoad', error)
+      (error) => console.warn(error)
     );
     AdMobRewarded.addEventListener('rewardedVideoDidOpen',
       () => console.log('rewardedVideoDidOpen')
@@ -59,14 +59,14 @@ export default class Example extends Component {
     AdMobRewarded.addEventListener('rewardedVideoDidClose',
       () => {
         console.log('rewardedVideoDidClose');
-        AdMobRewarded.requestAd().catch(error => console.log(error));
+        AdMobRewarded.requestAd().catch(error => console.warn(error));
       }
     );
     AdMobRewarded.addEventListener('rewardedVideoWillLeaveApplication',
       () => console.log('rewardedVideoWillLeaveApplication')
     );
 
-    AdMobRewarded.requestAd().catch(error => console.log(error));
+    AdMobRewarded.requestAd().catch(error => console.warn(error));
 
     AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
     AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/4411468910');
@@ -75,7 +75,7 @@ export default class Example extends Component {
       () => console.log('interstitialDidLoad')
     );
     AdMobInterstitial.addEventListener('interstitialDidFailToLoad',
-      (error) => console.log('interstitialDidFailToLoad', error)
+      (error) => console.warn(error)
     );
     AdMobInterstitial.addEventListener('interstitialDidOpen',
       () => console.log('interstitialDidOpen')
@@ -83,14 +83,14 @@ export default class Example extends Component {
     AdMobInterstitial.addEventListener('interstitialDidClose',
       () => {
         console.log('interstitialDidClose');
-        AdMobInterstitial.requestAd().catch(error => console.log(error));
+        AdMobInterstitial.requestAd().catch(error => console.warn(error));
       }
     );
     AdMobInterstitial.addEventListener('interstitialWillLeaveApplication',
       () => console.log('interstitialWillLeaveApplication')
     );
 
-    AdMobInterstitial.requestAd().catch(error => console.log(error));
+    AdMobInterstitial.requestAd().catch(error => console.warn(error));
   }
 
   componentWillUnmount() {
@@ -99,11 +99,11 @@ export default class Example extends Component {
   }
 
   showRewarded() {
-    AdMobRewarded.showAd().catch(error => console.log(error));
+    AdMobRewarded.showAd().catch(error => console.warn(error));
   }
 
   showInterstitial() {
-    AdMobInterstitial.showAd().catch(error => console.log(error));
+    AdMobInterstitial.showAd().catch(error => console.warn(error));
   }
 
   render() {
