@@ -156,6 +156,12 @@ This handles App events that Admob/DFP can send back to the app.
 More info here: https://developers.google.com/mobile-ads-sdk/docs/dfp/android/banner#ios_app-events
 
 
+#### AdMobNativeExpress (Android only)
+
+Same as AdMobBanner, except that requires `bannerWidth` and `bannerHeight` instead of `bannerSize` prop.
+More info here: https://firebase.google.com/docs/admob/android/native-express#choose_a_size
+
+
 #### AdMobInterstitials
 
 ##### Methods
