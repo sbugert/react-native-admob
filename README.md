@@ -1,6 +1,8 @@
 [![npm version](https://badge.fury.io/js/react-native-admob.svg)](https://badge.fury.io/js/react-native-admob)
 ## react-native-admob
 
+### ⚠️ Please note, version 2 of this library is currently under development. We would like you to check it out, and give us your feedback: https://github.com/sbugert/react-native-admob/pull/165
+
 A react-native module for Google AdMob GADBanner, DFPBanner and GADInterstitial (react-native v0.19.0 or newer required).
 
 The banner is implemented as a component while the interstitial has an imperative API.
