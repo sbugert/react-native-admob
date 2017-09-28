@@ -126,7 +126,7 @@ didReceiveAppEvent:(NSString *)name
 {
     [super layoutSubviews ];
 
-    _bannerView.frame = CGRectMake(
+    self.frame = CGRectMake(
                                    self.bounds.origin.x,
                                    self.bounds.origin.x,
                                    _bannerView.frame.size.width,
