@@ -149,7 +149,7 @@ export default class Example extends Component {
             <PublisherBanner
               style={{ height: 50 }}
               adUnitID="/6499/example/APIDemo/AppEvents"
-              onAdmobDispatchAppEvent={(event) => {
+              onDidReceiveAppEvent={(event) => {
                 if (event.name === 'color') {
                   this.setState({
                     appEventsExampleStyle: { backgroundColor: event.info },

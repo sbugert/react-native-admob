@@ -83,7 +83,7 @@ import {
   adUnitID="your-admob-unit-id"
   testDevices={[PublisherBanner.simulatorId]}
   onDidFailToReceiveAdWithError={error => console.error(error)}
-  onAdmobDispatchAppEvent={event => console.log(event.name, event.info)}
+  onDidReceiveAppEvent={event => console.log(event.name, event.info)}
 />
 
 // Display an interstitial

@@ -14,7 +14,7 @@
 @property (nonatomic, copy) NSArray *testDevices;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onSizeChange;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdmobDispatchAppEvent;
+@property (nonatomic, copy) RCTBubblingEventBlock onDidReceiveAppEvent;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewDidReceiveAd;
 @property (nonatomic, copy) RCTBubblingEventBlock onDidFailToReceiveAdWithError;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdViewWillPresentScreen;

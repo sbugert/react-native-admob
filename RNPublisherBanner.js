@@ -14,7 +14,7 @@ class PublisherBanner extends Component {
   constructor() {
     super();
     this.handleSizeChange = this.handleSizeChange.bind(this);
-    this.handleAdmobDispatchAppEvent = this.handleAdmobDispatchAppEvent.bind(this);
+    this.handleDidReceiveAppEvent = this.handleDidReceiveAppEvent.bind(this);
     this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(this);
     this.state = {
       style: {},
@@ -41,10 +41,10 @@ class PublisherBanner extends Component {
     }
   }
 
-  handleAdmobDispatchAppEvent(event) {
-    if (this.props.onAdmobDispatchAppEvent) {
+  handleDidReceiveAppEvent(event) {
+    if (this.props.onDidReceiveAppEvent) {
       const { name, info } = event.nativeEvent;
-      this.props.onAdmobDispatchAppEvent({ name, info });
+      this.props.onDidReceiveAppEvent({ name, info });
     }
   }
 
@@ -61,7 +61,7 @@ class PublisherBanner extends Component {
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
         onDidFailToReceiveAdWithError={this.handleDidFailToReceiveAdWithError}
-        onAdmobDispatchAppEvent={this.handleAdmobDispatchAppEvent}
+        onDidReceiveAppEvent={this.handleDidReceiveAppEvent}
         ref={el => (this._bannerView = el)}
       />
     );
@@ -78,7 +78,7 @@ PublisherBanner.propTypes = {
   ...ViewPropTypes,
 
   /**
-   * AdMob iOS library banner size constants
+   * DFP iOS library banner size constants
    * (https://developers.google.com/admob/ios/banner)
    * banner (320x50, Standard Banner for Phones and Tablets)
    * largeBanner (320x100, Large Banner for Phones and Tablets)
@@ -98,7 +98,7 @@ PublisherBanner.propTypes = {
   validAdSizes: arrayOf(string),
 
   /**
-   * AdMob ad unit ID
+   * DFP ad unit ID
    */
   adUnitID: string,
 
@@ -108,7 +108,7 @@ PublisherBanner.propTypes = {
   testDevices: arrayOf(string),
 
   /**
-   * AdMob iOS library events
+   * DFP iOS library events
    */
   onSizeChange: func,
   onAdViewDidReceiveAd: func,
@@ -117,7 +117,7 @@ PublisherBanner.propTypes = {
   onAdViewWillDismissScreen: func,
   onAdViewDidDismissScreen: func,
   onAdViewWillLeaveApplication: func,
-  onAdmobDispatchAppEvent: func,
+  onDidReceiveAppEvent: func,
 };
 
 const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);

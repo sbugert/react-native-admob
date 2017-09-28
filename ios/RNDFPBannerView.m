@@ -133,8 +133,8 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 
 - (void)adView:(GADBannerView *)banner didReceiveAppEvent:(NSString *)name withInfo:(NSString *)info
 {
-    if (self.onAdmobDispatchAppEvent) {
-        self.onAdmobDispatchAppEvent(@{ @"name": name, @"info": info });
+    if (self.onDidReceiveAppEvent) {
+        self.onDidReceiveAppEvent(@{ @"name": name, @"info": info });
     }
 }
 

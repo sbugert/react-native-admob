@@ -185,7 +185,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     ReactContext reactContext = (ReactContext) getContext();
     reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
             getId(),
-            "onAdmobDispatchAppEvent",
+            "onDidReceiveAppEvent",
             event);
     String message = String.format("Received app event (%s, %s)", name, info);
     Log.d("PublisherAdBanner", message);
@@ -229,7 +229,7 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactPublish
       .put("onAdViewWillDismissScreen", MapBuilder.of("registrationName", "onAdViewWillDismissScreen"))
       .put("onAdViewDidDismissScreen", MapBuilder.of("registrationName", "onAdViewDidDismissScreen"))
       .put("onAdViewWillLeaveApplication", MapBuilder.of("registrationName", "onAdViewWillLeaveApplication"))
-      .put("onAdmobDispatchAppEvent", MapBuilder.of("registrationName", "onAdmobDispatchAppEvent"))
+      .put("onDidReceiveAppEvent", MapBuilder.of("registrationName", "onDidReceiveAppEvent"))
       .build();
   }
 
