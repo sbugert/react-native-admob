@@ -2,6 +2,7 @@ package com.sbugert.rnadmob;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -10,8 +11,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
+import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.view.ReactViewGroup;
@@ -25,8 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 class ReactAdView extends ReactViewGroup {
-
-    private Context mContext;
 
     protected AdView adView;
 
@@ -154,7 +153,7 @@ class ReactAdView extends ReactViewGroup {
     }
 }
 
-public class RNAdMobBannerViewManager extends SimpleViewManager<ReactAdView> {
+public class RNAdMobBannerViewManager extends ViewGroupManager<ReactAdView> {
 
     public static final String REACT_CLASS = "RNGADBannerView";
 
@@ -183,6 +182,11 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactAdView> {
     protected ReactAdView createViewInstance(ThemedReactContext themedReactContext) {
         ReactAdView adView = new ReactAdView(themedReactContext);
         return adView;
+    }
+
+    @Override
+    public void addView(ReactAdView parent, View child, int index) {
+        throw new RuntimeException("RNAdMobBannerView cannot have subviews");
     }
 
     @Override

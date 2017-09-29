@@ -2,7 +2,7 @@ package com.sbugert.rnadmob;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -11,8 +11,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
+import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.view.ReactViewGroup;
@@ -27,8 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
-
-    private Context mContext;
 
     protected PublisherAdView adView;
 
@@ -188,7 +186,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     }
 }
 
-public class RNPublisherBannerViewManager extends SimpleViewManager<ReactPublisherAdView> {
+public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublisherAdView> {
 
     public static final String REACT_CLASS = "RNDFPBannerView";
 
@@ -219,6 +217,11 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactPublish
     protected ReactPublisherAdView createViewInstance(ThemedReactContext themedReactContext) {
         ReactPublisherAdView adView = new ReactPublisherAdView(themedReactContext);
         return adView;
+    }
+
+    @Override
+    public void addView(ReactPublisherAdView parent, View child, int index) {
+        throw new RuntimeException("RNPublisherBannerView cannot have subviews");
     }
 
     @Override
