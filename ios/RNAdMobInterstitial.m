@@ -6,6 +6,13 @@
 #import "RCTUtils.h"
 #endif
 
+static NSString *const kEventAdLoaded = @"adLoaded";
+static NSString *const kEventAdFailedToLoad = @"adFailedToLoad";
+static NSString *const kEventAdOpened = @"adOpened";
+static NSString *const kEventAdFailedToOpen = @"adFailedToOpen";
+static NSString *const kEventAdClosed = @"adClosed";
+static NSString *const kEventAdLeftApplication = @"adLeftApplication";
+
 @implementation RNAdMobInterstitial {
   GADInterstitial  *_interstitial;
   NSString *_adUnitID;
@@ -25,11 +32,12 @@ RCT_EXPORT_MODULE();
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[
-           @"interstitialDidLoad",
-           @"interstitialDidFailToLoad",
-           @"interstitialDidOpen",
-           @"interstitialDidClose",
-           @"interstitialWillLeaveApplication"];
+           kEventAdLoaded,
+           kEventAdFailedToLoad,
+           kEventAdOpened,
+           kEventAdFailedToOpen,
+           kEventAdClosed,
+           kEventAdLeftApplication ];
 }
 
 #pragma mark exported methods
@@ -101,7 +109,7 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 
 - (void)interstitialDidReceiveAd:(__unused GADInterstitial *)ad {
   if (hasListeners) {
-    [self sendEventWithName:@"interstitialDidLoad" body:nil];
+    [self sendEventWithName:kEventAdLoaded body:nil];
   }
   _requestAdResolve(nil);
 }
@@ -109,26 +117,32 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 - (void)interstitial:(__unused GADInterstitial *)interstitial didFailToReceiveAdWithError:(GADRequestError *)error {
   if (hasListeners) {
     NSDictionary *jsError = RCTJSErrorFromCodeMessageAndNSError(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
-    [self sendEventWithName:@"interstitialDidFailToLoad" body:jsError];
+    [self sendEventWithName:kEventAdFailedToLoad body:jsError];
   }
   _requestAdReject(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
 }
 
 - (void)interstitialWillPresentScreen:(__unused GADInterstitial *)ad {
   if (hasListeners){
-    [self sendEventWithName:@"interstitialDidOpen" body:nil];
+    [self sendEventWithName:kEventAdOpened body:nil];
   }
 }
 
-- (void)interstitialDidDismissScreen:(__unused GADInterstitial *)ad {
+- (void)interstitialDidFailToPresentScreen:(__unused GADInterstitial *)ad {
+  if (hasListeners){
+    [self sendEventWithName:kEventAdFailedToOpen body:nil];
+  }
+}
+
+- (void)interstitialWillDismissScreen:(__unused GADInterstitial *)ad {
   if (hasListeners) {
-    [self sendEventWithName:@"interstitialDidClose" body:nil];
+    [self sendEventWithName:kEventAdClosed body:nil];
   }
 }
 
 - (void)interstitialWillLeaveApplication:(__unused GADInterstitial *)ad {
   if (hasListeners) {
-    [self sendEventWithName:@"interstitialWillLeaveApplication" body:nil];
+    [self sendEventWithName:kEventAdLeftApplication body:nil];
   }
 }
 

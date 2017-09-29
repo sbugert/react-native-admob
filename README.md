@@ -75,7 +75,7 @@ import {
   adSize="fullBanner"
   adUnitID="your-admob-unit-id"
   testDevices={[AdMobBanner.simulatorId]}
-  onDidFailToReceiveAdWithError={error => console.error(error)}
+  onAdFailedToLoad={error => console.error(error)}
 />
 
 // Display a DFP Publisher banner
@@ -83,8 +83,8 @@ import {
   adSize="fullBanner"
   adUnitID="your-admob-unit-id"
   testDevices={[PublisherBanner.simulatorId]}
-  onDidFailToReceiveAdWithError={error => console.error(error)}
-  onDidReceiveAppEvent={event => console.log(event.name, event.info)}
+  onAdFailedToLoad={error => console.error(error)}
+  onAppEvent={event => console.log(event.name, event.info)}
 />
 
 // Display an interstitial
@@ -163,27 +163,23 @@ For a full example reference to the [example project](Example).
 
 *Note: There is no `smartBannerPortrait` and `smartBannerLandscape` on Android. Both prop values will map to `smartBanner`*
 
-##### `onAdViewDidReceiveAd`
+##### `onAdLoaded`
 
-Accepts a function. Called when an ad was received from AdMob.
+Accepts a function. Called when an ad is received.
 
-##### `onDidFailToReceiveAdWithError`
+##### `onAdFailedToLoad`
 
-Accepts a function. Called when the request failed.
+Accepts a function. Called when an ad request failed.
 
-##### `onAdViewWillPresentScreen`
+##### `onAdOpened`
 
-Accepts a function. Called when a full screen view will be presented in response to the user clicking on an ad.
+Accepts a function. Called when an ad opens an overlay that covers the screen.
 
-##### `onAdViewWillDismissScreen`
+##### `onAdClosed`
 
-Accepts a function. Called when the view is dismissed.
+Accepts a function. Called when the user is about to return to the application after clicking on an ad.
 
-##### `onAdViewDidDismissScreen`
-
-Accepts a function. Called when the view has been dismissed.
-
-##### `onAdViewWillLeaveApplication`
+##### `onAdLeftApplication`
 
 Accepts a function. Called when a user click will open another app (such as the App Store), backgrounding the current app.
 
@@ -192,7 +188,7 @@ Accepts a function. Called when a user click will open another app (such as the 
 Accepts a function. Called when the size of the banner changes. The function is called with an object containing the width and the height.
 
 
-*Above names correspond to the [Ad lifecycle event callbacks](https://developers.google.com/admob/ios/banner#implementing_banner_events)*
+*Above names correspond to the [Ad lifecycle event callbacks](https://developers.google.com/admob/android/banner#ad_events)*
 
 ### PublisherBanner
 
@@ -200,11 +196,11 @@ Accepts a function. Called when the size of the banner changes. The function is 
 
 Same as `AdMobBanner`, with the addition of 2 extra properties:
 
-##### `onDidReceiveAppEvent`
+##### `onAppEvent`
 
-Accepts a function. Called when a DFP sends an event back to the app.
+Accepts a function. Called when DFP sends an event back to the app.
 
-These events may occur at any time during the ad's lifecycle, even before `onAdViewDidReceiveAd` is called. The function is called with an object, containing the name of the event and an info property, containing additional information.
+These events may occur at any time during the ad's lifecycle, even before `onAdLoaded` is called. The function is called with an object, containing the name of the event and an info property, containing additional information.
 
 More info here: https://developers.google.com/mobile-ads-sdk/docs/dfp/ios/banner#app_events
 
@@ -255,44 +251,37 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
   </thead>
   <tbody>
     <tr>
-      <td><code>interstitialDidLoad</code></td>
+      <td><code>adLoaded</code></td>
       <td><code>interstitialDidReceiveAd</code></td>
       <td><code>onAdLoaded</code></td>
     </tr>
     <tr>
-      <td><code>interstitialDidFailToLoad</code></td>
+      <td><code>adFailedToLoad</code></td>
       <td><code>interstitial:didFailToReceiveAdWithError</code></td>
       <td><code>onAdFailedToLoad</code></td>
     </tr>
     <tr>
-      <td><code>interstitialDidOpen</code></td>
+      <td><code>adOpened</code></td>
       <td><code>interstitialWillPresentScreen</code></td>
       <td><code>onAdOpened</code></td>
     </tr>
     <tr>
-      <td></td>
+      <td><code>adFailedToOpen</code></td>
       <td><code>interstitialDidFailToPresentScreen</code></td>
-      <td></td>
+      <td><em>Not supported</em></td>
     </tr>
     <tr>
-      <td></td>
+      <td><code>adClosed</code></td>
       <td><code>interstitialWillDismissScreen</code></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><code>interstitialDidClose</code></td>
-      <td><code>interstitialDidDismissScreen</code></td>
       <td><code>onAdClosed</code></td>
     </tr>
     <tr>
-      <td><code>interstitialWillLeaveApplication</code></td>
+      <td><code>adLeftApplication</code></td>
       <td><code>interstitialWillLeaveApplication</code></td>
       <td><code>onAdLeftApplication</code></td>
     </tr>
   </tbody>
 </table>
-
-*Note that `interstitialWillLeaveApplication` and `onAdLeftApplication` are not exactly the same but share one event in this library.*
 
 ### AdMobRewarded
 
@@ -336,39 +325,42 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
   </thead>
   <tbody>
     <tr>
-      <td><code>rewardedVideoDidLoad</code></td>
+      <td><code>adLoaded</code></td>
       <td><code>rewardBasedVideoAdDidReceiveAd</code></td>
       <td><code>onRewardedVideoAdLoaded</code></td>
     </tr>
     <tr>
-      <td><code>rewardedVideoDidFailToLoad</code></td>
+      <td><code>adFailedToLoad</code></td>
       <td><code>rewardBasedVideoAd:didFailToLoadWithError</code></td>
       <td><code>onRewardedVideoAdFailedToLoad</code></td>
     </tr>
     <tr>
-      <td><code>rewardedVideoDidRewardUser</code></td>
+      <td><code>rewarded</code></td>
       <td><code>rewardBasedVideoAd:didRewardUserWithReward</code></td>
       <td><code>onRewarded</code></td>
     </tr>
     <tr>
-      <td><code>rewardedVideoDidOpen</code></td>
+      <td><code>adOpened</code></td>
       <td><code>rewardBasedVideoAdDidOpen</code></td>
       <td><code>onRewardedVideoAdOpened</code></td>
     </tr>
     <tr>
-      <td><code>rewardedVideoDidClose</code></td>
+      <td><code>videoStarted</code></td>
+      <td><code>rewardBasedVideoAdDidStartPlaying</code></td>
+      <td><code>onRewardedVideoStarted</code></td>
+    </tr>
+    <tr>
+      <td><code>adClosed</code></td>
       <td><code>rewardBasedVideoAdDidClose</code></td>
       <td><code>onRewardedVideoAdClosed</code></td>
     </tr>
     <tr>
-      <td><code>rewardedVideoWillLeaveApplication</code></td>
+      <td><code>adLeftApplication</code></td>
       <td><code>rewardBasedVideoAdWillLeaveApplication</code></td>
       <td><code>onRewardedVideoAdLeftApplication</code></td>
     </tr>
   </tbody>
 </table>
-
-*Note that `rewardedVideoWillLeaveApplication` and `onRewardedVideoAdLeftApplication` are not exactly the same but share one event in this library.*
 
 ---
 

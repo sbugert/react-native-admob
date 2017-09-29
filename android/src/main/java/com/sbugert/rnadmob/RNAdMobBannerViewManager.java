@@ -53,7 +53,7 @@ class ReactAdView extends ReactViewGroup {
         adView.measure(width, height);
         adView.layout(left, top, left + width, top + height);
         sendOnSizeChangeEvent();
-        sendEvent("onAdViewDidReceiveAd", null);
+        sendEvent(RNAdMobBannerViewManager.EVENT_AD_LOADED, null);
       }
 
       @Override
@@ -77,22 +77,22 @@ class ReactAdView extends ReactViewGroup {
         WritableMap error = Arguments.createMap();
         error.putString("message", errorMessage);
         event.putMap("error", error);
-        sendEvent("onDidFailToReceiveAdWithError", event);
+        sendEvent(RNAdMobBannerViewManager.EVENT_AD_FAILED_TO_LOAD, event);
       }
 
       @Override
       public void onAdOpened() {
-        sendEvent("onAdViewWillPresentScreen", null);
+        sendEvent(RNAdMobBannerViewManager.EVENT_AD_OPENED, null);
       }
 
       @Override
       public void onAdClosed() {
-        sendEvent("onAdViewWillDismissScreen", null);
+        sendEvent(RNAdMobBannerViewManager.EVENT_AD_CLOSED, null);
       }
 
       @Override
       public void onAdLeftApplication() {
-        sendEvent("onAdViewWillLeaveApplication", null);
+        sendEvent(RNAdMobBannerViewManager.EVENT_AD_LEFT_APPLICATION, null);
       }
     });
     this.addView(this.adView);
@@ -113,7 +113,7 @@ class ReactAdView extends ReactViewGroup {
     }
     event.putDouble("width", width);
     event.putDouble("height", height);
-    sendEvent("onSizeChange", event);
+    sendEvent(RNAdMobBannerViewManager.EVENT_SIZE_CHANGE, event);
   }
 
   private void sendEvent(String name, @Nullable WritableMap event) {
@@ -162,28 +162,14 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactAdView> {
   public static final String PROP_AD_UNIT_ID = "adUnitID";
   public static final String PROP_TEST_DEVICES = "testDevices";
 
+  public static final String EVENT_SIZE_CHANGE = "onSizeChange";
+  public static final String EVENT_AD_LOADED = "onAdLoaded";
+  public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
+  public static final String EVENT_AD_OPENED = "onAdOpened";
+  public static final String EVENT_AD_CLOSED = "onAdClosed";
+  public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
+
   public static final int COMMAND_LOAD_BANNER = 1;
-
-  public enum Events {
-    EVENT_SIZE_CHANGE("onSizeChange"),
-    EVENT_RECEIVE_AD("onAdViewDidReceiveAd"),
-    EVENT_ERROR("onDidFailToReceiveAdWithError"),
-    EVENT_WILL_PRESENT("onAdViewWillPresentScreen"),
-    EVENT_WILL_DISMISS("onAdViewWillDismissScreen"),
-    EVENT_DID_DISMISS("onAdViewDidDismissScreen"),
-    EVENT_WILL_LEAVE_APP("onAdViewWillLeaveApplication");
-
-    private final String mName;
-
-    Events(final String name) {
-      mName = name;
-    }
-
-    @Override
-    public String toString() {
-      return mName;
-    }
-  }
 
   private ThemedReactContext mThemedReactContext;
   private RCTEventEmitter mEventEmitter;
@@ -203,8 +189,16 @@ public class RNAdMobBannerViewManager extends SimpleViewManager<ReactAdView> {
   @Nullable
   public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
     MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
-    for (Events event : Events.values()) {
-      builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()));
+    String[] events = {
+      EVENT_SIZE_CHANGE,
+      EVENT_AD_LOADED,
+      EVENT_AD_FAILED_TO_LOAD,
+      EVENT_AD_OPENED,
+      EVENT_AD_CLOSED,
+      EVENT_AD_LEFT_APPLICATION
+    };
+    for (int i = 0; i < events.length; i++) {
+      builder.put(events[i], MapBuilder.of("registrationName", events[i]));
     }
     return builder.build();
   }

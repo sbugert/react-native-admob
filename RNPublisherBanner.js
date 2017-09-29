@@ -14,8 +14,8 @@ class PublisherBanner extends Component {
   constructor() {
     super();
     this.handleSizeChange = this.handleSizeChange.bind(this);
-    this.handleDidReceiveAppEvent = this.handleDidReceiveAppEvent.bind(this);
-    this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(this);
+    this.handleAppEvent = this.handleAppEvent.bind(this);
+    this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
     this.state = {
       style: {},
     };
@@ -41,16 +41,16 @@ class PublisherBanner extends Component {
     }
   }
 
-  handleDidReceiveAppEvent(event) {
-    if (this.props.onDidReceiveAppEvent) {
+  handleAppEvent(event) {
+    if (this.props.onAppEvent) {
       const { name, info } = event.nativeEvent;
-      this.props.onDidReceiveAppEvent({ name, info });
+      this.props.onAppEvent({ name, info });
     }
   }
 
-  handleDidFailToReceiveAdWithError(event) {
-    if (this.props.onDidFailToReceiveAdWithError) {
-      this.props.onDidFailToReceiveAdWithError(createErrorFromErrorData(event.nativeEvent.error));
+  handleAdFailedToLoad(event) {
+    if (this.props.onAdFailedToLoad) {
+      this.props.onAdFailedToLoad(createErrorFromErrorData(event.nativeEvent.error));
     }
   }
 
@@ -60,8 +60,8 @@ class PublisherBanner extends Component {
         {...this.props}
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
-        onDidFailToReceiveAdWithError={this.handleDidFailToReceiveAdWithError}
-        onDidReceiveAppEvent={this.handleDidReceiveAppEvent}
+        onAdFailedToLoad={this.handleAdFailedToLoad}
+        onAppEvent={this.handleAppEvent}
         ref={el => (this._bannerView = el)}
       />
     );
@@ -107,17 +107,17 @@ PublisherBanner.propTypes = {
    */
   testDevices: arrayOf(string),
 
-  /**
-   * DFP iOS library events
-   */
   onSizeChange: func,
-  onAdViewDidReceiveAd: func,
-  onDidFailToReceiveAdWithError: func,
-  onAdViewWillPresentScreen: func,
-  onAdViewWillDismissScreen: func,
-  onAdViewDidDismissScreen: func,
-  onAdViewWillLeaveApplication: func,
-  onDidReceiveAppEvent: func,
+
+  /**
+   * DFP library events
+   */
+  onAdLoaded: func,
+  onAdFailedToLoad: func,
+  onAdOpened: func,
+  onAdClosed: func,
+  onAdLeftApplication: func,
+  onAppEvent: func,
 };
 
 const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);

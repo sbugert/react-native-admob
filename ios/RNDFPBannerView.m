@@ -76,46 +76,39 @@
                           @"width": @(adView.frame.size.width),
                           @"height": @(adView.frame.size.height) });
     }
-    if (self.onAdViewDidReceiveAd) {
-        self.onAdViewDidReceiveAd(@{});
+    if (self.onAdLoaded) {
+        self.onAdLoaded(@{});
     }
 }
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(DFPBannerView *)adView
 didFailToReceiveAdWithError:(GADRequestError *)error {
-    if (self.onDidFailToReceiveAdWithError) {
-        self.onDidFailToReceiveAdWithError(@{ @"error": @{ @"message": [error localizedDescription] } });
+    if (self.onAdFailedToLoad) {
+        self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
     }
 }
 
 /// Tells the delegate that a full screen view will be presented in response
 /// to the user clicking on an ad.
 - (void)adViewWillPresentScreen:(DFPBannerView *)adView {
-    if (self.onAdViewWillPresentScreen) {
-        self.onAdViewWillPresentScreen(@{});
+    if (self.onAdOpened) {
+        self.onAdOpened(@{});
     }
 }
 
-/// Tells the delegate that the full screen view will be dismissed.
-- (void)adViewWillDismissScreen:(DFPBannerView *)adView {
-    if (self.onAdViewWillDismissScreen) {
-        self.onAdViewWillDismissScreen(@{});
-    }
-}
-
-/// Tells the delegate that the full screen view has been dismissed.
-- (void)adViewDidDismissScreen:(DFPBannerView *)adView {
-    if (self.onAdViewDidDismissScreen) {
-        self.onAdViewDidDismissScreen(@{});
-    }
-}
+ /// Tells the delegate that the full screen view will be dismissed.
+ - (void)adViewWillDismissScreen:(__unused DFPBannerView *)adView {
+     if (self.onAdClosed) {
+         self.onAdClosed(@{});
+     }
+ }
 
 /// Tells the delegate that a user click will open another app (such as
 /// the App Store), backgrounding the current app.
 - (void)adViewWillLeaveApplication:(DFPBannerView *)adView {
-    if (self.onAdViewWillLeaveApplication) {
-        self.onAdViewWillLeaveApplication(@{});
+    if (self.onAdLeftApplication) {
+        self.onAdLeftApplication(@{});
     }
 }
 
@@ -133,8 +126,8 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 
 - (void)adView:(GADBannerView *)banner didReceiveAppEvent:(NSString *)name withInfo:(NSString *)info
 {
-    if (self.onDidReceiveAppEvent) {
-        self.onDidReceiveAppEvent(@{ @"name": name, @"info": info });
+    if (self.onAppEvent) {
+        self.onAppEvent(@{ @"name": name, @"info": info });
     }
 }
 

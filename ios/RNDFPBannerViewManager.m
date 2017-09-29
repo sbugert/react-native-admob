@@ -43,13 +43,12 @@ RCT_EXPORT_VIEW_PROPERTY(validAdSizes, NSArray)
 RCT_EXPORT_VIEW_PROPERTY(testDevices, NSArray)
 
 RCT_EXPORT_VIEW_PROPERTY(onSizeChange, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onDidReceiveAppEvent, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onAdViewDidReceiveAd, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onDidFailToReceiveAdWithError, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onAdViewWillPresentScreen, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onAdViewWillDismissScreen, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onAdViewDidDismissScreen, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onAdViewWillLeaveApplication, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAppEvent, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdLoaded, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdFailedToLoad, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdOpened, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdClosed, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onAdLeftApplication, RCTBubblingEventBlock)
 
 - (NSDictionary<NSString *,id> *)constantsToExport
 {

@@ -13,7 +13,7 @@ const eventHandlers = {};
 
 const addEventListener = (type, handler) => {
   eventHandlers[type] = eventHandlers[type] || new Map();
-  if (type === 'rewardedVideoDidFailToLoad') {
+  if (type === 'adFailedToLoad') {
     eventHandlers[type].set(handler, adMobRewardedEmitter.addListener(type, error => handler(createErrorFromErrorData(error))));
   } else {
     eventHandlers[type].set(handler, adMobRewardedEmitter.addListener(type, handler));

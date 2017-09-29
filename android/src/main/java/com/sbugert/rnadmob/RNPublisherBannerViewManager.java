@@ -60,7 +60,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
         adView.measure(width, height);
         adView.layout(left, top, left + width, top + height);
         sendOnSizeChangeEvent();
-        sendEvent("onAdViewDidReceiveAd", null);
+        sendEvent(RNPublisherBannerViewManager.EVENT_AD_LOADED, null);
       }
 
       @Override
@@ -84,22 +84,22 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
         WritableMap error = Arguments.createMap();
         error.putString("message", errorMessage);
         event.putMap("error", error);
-        sendEvent("onDidFailToReceiveAdWithError", event);
+        sendEvent(RNPublisherBannerViewManager.EVENT_AD_FAILED_TO_LOAD, event);
       }
 
       @Override
       public void onAdOpened() {
-        sendEvent("onAdViewWillPresentScreen", null);
+        sendEvent(RNPublisherBannerViewManager.EVENT_AD_OPENED, null);
       }
 
       @Override
       public void onAdClosed() {
-        sendEvent("onAdViewWillDismissScreen", null);
+        sendEvent(RNPublisherBannerViewManager.EVENT_AD_CLOSED, null);
       }
 
       @Override
       public void onAdLeftApplication() {
-        sendEvent("onAdViewWillLeaveApplication", null);
+        sendEvent(RNPublisherBannerViewManager.EVENT_AD_LEFT_APPLICATION, null);
       }
     });
     this.addView(this.adView);
@@ -120,7 +120,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     }
     event.putDouble("width", width);
     event.putDouble("height", height);
-    sendEvent("onSizeChange", event);
+    sendEvent(RNPublisherBannerViewManager.EVENT_SIZE_CHANGE, event);
   }
 
   private void sendEvent(String name, @Nullable WritableMap event) {
@@ -186,13 +186,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     WritableMap event = Arguments.createMap();
     event.putString("name", name);
     event.putString("info", info);
-    ReactContext reactContext = (ReactContext) getContext();
-    reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-            getId(),
-            "onDidReceiveAppEvent",
-            event);
-    String message = String.format("Received app event (%s, %s)", name, info);
-    Log.d("PublisherAdBanner", message);
+    sendEvent(RNPublisherBannerViewManager.EVENT_APP_EVENT, event);
   }
 }
 
@@ -204,6 +198,14 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactPublish
   public static final String PROP_VALID_AD_SIZES = "validAdSizes";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
   public static final String PROP_TEST_DEVICES = "testDevices";
+
+  public static final String EVENT_SIZE_CHANGE = "onSizeChange";
+  public static final String EVENT_AD_LOADED = "onAdLoaded";
+  public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
+  public static final String EVENT_AD_OPENED = "onAdOpened";
+  public static final String EVENT_AD_CLOSED = "onAdClosed";
+  public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
+  public static final String EVENT_APP_EVENT = "onAppEvent";
 
   public static final int COMMAND_LOAD_BANNER = 1;
 
@@ -225,16 +227,19 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactPublish
   @Nullable
   public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
     MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
-    return builder
-      .put("onSizeChange", MapBuilder.of("registrationName", "onSizeChange"))
-      .put("onAdViewDidReceiveAd", MapBuilder.of("registrationName", "onAdViewDidReceiveAd"))
-      .put("onDidFailToReceiveAdWithError", MapBuilder.of("registrationName", "onDidFailToReceiveAdWithError"))
-      .put("onAdViewWillPresentScreen", MapBuilder.of("registrationName", "onAdViewWillPresentScreen"))
-      .put("onAdViewWillDismissScreen", MapBuilder.of("registrationName", "onAdViewWillDismissScreen"))
-      .put("onAdViewDidDismissScreen", MapBuilder.of("registrationName", "onAdViewDidDismissScreen"))
-      .put("onAdViewWillLeaveApplication", MapBuilder.of("registrationName", "onAdViewWillLeaveApplication"))
-      .put("onDidReceiveAppEvent", MapBuilder.of("registrationName", "onDidReceiveAppEvent"))
-      .build();
+    String[] events = {
+      EVENT_SIZE_CHANGE,
+      EVENT_AD_LOADED,
+      EVENT_AD_FAILED_TO_LOAD,
+      EVENT_AD_OPENED,
+      EVENT_AD_CLOSED,
+      EVENT_AD_LEFT_APPLICATION,
+      EVENT_APP_EVENT
+    };
+    for (int i = 0; i < events.length; i++) {
+      builder.put(events[i], MapBuilder.of("registrationName", events[i]));
+    }
+    return builder.build();
   }
 
   @ReactProp(name = PROP_AD_SIZE)

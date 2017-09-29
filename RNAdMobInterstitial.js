@@ -13,7 +13,7 @@ const eventHandlers = {};
 
 const addEventListener = (type, handler) => {
   eventHandlers[type] = eventHandlers[type] || new Map();
-  if (type === 'interstitialDidFailToLoad') {
+  if (type === 'adFailedToLoad') {
     eventHandlers[type].set(handler, adMobInterstitialEmitter.addListener(type, error => handler(createErrorFromErrorData(error))));
   } else {
     eventHandlers[type].set(handler, adMobInterstitialEmitter.addListener(type, handler));
