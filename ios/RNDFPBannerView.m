@@ -26,10 +26,10 @@
 {
     if ((self = [super initWithFrame:frame])) {
         super.backgroundColor = [UIColor clearColor];
-        
+
         UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
         UIViewController *rootViewController = [keyWindow rootViewController];
-        
+
         _bannerView = [[DFPBannerView alloc] initWithAdSize:kGADAdSizeBanner];
         _bannerView.delegate = self;
         _bannerView.adSizeDelegate = self;
@@ -37,7 +37,7 @@
         _bannerView.rootViewController = rootViewController;
         [self addSubview:_bannerView];
     }
-    
+
     return self;
 }
 
@@ -70,11 +70,12 @@
 # pragma mark GADBannerViewDelegate
 
 /// Tells the delegate an ad request loaded an ad.
-- (void)adViewDidReceiveAd:(DFPBannerView *)adView {
+- (void)adViewDidReceiveAd:(DFPBannerView *)adView
+{
     if (self.onSizeChange) {
-      self.onSizeChange(@{
-                          @"width": @(adView.frame.size.width),
-                          @"height": @(adView.frame.size.height) });
+        self.onSizeChange(@{
+                            @"width": @(adView.frame.size.width),
+                            @"height": @(adView.frame.size.height) });
     }
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
@@ -83,7 +84,8 @@
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(DFPBannerView *)adView
-didFailToReceiveAdWithError:(GADRequestError *)error {
+didFailToReceiveAdWithError:(GADRequestError *)error
+{
     if (self.onAdFailedToLoad) {
         self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
     }
@@ -91,22 +93,25 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 
 /// Tells the delegate that a full screen view will be presented in response
 /// to the user clicking on an ad.
-- (void)adViewWillPresentScreen:(DFPBannerView *)adView {
+- (void)adViewWillPresentScreen:(DFPBannerView *)adView
+{
     if (self.onAdOpened) {
         self.onAdOpened(@{});
     }
 }
 
- /// Tells the delegate that the full screen view will be dismissed.
- - (void)adViewWillDismissScreen:(__unused DFPBannerView *)adView {
-     if (self.onAdClosed) {
-         self.onAdClosed(@{});
-     }
- }
+/// Tells the delegate that the full screen view will be dismissed.
+- (void)adViewWillDismissScreen:(__unused DFPBannerView *)adView
+{
+    if (self.onAdClosed) {
+        self.onAdClosed(@{});
+    }
+}
 
 /// Tells the delegate that a user click will open another app (such as
 /// the App Store), backgrounding the current app.
-- (void)adViewWillLeaveApplication:(DFPBannerView *)adView {
+- (void)adViewWillLeaveApplication:(DFPBannerView *)adView
+{
     if (self.onAdLeftApplication) {
         self.onAdLeftApplication(@{});
     }
