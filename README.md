@@ -366,5 +366,4 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
 
 ## TODO
 
-- [ ] Support [Ad Targeting](https://developers.google.com/admob/ios/targeting)
-- [ ] Also use interstitial event names for banner
+- [ ] Support [Ad Targeting](https://developers.google.com/admob/ios/targeting) (RFC: [#166](https://github.com/sbugert/react-native-admob/pull/166))
