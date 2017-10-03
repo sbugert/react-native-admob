@@ -2,6 +2,8 @@
 
 ### ⚠️ Please note, the master branch tracks development of version 2 of this library, which is currently in alpha. For version 1 please check out the [1.x branch](https://github.com/sbugert/react-native-admob/tree/1.x).
 
+### ⚠️ Please note, version 2 of this library is currently under development. We would like you to check it out, and give us your feedback: https://github.com/sbugert/react-native-admob/pull/165
+
 A react-native module for Google AdMob GADBanner, DFPBanner and GADInterstitial (react-native v0.19.0 or newer required).
 
 The banner is implemented as a component while the interstitial has an imperative API.
