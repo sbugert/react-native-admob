@@ -1,64 +1,32 @@
 # react-native-admob [![npm version](https://badge.fury.io/js/react-native-admob.svg)](https://badge.fury.io/js/react-native-admob)
 
-### ⚠️ Please note, the master branch tracks development of version 2 of this library, which is currently in alpha. For version 1 please check out the [1.x branch](https://github.com/sbugert/react-native-admob/tree/1.x).
+### ⚠️ Please note, the master branch tracks development of version 2 of this library, which is currently in beta. For version 1 please check out the [1.x branch](https://github.com/sbugert/react-native-admob/tree/1.x).
 
-A react-native module for Google AdMob GADBanner, DFPBanner and GADInterstitial (react-native v0.19.0 or newer required).
+A react-native module for Google AdMob Banners, Interstitials, and Rewarded Videos, and also DFP Banners.
 
-The banner is implemented as a component while the interstitial has an imperative API.
+The banner types are implemented as components while the interstitial and rewarded video have an imperative API.
 
 ## Installation
 
-### Automatic Installation (recommended)
+You can use npm or Yarn to install the latest beta version:
 
-1. `npm i react-native-admob -S`
-2. `react-native link react-native-admob`
-3. Add the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project with CocoaPods or manually. This is only needed for iOS and guarantees your app is using the newest AdMob version.
+**npm:**
 
-### Manual Installation
+    npm i --save react-native-admob@next
 
-#### iOS
+**Yarn:**
 
-1. `npm i react-native-admob -S`
-2. Add the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project with CocoaPods or manually. This is only needed for iOS and guarantees your app is using the newest AdMob version.
-3. Add react-native-admob static library to your Xcode project like explained [here](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#manual-linking). (Step 3 of this guide is not needed)
+    yarn add react-native-admob@next
 
-#### Android
+In order to use this library, you have to link it to your project first. There's excellent documentation on how to do this in the [React Native Docs](https://facebook.github.io/react-native/docs/linking-libraries-ios.html#content).
 
-1. `npm i react-native-admob -S`
-2. Make the following additions to the given files:
+### iOS
 
-**`android/settings.gradle`**
+For iOS you will have to add the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project.
 
-```groovy
-include ':react-native-admob'
-project(':react-native-admob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-admob/android')
-```
+### Android
 
-**`android/app/build.gradle`**
-
-```groovy
-dependencies {
-   // ...
-   compile project(':react-native-admob')
-}
-```
-
-**`MainApplication.java`**
-
-In **MainAplication.java** on top, where imports are:
-
-```java
-import com.sbugert.rnadmob.RNAdMobPackage;
-```
-
-Under `protected List<ReactPackage> getPackages() {`:
-
-```java
-  return Arrays.<ReactPackage>asList(
-    new MainReactPackage(),
-    new RNAdMobPackage()
-  );
-```
+On Android the AdMob library code is part of Play Services, which is automatically added when this library is linked.
 
 ## Usage
 
