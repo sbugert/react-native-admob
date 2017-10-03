@@ -1,51 +1,72 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  NativeModules,
   requireNativeComponent,
-  View,
-  NativeEventEmitter,
+  UIManager,
+  findNodeHandle,
+  ViewPropTypes,
 } from 'react-native';
+import { string, func, arrayOf } from 'prop-types';
 
-const RNBanner = requireNativeComponent('RNAdMob', AdMobBanner);
+import { createErrorFromErrorData } from './utils';
 
-export default class AdMobBanner extends React.Component {
+class AdMobBanner extends Component {
 
   constructor() {
     super();
-    this.onSizeChange = this.onSizeChange.bind(this);
+    this.handleSizeChange = this.handleSizeChange.bind(this);
+    this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
     this.state = {
       style: {},
     };
   }
 
-  onSizeChange(event) {
+  componentDidMount() {
+    this.loadBanner();
+  }
+
+  loadBanner() {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this._bannerView),
+      UIManager.RNGADBannerView.Commands.loadBanner,
+      null,
+    );
+  }
+
+  handleSizeChange(event) {
     const { height, width } = event.nativeEvent;
     this.setState({ style: { width, height } });
+    if (this.props.onSizeChange) {
+      this.props.onSizeChange({ width, height });
+    }
+  }
+
+  handleAdFailedToLoad(event) {
+    if (this.props.onAdFailedToLoad) {
+      this.props.onAdFailedToLoad(createErrorFromErrorData(event.nativeEvent.error));
+    }
   }
 
   render() {
-    const { adUnitID, testDeviceID, bannerSize, style, didFailToReceiveAdWithError } = this.props;
     return (
-      <View style={this.props.style}>
-        <RNBanner
-          style={this.state.style}
-          onSizeChange={this.onSizeChange.bind(this)}
-          onAdViewDidReceiveAd={this.props.adViewDidReceiveAd}
-          onDidFailToReceiveAdWithError={(event) => didFailToReceiveAdWithError(event.nativeEvent.error)}
-          onAdViewWillPresentScreen={this.props.adViewWillPresentScreen}
-          onAdViewWillDismissScreen={this.props.adViewWillDismissScreen}
-          onAdViewDidDismissScreen={this.props.adViewDidDismissScreen}
-          onAdViewWillLeaveApplication={this.props.adViewWillLeaveApplication}
-          testDeviceID={testDeviceID}
-          adUnitID={adUnitID}
-          bannerSize={bannerSize} />
-      </View>
+      <RNGADBannerView
+        {...this.props}
+        style={[this.props.style, this.state.style]}
+        onSizeChange={this.handleSizeChange}
+        onAdFailedToLoad={this.handleAdFailedToLoad}
+        ref={el => (this._bannerView = el)}
+      />
     );
   }
 }
 
+Object.defineProperty(AdMobBanner, 'simulatorId', {
+  get() {
+    return UIManager.RNGADBannerView.Constants.simulatorId;
+  },
+});
+
 AdMobBanner.propTypes = {
-  style: View.propTypes.style,
+  ...ViewPropTypes,
 
   /**
    * AdMob iOS library banner size constants
@@ -60,28 +81,30 @@ AdMobBanner.propTypes = {
    *
    * banner is default
    */
-  bannerSize: React.PropTypes.string,
+  adSize: string,
 
   /**
    * AdMob ad unit ID
    */
-  adUnitID: React.PropTypes.string,
+  adUnitID: string,
 
   /**
-   * Test device ID
+   * Array of test devices. Use AdMobBanner.simulatorId for the simulator
    */
-  testDeviceID: React.PropTypes.string,
+  testDevices: arrayOf(string),
 
   /**
    * AdMob iOS library events
    */
-  adViewDidReceiveAd: React.PropTypes.func,
-  didFailToReceiveAdWithError: React.PropTypes.func,
-  adViewWillPresentScreen: React.PropTypes.func,
-  adViewWillDismissScreen: React.PropTypes.func,
-  adViewDidDismissScreen: React.PropTypes.func,
-  adViewWillLeaveApplication: React.PropTypes.func,
-  ...View.propTypes,
+  onSizeChange: func,
+
+  onAdLoaded: func,
+  onAdFailedToLoad: func,
+  onAdOpened: func,
+  onAdClosed: func,
+  onAdLeftApplication: func,
 };
 
-AdMobBanner.defaultProps = { bannerSize: 'smartBannerPortrait', didFailToReceiveAdWithError: () => {} };
+const RNGADBannerView = requireNativeComponent('RNGADBannerView', AdMobBanner);
+
+export default AdMobBanner;

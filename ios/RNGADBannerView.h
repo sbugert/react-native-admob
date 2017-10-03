@@ -1,4 +1,4 @@
-#if __has_include(<React/RCTComponent.h>)
+#if __has_include(<React/RCTView.h>)
 #import <React/RCTView.h>
 #else
 #import "RCTView.h"
@@ -8,13 +8,11 @@
 
 @class RCTEventDispatcher;
 
-@interface RNDFPBannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate, GADAppEventDelegate>
+@interface RNGADBannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate>
 
-@property (nonatomic, copy) NSArray *validAdSizes;
 @property (nonatomic, copy) NSArray *testDevices;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onSizeChange;
-@property (nonatomic, copy) RCTBubblingEventBlock onAppEvent;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdLoaded;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdFailedToLoad;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdOpened;

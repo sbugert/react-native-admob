@@ -1,55 +1,84 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  NativeModules,
   requireNativeComponent,
-  View,
-  NativeEventEmitter,
+  UIManager,
+  findNodeHandle,
+  ViewPropTypes,
 } from 'react-native';
+import { string, func, arrayOf } from 'prop-types';
 
-const RNBanner = requireNativeComponent('RNAdMobDFP', PublisherBanner);
+import { createErrorFromErrorData } from './utils';
 
-export default class PublisherBanner extends React.Component {
+class PublisherBanner extends Component {
 
   constructor() {
     super();
-    this.onSizeChange = this.onSizeChange.bind(this);
+    this.handleSizeChange = this.handleSizeChange.bind(this);
+    this.handleAppEvent = this.handleAppEvent.bind(this);
+    this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
     this.state = {
       style: {},
     };
   }
 
-  onSizeChange(event) {
+  componentDidMount() {
+    this.loadBanner();
+  }
+
+  loadBanner() {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this._bannerView),
+      UIManager.RNDFPBannerView.Commands.loadBanner,
+      null,
+    );
+  }
+
+  handleSizeChange(event) {
     const { height, width } = event.nativeEvent;
     this.setState({ style: { width, height } });
+    if (this.props.onSizeChange) {
+      this.props.onSizeChange({ width, height });
+    }
+  }
+
+  handleAppEvent(event) {
+    if (this.props.onAppEvent) {
+      const { name, info } = event.nativeEvent;
+      this.props.onAppEvent({ name, info });
+    }
+  }
+
+  handleAdFailedToLoad(event) {
+    if (this.props.onAdFailedToLoad) {
+      this.props.onAdFailedToLoad(createErrorFromErrorData(event.nativeEvent.error));
+    }
   }
 
   render() {
-    const { adUnitID, testDeviceID, bannerSize, style, didFailToReceiveAdWithError,admobDispatchAppEvent } = this.props;
     return (
-      <View style={this.props.style}>
-        <RNBanner
-          style={this.state.style}
-          onSizeChange={this.onSizeChange.bind(this)}
-          onAdViewDidReceiveAd={this.props.adViewDidReceiveAd}
-          onDidFailToReceiveAdWithError={(event) => didFailToReceiveAdWithError(event.nativeEvent.error)}
-          onAdViewWillPresentScreen={this.props.adViewWillPresentScreen}
-          onAdViewWillDismissScreen={this.props.adViewWillDismissScreen}
-          onAdViewDidDismissScreen={this.props.adViewDidDismissScreen}
-          onAdViewWillLeaveApplication={this.props.adViewWillLeaveApplication}
-          onAdmobDispatchAppEvent={(event) => admobDispatchAppEvent(event)}
-          testDeviceID={testDeviceID}
-          adUnitID={adUnitID}
-          bannerSize={bannerSize} />
-      </View>
+      <RNDFPBannerView
+        {...this.props}
+        style={[this.props.style, this.state.style]}
+        onSizeChange={this.handleSizeChange}
+        onAdFailedToLoad={this.handleAdFailedToLoad}
+        onAppEvent={this.handleAppEvent}
+        ref={el => (this._bannerView = el)}
+      />
     );
   }
 }
 
+Object.defineProperty(PublisherBanner, 'simulatorId', {
+  get() {
+    return UIManager.RNDFPBannerView.Constants.simulatorId;
+  },
+});
+
 PublisherBanner.propTypes = {
-  style: View.propTypes.style,
+  ...ViewPropTypes,
 
   /**
-   * AdMob iOS library banner size constants
+   * DFP iOS library banner size constants
    * (https://developers.google.com/admob/ios/banner)
    * banner (320x50, Standard Banner for Phones and Tablets)
    * largeBanner (320x100, Large Banner for Phones and Tablets)
@@ -61,30 +90,36 @@ PublisherBanner.propTypes = {
    *
    * banner is default
    */
-  bannerSize: React.PropTypes.string,
+  adSize: string,
 
   /**
-   * AdMob ad unit ID
+   * Optional array specifying all valid sizes that are appropriate for this slot.
    */
-  adUnitID: React.PropTypes.string,
+  validAdSizes: arrayOf(string),
 
   /**
-   * Test device ID
+   * DFP ad unit ID
    */
-  testDeviceID: React.PropTypes.string,
+  adUnitID: string,
 
   /**
-   * AdMob iOS library events
+   * Array of test devices. Use PublisherBanner.simulatorId for the simulator
    */
-  adViewDidReceiveAd: React.PropTypes.func,
-  didFailToReceiveAdWithError: React.PropTypes.func,
-  adViewWillPresentScreen: React.PropTypes.func,
-  adViewWillDismissScreen: React.PropTypes.func,
-  adViewDidDismissScreen: React.PropTypes.func,
-  adViewWillLeaveApplication: React.PropTypes.func,
-  admobDispatchAppEvent: React.PropTypes.func,
-  ...View.propTypes,
+  testDevices: arrayOf(string),
+
+  onSizeChange: func,
+
+  /**
+   * DFP library events
+   */
+  onAdLoaded: func,
+  onAdFailedToLoad: func,
+  onAdOpened: func,
+  onAdClosed: func,
+  onAdLeftApplication: func,
+  onAppEvent: func,
 };
 
-PublisherBanner.defaultProps = { bannerSize: 'smartBannerPortrait', didFailToReceiveAdWithError: () => {} ,
-admobDispatchAppEvent: () => {}};
+const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);
+
+export default PublisherBanner;
