@@ -6,12 +6,12 @@
 #import "RCTUtils.h"
 #endif
 
-static NSString *const kEventAdLoaded = @"adLoaded";
-static NSString *const kEventAdFailedToLoad = @"adFailedToLoad";
-static NSString *const kEventAdOpened = @"adOpened";
-static NSString *const kEventAdFailedToOpen = @"adFailedToOpen";
-static NSString *const kEventAdClosed = @"adClosed";
-static NSString *const kEventAdLeftApplication = @"adLeftApplication";
+static NSString *const kEventAdLoaded = @"interstitialAdLoaded";
+static NSString *const kEventAdFailedToLoad = @"interstitialAdFailedToLoad";
+static NSString *const kEventAdOpened = @"interstitialAdOpened";
+static NSString *const kEventAdFailedToOpen = @"interstitialAdFailedToOpen";
+static NSString *const kEventAdClosed = @"interstitialAdClosed";
+static NSString *const kEventAdLeftApplication = @"interstitialAdLeftApplication";
 
 @implementation RNAdMobInterstitial
 {

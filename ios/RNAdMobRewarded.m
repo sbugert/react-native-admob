@@ -6,13 +6,13 @@
 #import "RCTUtils.h"
 #endif
 
-static NSString *const kEventAdLoaded = @"adLoaded";
-static NSString *const kEventAdFailedToLoad = @"adFailedToLoad";
-static NSString *const kEventAdOpened = @"adOpened";
-static NSString *const kEventAdClosed = @"adClosed";
-static NSString *const kEventAdLeftApplication = @"adLeftApplication";
-static NSString *const kEventRewarded = @"rewarded";
-static NSString *const kEventVideoStarted = @"videoStarted";
+static NSString *const kEventAdLoaded = @"rewardedVideoAdLoaded";
+static NSString *const kEventAdFailedToLoad = @"rewardedVideoAdFailedToLoad";
+static NSString *const kEventAdOpened = @"rewardedVideoAdOpened";
+static NSString *const kEventAdClosed = @"rewardedVideoAdClosed";
+static NSString *const kEventAdLeftApplication = @"rewardedVideoAdLeftApplication";
+static NSString *const kEventRewarded = @"rewardedVideoAdRewarded";
+static NSString *const kEventVideoStarted = @"rewardedVideoAdVideoStarted";
 
 @implementation RNAdMobRewarded
 {

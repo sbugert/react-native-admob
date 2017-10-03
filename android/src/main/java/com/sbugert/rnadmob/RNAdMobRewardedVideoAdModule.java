@@ -26,13 +26,13 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
 
     public static final String REACT_CLASS = "RNAdMobRewarded";
 
-    public static final String EVENT_AD_LOADED = "onAdLoaded";
-    public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
-    public static final String EVENT_AD_OPENED = "onAdOpened";
-    public static final String EVENT_AD_CLOSED = "onAdClosed";
-    public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
-    public static final String EVENT_REWARDED = "rewarded";
-    public static final String EVENT_VIDEO_STARTED = "videoStarted";
+    public static final String EVENT_AD_LOADED = "rewardedVideoAdLoaded";
+    public static final String EVENT_AD_FAILED_TO_LOAD = "rewardedVideoAdFailedToLoad";
+    public static final String EVENT_AD_OPENED = "rewardedVideoAdOpened";
+    public static final String EVENT_AD_CLOSED = "rewardedVideoAdClosed";
+    public static final String EVENT_AD_LEFT_APPLICATION = "rewardedVideoAdLeftApplication";
+    public static final String EVENT_REWARDED = "rewardedVideoAdRewarded";
+    public static final String EVENT_VIDEO_STARTED = "rewardedVideoAdVideoStarted";
 
     RewardedVideoAd mRewardedVideoAd;
     String adUnitID;

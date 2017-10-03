@@ -27,11 +27,11 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
 
     public static final String REACT_CLASS = "RNAdMobInterstitial";
 
-    public static final String EVENT_AD_LOADED = "onAdLoaded";
-    public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
-    public static final String EVENT_AD_OPENED = "onAdOpened";
-    public static final String EVENT_AD_CLOSED = "onAdClosed";
-    public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
+    public static final String EVENT_AD_LOADED = "interstitialAdLoaded";
+    public static final String EVENT_AD_FAILED_TO_LOAD = "interstitialAdFailedToLoad";
+    public static final String EVENT_AD_OPENED = "interstitialAdOpened";
+    public static final String EVENT_AD_CLOSED = "interstitialAdClosed";
+    public static final String EVENT_AD_LEFT_APPLICATION = "interstitialAdLeftApplication";
 
     InterstitialAd mInterstitialAd;
     String[] testDevices;
