@@ -205,9 +205,6 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
 
     public static final int COMMAND_LOAD_BANNER = 1;
 
-    private ThemedReactContext mThemedReactContext;
-    private RCTEventEmitter mEventEmitter;
-
     @Override
     public String getName() {
         return REACT_CLASS;

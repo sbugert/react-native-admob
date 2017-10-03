@@ -25,6 +25,8 @@ import java.util.Map;
 
 public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
 
+    public static final String REACT_CLASS = "RNAdMobInterstitial";
+
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
     public static final String EVENT_AD_OPENED = "onAdOpened";
@@ -32,14 +34,13 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
 
     InterstitialAd mInterstitialAd;
-    String adUnitID;
     String[] testDevices;
 
     private Promise mRequestAdPromise;
 
     @Override
     public String getName() {
-        return "RNAdMobInterstitial";
+        return REACT_CLASS;
     }
 
     public RNAdMobInterstitialAdModule(ReactApplicationContext reactContext) {

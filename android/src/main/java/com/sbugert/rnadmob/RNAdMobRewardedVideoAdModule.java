@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule implements RewardedVideoAdListener {
 
+    public static final String REACT_CLASS = "RNAdMobRewarded";
+
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
     public static final String EVENT_AD_OPENED = "onAdOpened";
@@ -40,7 +42,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
 
     @Override
     public String getName() {
-        return "RNAdMobRewarded";
+        return REACT_CLASS;
     }
 
     public RNAdMobRewardedVideoAdModule(ReactApplicationContext reactContext) {
