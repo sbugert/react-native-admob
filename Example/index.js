@@ -112,7 +112,7 @@ export default class Example extends Component {
         <ScrollView>
           <BannerExample title="AdMob - Basic">
             <AdMobBanner
-              adSize="banner"
+              adSize="smartBannerPortrait"
               adUnitID="ca-app-pub-3940256099942544/2934735716"
               ref={el => (this._basicExample = el)}
             />
