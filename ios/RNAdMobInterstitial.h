@@ -6,7 +6,11 @@
 #import "RCTEventEmitter.h"
 #endif
 
+#if __has_include(<GoogleMobileAds/GoogleMobileAds.h>)
+#import <GoogleMobileAds/GoogleMobileAds.h>
+#else
 @import GoogleMobileAds;
+#endif
 
 @interface RNAdMobInterstitial : RCTEventEmitter <RCTBridgeModule, GADInterstitialDelegate>
 @end
