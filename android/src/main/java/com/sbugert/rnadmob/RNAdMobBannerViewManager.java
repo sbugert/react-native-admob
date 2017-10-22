@@ -31,6 +31,7 @@ class ReactAdView extends ReactViewGroup {
 
     String adUnitID;
     String[] testDevices;
+    AdSize adSize;
 
     public ReactAdView(final Context context) {
         super(context);
@@ -103,7 +104,7 @@ class ReactAdView extends ReactViewGroup {
         ReactContext reactContext = (ReactContext) getContext();
         WritableMap event = Arguments.createMap();
         AdSize adSize = this.adView.getAdSize();
-        if (adSize == AdSize.SMART_BANNER) {
+        if (this.adSize == AdSize.SMART_BANNER) {
             width = (int) PixelUtil.toDIPFromPixel(adSize.getWidthInPixels(reactContext));
             height = (int) PixelUtil.toDIPFromPixel(adSize.getHeightInPixels(reactContext));
         } else {
@@ -149,6 +150,7 @@ class ReactAdView extends ReactViewGroup {
     }
 
     public void setAdSize(AdSize adSize) {
+        this.adSize = adSize;
         this.adView.setAdSize(adSize);
     }
 }
