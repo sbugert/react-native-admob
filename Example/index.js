@@ -39,7 +39,7 @@ export default class Example extends Component {
 
   componentDidMount() {
     AdMobRewarded.setTestDevices([AdMobRewarded.simulatorId]);
-    AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
+    AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917');
 
     AdMobRewarded.addEventListener('rewarded',
       (reward) => console.log('AdMobRewarded => rewarded', reward)
@@ -69,7 +69,7 @@ export default class Example extends Component {
     AdMobRewarded.requestAd().catch(error => console.warn(error));
 
     AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/4411468910');
+    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
 
     AdMobInterstitial.addEventListener('adLoaded',
       () => console.log('AdMobInterstitial adLoaded')
@@ -113,7 +113,7 @@ export default class Example extends Component {
           <BannerExample title="AdMob - Basic">
             <AdMobBanner
               adSize="banner"
-              adUnitID="ca-app-pub-3940256099942544/2934735716"
+              adUnitID="ca-app-pub-3940256099942544/6300978111"
               ref={el => (this._basicExample = el)}
             />
             <Button
