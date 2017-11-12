@@ -3311,7 +3311,7 @@ react-devtools-core@^2.5.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-"react-native-admob@file:../":
+"react-native-admob@file:..":
   version "2.0.0-beta.2"
   dependencies:
     prop-types "^15.5.10"

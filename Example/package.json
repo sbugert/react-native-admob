@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "16.0.0",
     "react-native": "0.50.3",
-    "react-native-admob": "file:../"
+    "react-native-admob": "file:.."
   },
   "devDependencies": {
     "babel-jest": "21.2.0",
