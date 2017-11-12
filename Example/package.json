@@ -7,15 +7,17 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.46.0",
-    "react-native-admob": "../"
+    "react": "16.0.0",
+    "react-native": "0.50.3",
+    "react-native-admob": "file:../"
   },
   "devDependencies": {
-    "babel-jest": "20.0.3",
-    "babel-preset-react-native": "2.1.0",
-    "jest": "20.0.4",
-    "react-test-renderer": "16.0.0-alpha.12"
+    "babel-jest": "21.2.0",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-preset-react-native": "4.0.0",
+    "escape-string-regexp": "^1.0.5",
+    "jest": "21.2.1",
+    "react-test-renderer": "16.0.0"
   },
   "jest": {
     "preset": "react-native"
