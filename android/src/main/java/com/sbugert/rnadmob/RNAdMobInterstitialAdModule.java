@@ -33,10 +33,15 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     public static final String EVENT_AD_CLOSED = "interstitialAdClosed";
     public static final String EVENT_AD_LEFT_APPLICATION = "interstitialAdLeftApplication";
 
+
     InterstitialAd mInterstitialAd;
     String[] testDevices;
+    AdListener adListener;
+
+    Map<String, InterstitialAd> mInterstitialAds = new HashMap<String, InterstitialAd>();
 
     private Promise mRequestAdPromise;
+    private final ReactApplicationContext mReactApplicationContext;
 
     @Override
     public String getName() {
@@ -46,57 +51,60 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     public RNAdMobInterstitialAdModule(ReactApplicationContext reactContext) {
         super(reactContext);
         mInterstitialAd = new InterstitialAd(reactContext);
+        mReactApplicationContext = reactContext;
+
+        adListener = new AdListener() {
+            @Override
+            public void onAdClosed() {
+                sendEvent(EVENT_AD_CLOSED, null);
+            }
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                String errorString = "ERROR_UNKNOWN";
+                String errorMessage = "Unknown error";
+                switch (errorCode) {
+                    case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+                        errorString = "ERROR_CODE_INTERNAL_ERROR";
+                        errorMessage = "Internal error, an invalid response was received from the ad server.";
+                        break;
+                    case AdRequest.ERROR_CODE_INVALID_REQUEST:
+                        errorString = "ERROR_CODE_INVALID_REQUEST";
+                        errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
+                        break;
+                    case AdRequest.ERROR_CODE_NETWORK_ERROR:
+                        errorString = "ERROR_CODE_NETWORK_ERROR";
+                        errorMessage = "The ad request was unsuccessful due to network connectivity.";
+                        break;
+                    case AdRequest.ERROR_CODE_NO_FILL:
+                        errorString = "ERROR_CODE_NO_FILL";
+                        errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
+                        break;
+                }
+                WritableMap event = Arguments.createMap();
+                WritableMap error = Arguments.createMap();
+                event.putString("message", errorMessage);
+                sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
+                mRequestAdPromise.reject(errorString, errorMessage);
+            }
+            @Override
+            public void onAdLeftApplication() {
+                sendEvent(EVENT_AD_LEFT_APPLICATION, null);
+            }
+            @Override
+            public void onAdLoaded() {
+                sendEvent(EVENT_AD_LOADED, null);
+                mRequestAdPromise.resolve(null);
+            }
+            @Override
+            public void onAdOpened() {
+                sendEvent(EVENT_AD_OPENED, null);
+            }
+        };
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                mInterstitialAd.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdClosed() {
-                        sendEvent(EVENT_AD_CLOSED, null);
-                    }
-                    @Override
-                    public void onAdFailedToLoad(int errorCode) {
-                        String errorString = "ERROR_UNKNOWN";
-                        String errorMessage = "Unknown error";
-                        switch (errorCode) {
-                            case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                                errorString = "ERROR_CODE_INTERNAL_ERROR";
-                                errorMessage = "Internal error, an invalid response was received from the ad server.";
-                                break;
-                            case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                                errorString = "ERROR_CODE_INVALID_REQUEST";
-                                errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
-                                break;
-                            case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                                errorString = "ERROR_CODE_NETWORK_ERROR";
-                                errorMessage = "The ad request was unsuccessful due to network connectivity.";
-                                break;
-                            case AdRequest.ERROR_CODE_NO_FILL:
-                                errorString = "ERROR_CODE_NO_FILL";
-                                errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
-                                break;
-                        }
-                        WritableMap event = Arguments.createMap();
-                        WritableMap error = Arguments.createMap();
-                        event.putString("message", errorMessage);
-                        sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
-                        mRequestAdPromise.reject(errorString, errorMessage);
-                    }
-                    @Override
-                    public void onAdLeftApplication() {
-                        sendEvent(EVENT_AD_LEFT_APPLICATION, null);
-                    }
-                    @Override
-                    public void onAdLoaded() {
-                        sendEvent(EVENT_AD_LOADED, null);
-                        mRequestAdPromise.resolve(null);
-                    }
-                    @Override
-                    public void onAdOpened() {
-                        sendEvent(EVENT_AD_OPENED, null);
-                    }
-                });
+                mInterstitialAd.setAdListener( adListener );
             }
         });
     }
@@ -104,11 +112,41 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
     }
 
+
     @ReactMethod
     public void setAdUnitID(String adUnitID) {
-        if (mInterstitialAd.getAdUnitId() == null) {
+
+        // first time
+        if( mInterstitialAd.getAdUnitId() == null ){
             mInterstitialAd.setAdUnitId(adUnitID);
+            mInterstitialAds.put(adUnitID, mInterstitialAd);
+            return;
         }
+
+        // already current
+        if( mInterstitialAd.getAdUnitId() == adUnitID ){
+            return;
+
+        // check for existing interstitial matching adUnitID, 
+        final InterstitialAd interstitialAd = mInterstitialAds.get(adUnitID);
+
+        // existing found, make current
+        if(interstitialAd != null ){
+            mInterstitialAd = interstitialAd;
+            return;
+        }
+        
+        // create new interstitial, store and make current
+        final InterstitialAd newInterstitialAd = new InterstitialAd(mReactApplicationContext);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                newInterstitialAd.setAdListener( adListener );
+            }
+        });
+        newInterstitialAd.setAdUnitId(adUnitID);
+        mInterstitialAds.put(adUnitID, newInterstitialAd);
+        mInterstitialAd = newInterstitialAd;
     }
 
     @ReactMethod
