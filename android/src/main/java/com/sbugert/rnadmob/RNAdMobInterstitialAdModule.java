@@ -117,6 +117,8 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
         // first time
         if (mInterstitialAd.getAdUnitId() == null) {
             mInterstitialAd.setAdUnitId(adUnitID);
+            mInterstitialAds.put(adUnitID, mInterstitialAd);
+            return;
         }
 
         // already current
