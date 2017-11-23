@@ -33,11 +33,9 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     public static final String EVENT_AD_CLOSED = "interstitialAdClosed";
     public static final String EVENT_AD_LEFT_APPLICATION = "interstitialAdLeftApplication";
 
-
     InterstitialAd mInterstitialAd;
     String[] testDevices;
     AdListener adListener;
-
     Map<String, InterstitialAd> mInterstitialAds = new HashMap<String, InterstitialAd>();
 
     private Promise mRequestAdPromise;
@@ -101,10 +99,11 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
             }
         };
 
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                mInterstitialAd.setAdListener( adListener );
+                mInterstitialAd.setAdListener(adListener);
             }
         });
     }
@@ -112,20 +111,18 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
     }
 
-
     @ReactMethod
     public void setAdUnitID(String adUnitID) {
 
         // first time
-        if( mInterstitialAd.getAdUnitId() == null ){
+        if (mInterstitialAd.getAdUnitId() == null) {
             mInterstitialAd.setAdUnitId(adUnitID);
-            mInterstitialAds.put(adUnitID, mInterstitialAd);
-            return;
         }
 
         // already current
         if( mInterstitialAd.getAdUnitId() == adUnitID ){
             return;
+        }
 
         // check for existing interstitial matching adUnitID, 
         final InterstitialAd interstitialAd = mInterstitialAds.get(adUnitID);
