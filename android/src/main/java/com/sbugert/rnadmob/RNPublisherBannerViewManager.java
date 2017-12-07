@@ -4,6 +4,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
@@ -28,8 +31,10 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
   public static final String PROP_BANNER_SIZE = "bannerSize";
   public static final String PROP_AD_UNIT_ID = "adUnitID";
   public static final String PROP_TEST_DEVICE_ID = "testDeviceID";
+  public static final String PROP_CUSTOM_TARGETING = "customTargeting";
 
   private String testDeviceID = null;
+  private ReadableMap customTargeting;
 
   public enum Events {
     EVENT_SIZE_CHANGE("onSizeChange"),
@@ -207,6 +212,11 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
     this.testDeviceID = testDeviceID;
   }
 
+  @ReactProp(name = PROP_CUSTOM_TARGETING)
+  public void setPropCustomTargeting(final ReactViewGroup view, final ReadableMap customTargeting) {
+    this.customTargeting = customTargeting;
+  }
+
   private void loadAd(final PublisherAdView adView) {
     if (adView.getAdSizes() != null && adView.getAdUnitId() != null) {
       PublisherAdRequest.Builder adRequestBuilder = new PublisherAdRequest.Builder();
@@ -217,11 +227,15 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
           adRequestBuilder = adRequestBuilder.addTestDevice(testDeviceID);
         }
       }
+
+      if (customTargeting != null) {
+        setCustomTargeting(adRequestBuilder, customTargeting);
+      }
+
       PublisherAdRequest adRequest = adRequestBuilder.build();
       adView.loadAd(adRequest);
     }
   }
-
 
   private AdSize getAdSizeFromString(String adSize) {
     switch (adSize) {
@@ -243,6 +257,17 @@ public class RNPublisherBannerViewManager extends SimpleViewManager<ReactViewGro
         return AdSize.SMART_BANNER;
       default:
         return AdSize.BANNER;
+    }
+  }
+
+  private static void setCustomTargeting(final PublisherAdRequest.Builder adRequestBuilder, ReadableMap customTargeting) {
+    ReadableMapKeySetIterator iterator = customTargeting.keySetIterator();
+
+    while (iterator.hasNextKey()) {
+      String key = iterator.nextKey();
+      if (ReadableType.String.equals(customTargeting.getType(key))) {
+        adRequestBuilder.addCustomTargeting(key, customTargeting.getString(key));
+      }
     }
   }
 }
