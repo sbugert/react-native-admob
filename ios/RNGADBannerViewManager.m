@@ -21,11 +21,6 @@ RCT_EXPORT_MODULE();
     return [RNGADBannerView new];
 }
 
-- (dispatch_queue_t)methodQueue
-{
-    return dispatch_get_main_queue();
-}
-
 RCT_EXPORT_METHOD(loadBanner:(nonnull NSNumber *)reactTag)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNGADBannerView *> *viewRegistry) {
