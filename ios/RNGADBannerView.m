@@ -1,4 +1,5 @@
 #import "RNGADBannerView.h"
+#import "RNAdMobUtils.h"
 
 #if __has_include(<React/RCTBridgeModule.h>)
 #import <React/RCTBridgeModule.h>
@@ -58,6 +59,11 @@
     GADRequest *request = [GADRequest request];
     request.testDevices = _testDevices;
     [_bannerView loadRequest:request];
+}
+
+- (void)setTestDevices:(NSArray *)testDevices
+{
+    _testDevices = RNAdMobProcessTestDevices(testDevices, kGADSimulatorID);
 }
 
 -(void)layoutSubviews

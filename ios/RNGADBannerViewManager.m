@@ -50,11 +50,4 @@ RCT_EXPORT_VIEW_PROPERTY(onAdOpened, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdClosed, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdLeftApplication, RCTBubblingEventBlock)
 
-- (NSDictionary<NSString *,id> *)constantsToExport
-{
-    return @{
-             @"simulatorId": kGADSimulatorID
-             };
-}
-
 @end
