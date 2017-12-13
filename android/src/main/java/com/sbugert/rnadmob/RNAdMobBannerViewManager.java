@@ -128,7 +128,11 @@ class ReactAdView extends ReactViewGroup {
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         if (testDevices != null) {
             for (int i = 0; i < testDevices.length; i++) {
-                adRequestBuilder.addTestDevice(testDevices[i]);
+                String testDevice = testDevices[i];
+                if (testDevice == "SIMULATOR") {
+                    testDevice = AdRequest.DEVICE_ID_EMULATOR;
+                }
+                adRequestBuilder.addTestDevice(testDevice);
             }
         }
         AdRequest adRequest = adRequestBuilder.build();
@@ -245,14 +249,6 @@ public class RNAdMobBannerViewManager extends ViewGroupManager<ReactAdView> {
             default:
                 return AdSize.BANNER;
         }
-    }
-
-    @Nullable
-    @Override
-    public Map<String, Object> getExportedViewConstants() {
-        final Map<String, Object> constants = new HashMap<>();
-        constants.put("simulatorId", AdRequest.DEVICE_ID_EMULATOR);
-        return constants;
     }
 
     @Nullable
