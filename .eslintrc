@@ -1,6 +1,7 @@
 {
   "env": {
-    "es6": true
+    "es6": true,
+    "node": true
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "babel-eslint",
@@ -8,7 +9,8 @@
     "ecmaVersion": 6
   },
   "plugins": [
-    "react"
+    "react",
+    "react-native"
   ],
   "rules": {
     "comma-dangle": ["error", "always-multiline"],
