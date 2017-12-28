@@ -62,7 +62,10 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     @Override
     public void onRewardedVideoAdLoaded() {
         sendEvent(EVENT_AD_LOADED, null);
-        mRequestAdPromise.resolve(null);
+        if (mRequestAdPromise != null) {
+          mRequestAdPromise.resolve(null);
+          mRequestAdPromise = null;
+        }
     }
 
     @Override
@@ -111,7 +114,10 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         WritableMap error = Arguments.createMap();
         event.putString("message", errorMessage);
         sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
-        mRequestAdPromise.reject(errorString, errorMessage);
+        if (mRequestAdPromise != null) {
+          mRequestAdPromise.reject(errorString, errorMessage);
+          mRequestAdPromise = null;
+        }
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
