@@ -1,6 +1,6 @@
 {
   "name": "@bam.tech/react-native-admob",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description":
     "A react-native component for Google AdMob banners and interstitials",
   "author": "Simon Bugert <simon.bugert@gmail.com>",
