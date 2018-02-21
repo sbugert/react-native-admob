@@ -8,5 +8,8 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:sbugert/react-native-admob.git"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.10"
   }
 }
