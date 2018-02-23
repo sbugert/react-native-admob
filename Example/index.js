@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import {
+  AdMob,
   AdMobBanner,
   AdMobRewarded,
   AdMobInterstitial,
@@ -38,6 +39,8 @@ export default class Example extends Component {
   }
 
   componentDidMount() {
+    AdMob.setAppId("ca-app-pub-3940256099942544~3347511713");
+
     AdMobRewarded.setTestDevices([AdMobRewarded.simulatorId]);
     AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917');
 

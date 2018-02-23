@@ -69,6 +69,14 @@ For a full example reference to the [example project](Example).
 
 ## Reference
 
+### AdMob
+
+#### Methods
+
+##### `setAppId(appID)`
+
+Set the app id for the application. See [Google AdMob documentation](https://support.google.com/admob/answer/6232340?hl=en).
+
 ### AdMobBanner
 
 #### Properties
