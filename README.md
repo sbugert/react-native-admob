@@ -50,6 +50,7 @@ import {
 <PublisherBanner
   adSize="fullBanner"
   adUnitID="your-admob-unit-id"
+  targeting="key:valeur|key1:valeur2|key2:[key3:valeur, key4:valeur]"
   testDevices={[PublisherBanner.simulatorId]}
   onAdFailedToLoad={error => console.error(error)}
   onAppEvent={event => console.log(event.name, event.info)}
