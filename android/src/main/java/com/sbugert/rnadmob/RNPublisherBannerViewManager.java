@@ -210,7 +210,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     public static final String PROP_AD_SIZE = "adSize";
     public static final String PROP_VALID_AD_SIZES = "validAdSizes";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
-    public static final String PROP_BANNER_TARGETING = "targeting"
+    public static final String PROP_BANNER_TARGETING = "targeting";
     public static final String PROP_TEST_DEVICES = "testDevices";
 
     public static final String EVENT_SIZE_CHANGE = "onSizeChange";
