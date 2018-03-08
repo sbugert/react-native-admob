@@ -147,6 +147,7 @@ export default class Example extends Component {
           <BannerExample title="DFP - Multiple Ad Sizes">
             <PublisherBanner
               adSize="banner"
+              targeting="key:valeur|key2:valeur2"
               validAdSizes={['banner', 'largeBanner', 'mediumRectangle']}
               adUnitID="/6499/example/APIDemo/AdSizes"
               ref={el => (this._adSizesExample = el)}

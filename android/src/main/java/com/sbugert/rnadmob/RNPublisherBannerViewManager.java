@@ -31,6 +31,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     protected PublisherAdView adView;
 
     String[] testDevices;
+    String targetString = null;
     AdSize[] validAdSizes;
     String adUnitID;
     AdSize adSize;
@@ -146,6 +147,18 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
         this.adView.setAdSizes(adSizesArray);
 
         PublisherAdRequest.Builder adRequestBuilder = new PublisherAdRequest.Builder();
+        if (targetString != null) {
+            String[] parts = targetString.split("\\|");
+            for (String s : parts) {
+                if (s.contains(":")) {
+                    if (s.split(":").length > 1) {
+                        if (s.split(":")[0] != "" && s.split(":")[1] != "") {
+                            adRequestBuilder.addCustomTargeting(s.split(":")[0], s.split(":")[1]);
+                        }
+                    }
+                }
+            }
+        }
         if (testDevices != null) {
             for (int i = 0; i < testDevices.length; i++) {
                 adRequestBuilder.addTestDevice(testDevices[i]);
@@ -173,6 +186,10 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
         this.adSize = adSize;
     }
 
+    public void setTargeting(String targeting) {
+        this.targetString = targeting;
+    }
+
     public void setValidAdSizes(AdSize[] adSizes) {
         this.validAdSizes = adSizes;
     }
@@ -193,6 +210,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     public static final String PROP_AD_SIZE = "adSize";
     public static final String PROP_VALID_AD_SIZES = "validAdSizes";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
+    public static final String PROP_BANNER_TARGETING = "targeting";
     public static final String PROP_TEST_DEVICES = "testDevices";
 
     public static final String EVENT_SIZE_CHANGE = "onSizeChange";
@@ -246,6 +264,11 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
         view.setAdSize(adSize);
     }
 
+    @ReactProp(name = PROP_BANNER_TARGETING)
+     public void setTargeting(final ReactPublisherAdView view, final String targetingString) {
+        view.setTargeting(targetingString);
+    }
+
     @ReactProp(name = PROP_VALID_AD_SIZES)
     public void setPropValidAdSizes(final ReactPublisherAdView view, final ReadableArray adSizeStrings) {
         ReadableNativeArray nativeArray = (ReadableNativeArray)adSizeStrings;
@@ -290,6 +313,8 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
                 return AdSize.SMART_BANNER;
             case "smartBanner":
                 return AdSize.SMART_BANNER;
+            case "fluid":
+                return AdSize.FLUID;
             default:
                 return AdSize.BANNER;
         }
