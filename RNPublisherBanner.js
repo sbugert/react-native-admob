@@ -5,7 +5,7 @@ import {
   findNodeHandle,
   ViewPropTypes,
 } from 'react-native';
-import { string, func, arrayOf } from 'prop-types';
+import { string, func, arrayOf, object } from 'prop-types';
 
 import { createErrorFromErrorData } from './utils';
 
@@ -101,6 +101,12 @@ PublisherBanner.propTypes = {
    * DFP ad unit ID
    */
   adUnitID: string,
+
+  /**
+   * custom targeting params
+   */
+
+  customTargeting: object,
 
   /**
    * Array of test devices. Use PublisherBanner.simulatorId for the simulator

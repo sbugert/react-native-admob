@@ -52,8 +52,11 @@
 #pragma clang diagnostic pop
 
 - (void)loadBanner {
-    GADRequest *request = [GADRequest request];
+    DFPRequest *request = [DFPRequest request];
     request.testDevices = _testDevices;
+    if (_customTargeting != nil) {
+        request.customTargeting = _customTargeting;
+    }
     [_bannerView loadRequest:request];
 }
 
@@ -69,6 +72,17 @@
         }
     }];
     _bannerView.validAdSizes = validAdSizes;
+}
+
+- (void)setCustomTargeting:(NSDictionary *)customTargeting
+{
+    if(![customTargeting isEqual:_customTargeting]) {
+        _customTargeting = customTargeting;
+        if (_bannerView) {
+            [_bannerView removeFromSuperview];
+            [self loadBanner];
+        }
+    }
 }
 
 -(void)layoutSubviews
