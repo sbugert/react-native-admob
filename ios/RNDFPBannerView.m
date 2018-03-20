@@ -57,6 +57,8 @@
     if (_customTargeting != nil) {
         request.customTargeting = _customTargeting;
     }
+
+    NSLog(@"HELLO %@", request);
     [_bannerView loadRequest:request];
 }
 
