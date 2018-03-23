@@ -1,3 +1,4 @@
+#import <CoreGraphics/CoreGraphics.h>
 #import "RCTConvert+GADAdSize.h"
 
 @implementation RCTConvert (GADAdSize)
@@ -23,8 +24,9 @@
         return kGADAdSizeSmartBannerPortrait;
     } else if ([adSize isEqualToString:@"smartBannerLandscape"]) {
         return kGADAdSizeSmartBannerLandscape;
-    }
-    else {
+    } else if (!CGSizeEqualToSize(CGSizeFromString(json), CGSizeZero)) {
+        return GADAdSizeFromCGSize(CGSizeFromString(json));
+    } else {
         return kGADAdSizeInvalid;
     }
 }

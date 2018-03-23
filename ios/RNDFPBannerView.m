@@ -58,7 +58,6 @@
         request.customTargeting = _customTargeting;
     }
 
-    NSLog(@"HELLO %@", request);
     [_bannerView loadRequest:request];
 }
 
@@ -80,10 +79,6 @@
 {
     if(![customTargeting isEqual:_customTargeting]) {
         _customTargeting = customTargeting;
-        if (_bannerView) {
-            [_bannerView removeFromSuperview];
-            [self loadBanner];
-        }
     }
 }
 
