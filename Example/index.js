@@ -39,58 +39,58 @@ export default class Example extends Component {
 
   componentDidMount() {
     AdMobRewarded.setTestDevices([AdMobRewarded.simulatorId]);
-    AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
+    AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917');
 
-    AdMobRewarded.addEventListener('rewardedVideoDidRewardUser',
-      (reward) => console.log('rewardedVideoDidRewardUser', reward)
+    AdMobRewarded.addEventListener('rewarded',
+      (reward) => console.log('AdMobRewarded => rewarded', reward)
     );
-    AdMobRewarded.addEventListener('rewardedVideoDidLoad',
-      () => console.log('rewardedVideoDidLoad')
+    AdMobRewarded.addEventListener('adLoaded',
+      () => console.log('AdMobRewarded => adLoaded')
     );
-    AdMobRewarded.addEventListener('rewardedVideoDidFailToLoad',
-      (error) => console.log('rewardedVideoDidFailToLoad', error)
+    AdMobRewarded.addEventListener('adFailedToLoad',
+      (error) => console.warn(error)
     );
-    AdMobRewarded.addEventListener('rewardedVideoDidOpen',
-      () => console.log('rewardedVideoDidOpen')
+    AdMobRewarded.addEventListener('adOpened',
+      () => console.log('AdMobRewarded => adOpened')
     );
-    AdMobRewarded.addEventListener('rewardedVideoDidStartPlaying',
-      () => console.log('rewardedVideoDidStartPlaying')
+    AdMobRewarded.addEventListener('videoStarted',
+      () => console.log('AdMobRewarded => videoStarted')
     );
-    AdMobRewarded.addEventListener('rewardedVideoDidClose',
+    AdMobRewarded.addEventListener('adClosed',
       () => {
-        console.log('rewardedVideoDidClose');
-        AdMobRewarded.requestAd().catch(error => console.log(error));
+        console.log('AdMobRewarded => adClosed');
+        AdMobRewarded.requestAd().catch(error => console.warn(error));
       }
     );
-    AdMobRewarded.addEventListener('rewardedVideoWillLeaveApplication',
-      () => console.log('rewardedVideoWillLeaveApplication')
+    AdMobRewarded.addEventListener('adLeftApplication',
+      () => console.log('AdMobRewarded => adLeftApplication')
     );
 
-    AdMobRewarded.requestAd().catch(error => console.log(error));
+    AdMobRewarded.requestAd().catch(error => console.warn(error));
 
     AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/4411468910');
+    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
 
-    AdMobInterstitial.addEventListener('interstitialDidLoad',
-      () => console.log('interstitialDidLoad')
+    AdMobInterstitial.addEventListener('adLoaded',
+      () => console.log('AdMobInterstitial adLoaded')
     );
-    AdMobInterstitial.addEventListener('interstitialDidFailToLoad',
-      (error) => console.log('interstitialDidFailToLoad', error)
+    AdMobInterstitial.addEventListener('adFailedToLoad',
+      (error) => console.warn(error)
     );
-    AdMobInterstitial.addEventListener('interstitialDidOpen',
-      () => console.log('interstitialDidOpen')
+    AdMobInterstitial.addEventListener('adOpened',
+      () => console.log('AdMobInterstitial => adOpened')
     );
-    AdMobInterstitial.addEventListener('interstitialDidClose',
+    AdMobInterstitial.addEventListener('adClosed',
       () => {
-        console.log('interstitialDidClose');
-        AdMobInterstitial.requestAd().catch(error => console.log(error));
+        console.log('AdMobInterstitial => adClosed');
+        AdMobInterstitial.requestAd().catch(error => console.warn(error));
       }
     );
-    AdMobInterstitial.addEventListener('interstitialWillLeaveApplication',
-      () => console.log('interstitialWillLeaveApplication')
+    AdMobInterstitial.addEventListener('adLeftApplication',
+      () => console.log('AdMobInterstitial => adLeftApplication')
     );
 
-    AdMobInterstitial.requestAd().catch(error => console.log(error));
+    AdMobInterstitial.requestAd().catch(error => console.warn(error));
   }
 
   componentWillUnmount() {
@@ -99,11 +99,11 @@ export default class Example extends Component {
   }
 
   showRewarded() {
-    AdMobRewarded.showAd().catch(error => console.log(error));
+    AdMobRewarded.showAd().catch(error => console.warn(error));
   }
 
   showInterstitial() {
-    AdMobInterstitial.showAd().catch(error => console.log(error));
+    AdMobInterstitial.showAd().catch(error => console.warn(error));
   }
 
   render() {
@@ -113,12 +113,23 @@ export default class Example extends Component {
           <BannerExample title="AdMob - Basic">
             <AdMobBanner
               adSize="banner"
-              adUnitID="ca-app-pub-3940256099942544/2934735716"
+              adUnitID="ca-app-pub-3940256099942544/6300978111"
               ref={el => (this._basicExample = el)}
             />
             <Button
               title="Reload"
               onPress={() => this._basicExample.loadBanner()}
+            />
+          </BannerExample>
+          <BannerExample title="Smart Banner">
+            <AdMobBanner
+              adSize="smartBannerPortrait"
+              adUnitID="ca-app-pub-3940256099942544/6300978111"
+              ref={el => (this._smartBannerExample = el)}
+            />
+            <Button
+              title="Reload"
+              onPress={() => this._smartBannerExample.loadBanner()}
             />
           </BannerExample>
           <BannerExample title="Rewarded">
@@ -158,7 +169,8 @@ export default class Example extends Component {
             <PublisherBanner
               style={{ height: 50 }}
               adUnitID="/6499/example/APIDemo/AppEvents"
-              onAdmobDispatchAppEvent={(event) => {
+              onAdFailedToLoad={(error) => console.warn(error)}
+              onAppEvent={(event) => {
                 if (event.name === 'color') {
                   this.setState({
                     appEventsExampleStyle: { backgroundColor: event.info },

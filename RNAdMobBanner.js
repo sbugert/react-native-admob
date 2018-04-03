@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  NativeModules,
   requireNativeComponent,
   UIManager,
   findNodeHandle,
@@ -15,7 +14,7 @@ class AdMobBanner extends Component {
   constructor() {
     super();
     this.handleSizeChange = this.handleSizeChange.bind(this);
-    this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(this);
+    this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
     this.state = {
       style: {},
     };
@@ -41,9 +40,9 @@ class AdMobBanner extends Component {
     }
   }
 
-  handleDidFailToReceiveAdWithError(event) {
-    if (this.props.onDidFailToReceiveAdWithError) {
-      this.props.onDidFailToReceiveAdWithError(createErrorFromErrorData(event.nativeEvent.error));
+  handleAdFailedToLoad(event) {
+    if (this.props.onAdFailedToLoad) {
+      this.props.onAdFailedToLoad(createErrorFromErrorData(event.nativeEvent.error));
     }
   }
 
@@ -53,7 +52,7 @@ class AdMobBanner extends Component {
         {...this.props}
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
-        onDidFailToReceiveAdWithError={this.handleDidFailToReceiveAdWithError}
+        onAdFailedToLoad={this.handleAdFailedToLoad}
         ref={el => (this._bannerView = el)}
       />
     );
@@ -62,7 +61,7 @@ class AdMobBanner extends Component {
 
 Object.defineProperty(AdMobBanner, 'simulatorId', {
   get() {
-    return NativeModules.RNGADBannerViewManager.simulatorId;
+    return UIManager.RNGADBannerView.Constants.simulatorId;
   },
 });
 
@@ -98,12 +97,12 @@ AdMobBanner.propTypes = {
    * AdMob iOS library events
    */
   onSizeChange: func,
-  onAdViewDidReceiveAd: func,
-  onDidFailToReceiveAdWithError: func,
-  onAdViewWillPresentScreen: func,
-  onAdViewWillDismissScreen: func,
-  onAdViewDidDismissScreen: func,
-  onAdViewWillLeaveApplication: func,
+
+  onAdLoaded: func,
+  onAdFailedToLoad: func,
+  onAdOpened: func,
+  onAdClosed: func,
+  onAdLeftApplication: func,
 };
 
 const RNGADBannerView = requireNativeComponent('RNGADBannerView', AdMobBanner);

@@ -6,7 +6,16 @@
 #import "RCTUtils.h"
 #endif
 
-@implementation RNAdMobRewarded {
+static NSString *const kEventAdLoaded = @"rewardedVideoAdLoaded";
+static NSString *const kEventAdFailedToLoad = @"rewardedVideoAdFailedToLoad";
+static NSString *const kEventAdOpened = @"rewardedVideoAdOpened";
+static NSString *const kEventAdClosed = @"rewardedVideoAdClosed";
+static NSString *const kEventAdLeftApplication = @"rewardedVideoAdLeftApplication";
+static NSString *const kEventRewarded = @"rewardedVideoAdRewarded";
+static NSString *const kEventVideoStarted = @"rewardedVideoAdVideoStarted";
+
+@implementation RNAdMobRewarded
+{
     NSString *_adUnitID;
     NSArray *_testDevices;
     RCTPromiseResolveBlock _requestAdResolve;
@@ -24,13 +33,13 @@ RCT_EXPORT_MODULE();
 - (NSArray<NSString *> *)supportedEvents
 {
     return @[
-             @"rewardedVideoDidRewardUser",
-             @"rewardedVideoDidLoad",
-             @"rewardedVideoDidFailToLoad",
-             @"rewardedVideoDidOpen",
-             @"rewardedVideoDidStartPlaying",
-             @"rewardedVideoDidClose",
-             @"rewardedVideoWillLeaveApplication"];
+             kEventRewarded,
+             kEventAdLoaded,
+             kEventAdFailedToLoad,
+             kEventAdOpened,
+             kEventVideoStarted,
+             kEventAdClosed,
+             kEventAdLeftApplication ];
 }
 
 #pragma mark exported methods
@@ -49,7 +58,7 @@ RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
 {
     _requestAdResolve = resolve;
     _requestAdReject = reject;
-    
+
     [GADRewardBasedVideoAd sharedInstance].delegate = self;
     GADRequest *request = [GADRequest request];
     request.testDevices = _testDevices;
@@ -97,48 +106,54 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
 - (void)rewardBasedVideoAd:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd
    didRewardUserWithReward:(GADAdReward *)reward {
     if (hasListeners) {
-        [self sendEventWithName:@"rewardedVideoDidRewardUser" body:@{@"type": reward.type, @"amount": reward.amount}];
+        [self sendEventWithName:kEventRewarded body:@{@"type": reward.type, @"amount": reward.amount}];
     }
 }
 
-- (void)rewardBasedVideoAdDidReceiveAd:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdDidReceiveAd:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd
+{
     if (hasListeners) {
-        [self sendEventWithName:@"rewardedVideoDidLoad" body:nil];
+        [self sendEventWithName:kEventAdLoaded body:nil];
     }
     _requestAdResolve(nil);
 }
 
-- (void)rewardBasedVideoAdDidOpen:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdDidOpen:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd
+{
     if (hasListeners) {
-        [self sendEventWithName:@"rewardedVideoDidOpen" body:nil];
+        [self sendEventWithName:kEventAdOpened body:nil];
     }
 }
 
-- (void)rewardBasedVideoAdDidStartPlaying:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdDidStartPlaying:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd
+{
     if (hasListeners) {
-        [self sendEventWithName:@"rewardedVideoDidStartPlaying" body:nil];
+        [self sendEventWithName:kEventVideoStarted body:nil];
     }
 }
 
-- (void)rewardBasedVideoAdDidClose:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdDidClose:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd
+{
     if (hasListeners) {
-        [self sendEventWithName:@"rewardedVideoDidClose" body:nil];
+        [self sendEventWithName:kEventAdClosed body:nil];
     }
 }
 
-- (void)rewardBasedVideoAdWillLeaveApplication:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdWillLeaveApplication:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd
+{
     if (hasListeners) {
-        [self sendEventWithName:@"rewardedVideoWillLeaveApplication" body:nil];
+        [self sendEventWithName:kEventAdLeftApplication body:nil];
     }
 }
 
 - (void)rewardBasedVideoAd:(__unused GADRewardBasedVideoAd *)rewardBasedVideoAd
-    didFailToLoadWithError:(NSError *)error {
+    didFailToLoadWithError:(NSError *)error
+{
     if (hasListeners) {
-        NSDictionary *jsError = RCTJSErrorFromCodeMessageAndNSError(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
-        [self sendEventWithName:@"rewardedVideoDidFailToLoad" body:jsError];
+        NSDictionary *jsError = RCTJSErrorFromCodeMessageAndNSError(@"E_AD_FAILED_TO_LOAD", error.localizedDescription, error);
+        [self sendEventWithName:kEventAdFailedToLoad body:jsError];
     }
-    _requestAdReject(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
+    _requestAdReject(@"E_AD_FAILED_TO_LOAD", error.localizedDescription, error);
 }
 
 @end
