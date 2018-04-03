@@ -1,28 +1,42 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
+  NativeModules,
   requireNativeComponent,
   UIManager,
   findNodeHandle,
   ViewPropTypes,
-} from 'react-native';
-import { string, func, arrayOf } from 'prop-types';
+} from 'react-native'
+import {
+  string,
+  func,
+  arrayOf,
+  bool,
+  object,
+  shape,
+  instanceOf,
+  oneOf,
+  number,
+} from 'prop-types'
 
-import { createErrorFromErrorData } from './utils';
+import { createErrorFromErrorData } from './utils'
 
 class PublisherBanner extends Component {
-
   constructor() {
-    super();
-    this.handleSizeChange = this.handleSizeChange.bind(this);
-    this.handleAppEvent = this.handleAppEvent.bind(this);
-    this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
+    super()
+    this.handleSizeChange = this.handleSizeChange.bind(this)
+    this.handleAdmobDispatchAppEvent = this.handleAdmobDispatchAppEvent.bind(
+      this,
+    )
+    this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(
+      this,
+    )
     this.state = {
       style: {},
-    };
+    }
   }
 
   componentDidMount() {
-    this.loadBanner();
+    this.loadBanner()
   }
 
   loadBanner() {
@@ -30,27 +44,29 @@ class PublisherBanner extends Component {
       findNodeHandle(this._bannerView),
       UIManager.RNDFPBannerView.Commands.loadBanner,
       null,
-    );
+    )
   }
 
   handleSizeChange(event) {
-    const { height, width } = event.nativeEvent;
-    this.setState({ style: { width, height } });
+    const { height, width } = event.nativeEvent
+    this.setState({ style: { width, height } })
     if (this.props.onSizeChange) {
-      this.props.onSizeChange({ width, height });
+      this.props.onSizeChange({ width, height })
     }
   }
 
-  handleAppEvent(event) {
-    if (this.props.onAppEvent) {
-      const { name, info } = event.nativeEvent;
-      this.props.onAppEvent({ name, info });
+  handleAdmobDispatchAppEvent(event) {
+    if (this.props.onAdmobDispatchAppEvent) {
+      const { name, info } = event.nativeEvent
+      this.props.onAdmobDispatchAppEvent({ name, info })
     }
   }
 
-  handleAdFailedToLoad(event) {
-    if (this.props.onAdFailedToLoad) {
-      this.props.onAdFailedToLoad(createErrorFromErrorData(event.nativeEvent.error));
+  handleDidFailToReceiveAdWithError(event) {
+    if (this.props.onDidFailToReceiveAdWithError) {
+      this.props.onDidFailToReceiveAdWithError(
+        createErrorFromErrorData(event.nativeEvent.error),
+      )
     }
   }
 
@@ -60,25 +76,25 @@ class PublisherBanner extends Component {
         {...this.props}
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
-        onAdFailedToLoad={this.handleAdFailedToLoad}
-        onAppEvent={this.handleAppEvent}
+        onDidFailToReceiveAdWithError={this.handleDidFailToReceiveAdWithError}
+        onAdmobDispatchAppEvent={this.handleAdmobDispatchAppEvent}
         ref={el => (this._bannerView = el)}
       />
-    );
+    )
   }
 }
 
 Object.defineProperty(PublisherBanner, 'simulatorId', {
   get() {
-    return UIManager.RNDFPBannerView.Constants.simulatorId;
+    return NativeModules.RNDFPBannerViewManager.simulatorId
   },
-});
+})
 
 PublisherBanner.propTypes = {
   ...ViewPropTypes,
 
   /**
-   * DFP iOS library banner size constants
+   * AdMob iOS library banner size constants
    * (https://developers.google.com/admob/ios/banner)
    * banner (320x50, Standard Banner for Phones and Tablets)
    * largeBanner (320x100, Large Banner for Phones and Tablets)
@@ -98,7 +114,7 @@ PublisherBanner.propTypes = {
   validAdSizes: arrayOf(string),
 
   /**
-   * DFP ad unit ID
+   * AdMob ad unit ID
    */
   adUnitID: string,
 
@@ -107,19 +123,78 @@ PublisherBanner.propTypes = {
    */
   testDevices: arrayOf(string),
 
-  onSizeChange: func,
-
   /**
-   * DFP library events
+   * AdMob iOS library events
    */
-  onAdLoaded: func,
-  onAdFailedToLoad: func,
-  onAdOpened: func,
-  onAdClosed: func,
-  onAdLeftApplication: func,
-  onAppEvent: func,
-};
+  onSizeChange: func,
+  onAdViewDidReceiveAd: func,
+  onDidFailToReceiveAdWithError: func,
+  onAdViewWillPresentScreen: func,
+  onAdViewWillDismissScreen: func,
+  onAdViewDidDismissScreen: func,
+  onAdViewWillLeaveApplication: func,
+  onAdmobDispatchAppEvent: func,
 
-const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);
+  targeting: shape({
+    /**
+     * Arbitrary object of custom targeting information.
+     */
+    customTargeting: object,
 
-export default PublisherBanner;
+    /**
+     * Array of exclusion labels.
+     */
+    categoryExclusions: arrayOf(string),
+
+    /**
+     * Array of keyword strings.
+     */
+    keywords: arrayOf(string),
+
+    /**
+     * When using backfill or an SDK mediation creative, gender can be supplied
+     * in the ad request for targeting purposes.
+     */
+    gender: oneOf(['unknown', 'male', 'female']),
+
+    /**
+     * When using backfill or an SDK mediation creative, birthday can be supplied
+     * in the ad request for targeting purposes.
+     */
+    birthday: instanceOf(Date),
+
+    /**
+     * Indicate that you want Google to treat your content as child-directed.
+     */
+    childDirectedTreatment: bool,
+
+    /**
+     * Applications that monetize content matching a webpage's content may pass
+     * a content URL for keyword targeting.
+     */
+    contentURL: string,
+
+    /**
+     * You can set a publisher provided identifier (PPID) for use in frequency
+     * capping, audience segmentation and targeting, sequential ad rotation, and
+     * other audience-based ad delivery controls across devices.
+     */
+    publisherProvidedID: string,
+
+    /**
+     * The user’s current location may be used to deliver more relevant ads.
+     */
+    location: shape({
+      latitude: number,
+      longitude: number,
+      accuracy: number,
+    }),
+  }),
+}
+
+const RNDFPBannerView = requireNativeComponent(
+  'RNDFPBannerView',
+  PublisherBanner,
+)
+
+export default PublisherBanner
