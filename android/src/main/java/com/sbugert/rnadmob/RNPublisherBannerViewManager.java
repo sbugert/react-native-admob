@@ -292,13 +292,6 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
         view.setTestDevices(list.toArray(new String[list.size()]));
     }
 
-    @ReactProp(name = PROP_TEST_DEVICES)
-    public void setPropTestDevices(final ReactPublisherAdView view, final ReadableArray testDevices) {
-        ReadableNativeArray nativeArray = (ReadableNativeArray)testDevices;
-        ArrayList<Object> list = nativeArray.toArrayList();
-        view.setTestDevices(list.toArray(new String[list.size()]));
-    }
-
     @ReactProp(name = PROP_TARGETING)
     public void setPropTARGETING(final ReactPublisherAdView view, final ReadableMap targeting) {
         try {
