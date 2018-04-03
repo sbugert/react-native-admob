@@ -192,6 +192,9 @@ PublisherBanner.propTypes = {
   }),
 }
 
-// const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);
+const RNDFPBannerView = requireNativeComponent(
+  'RNDFPBannerView',
+  PublisherBanner,
+)
 
 export default PublisherBanner
