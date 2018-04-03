@@ -1,29 +1,42 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   NativeModules,
   requireNativeComponent,
   UIManager,
   findNodeHandle,
   ViewPropTypes,
-} from 'react-native';
-import { string, func, arrayOf, bool, object, shape, instanceOf, oneOf, number } from 'prop-types';
+} from 'react-native'
+import {
+  string,
+  func,
+  arrayOf,
+  bool,
+  object,
+  shape,
+  instanceOf,
+  oneOf,
+  number,
+} from 'prop-types'
 
-import { createErrorFromErrorData } from './utils';
+import { createErrorFromErrorData } from './utils'
 
 class PublisherBanner extends Component {
-
   constructor() {
-    super();
-    this.handleSizeChange = this.handleSizeChange.bind(this);
-    this.handleAdmobDispatchAppEvent = this.handleAdmobDispatchAppEvent.bind(this);
-    this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(this);
+    super()
+    this.handleSizeChange = this.handleSizeChange.bind(this)
+    this.handleAdmobDispatchAppEvent = this.handleAdmobDispatchAppEvent.bind(
+      this,
+    )
+    this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(
+      this,
+    )
     this.state = {
       style: {},
-    };
+    }
   }
 
   componentDidMount() {
-    this.loadBanner();
+    this.loadBanner()
   }
 
   loadBanner() {
@@ -31,27 +44,29 @@ class PublisherBanner extends Component {
       findNodeHandle(this._bannerView),
       UIManager.RNDFPBannerView.Commands.loadBanner,
       null,
-    );
+    )
   }
 
   handleSizeChange(event) {
-    const { height, width } = event.nativeEvent;
-    this.setState({ style: { width, height } });
+    const { height, width } = event.nativeEvent
+    this.setState({ style: { width, height } })
     if (this.props.onSizeChange) {
-      this.props.onSizeChange({ width, height });
+      this.props.onSizeChange({ width, height })
     }
   }
 
   handleAdmobDispatchAppEvent(event) {
     if (this.props.onAdmobDispatchAppEvent) {
-      const { name, info } = event.nativeEvent;
-      this.props.onAdmobDispatchAppEvent({ name, info });
+      const { name, info } = event.nativeEvent
+      this.props.onAdmobDispatchAppEvent({ name, info })
     }
   }
 
   handleDidFailToReceiveAdWithError(event) {
     if (this.props.onDidFailToReceiveAdWithError) {
-      this.props.onDidFailToReceiveAdWithError(createErrorFromErrorData(event.nativeEvent.error));
+      this.props.onDidFailToReceiveAdWithError(
+        createErrorFromErrorData(event.nativeEvent.error),
+      )
     }
   }
 
@@ -65,15 +80,15 @@ class PublisherBanner extends Component {
         onAdmobDispatchAppEvent={this.handleAdmobDispatchAppEvent}
         ref={el => (this._bannerView = el)}
       />
-    );
+    )
   }
 }
 
 Object.defineProperty(PublisherBanner, 'simulatorId', {
   get() {
-    return NativeModules.RNDFPBannerViewManager.simulatorId;
+    return NativeModules.RNDFPBannerViewManager.simulatorId
   },
-});
+})
 
 PublisherBanner.propTypes = {
   ...ViewPropTypes,
@@ -175,8 +190,8 @@ PublisherBanner.propTypes = {
       accuracy: number,
     }),
   }),
-};
+}
 
-const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);
+// const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);
 
-export default PublisherBanner;
+export default PublisherBanner
