@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {
+  NativeModules,
   requireNativeComponent,
   UIManager,
   findNodeHandle,
@@ -21,10 +22,14 @@ import { createErrorFromErrorData } from './utils'
 
 class PublisherBanner extends Component {
   constructor() {
-    super();
-    this.handleSizeChange = this.handleSizeChange.bind(this);
-    this.handleAppEvent = this.handleAppEvent.bind(this);
-    this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
+    super()
+    this.handleSizeChange = this.handleSizeChange.bind(this)
+    this.handleAdmobDispatchAppEvent = this.handleAdmobDispatchAppEvent.bind(
+      this,
+    )
+    this.handleDidFailToReceiveAdWithError = this.handleDidFailToReceiveAdWithError.bind(
+      this,
+    )
     this.state = {
       style: {},
     }
@@ -49,16 +54,19 @@ class PublisherBanner extends Component {
       this.props.onSizeChange({ width, height })
     }
   }
-  handleAppEvent(event) {
-    if (this.props.onAppEvent) {
-      const { name, info } = event.nativeEvent;
-      this.props.onAppEvent({ name, info });
+
+  handleAdmobDispatchAppEvent(event) {
+    if (this.props.onAdmobDispatchAppEvent) {
+      const { name, info } = event.nativeEvent
+      this.props.onAdmobDispatchAppEvent({ name, info })
     }
   }
 
-  handleAdFailedToLoad(event) {
-    if (this.props.onAdFailedToLoad) {
-      this.props.onAdFailedToLoad(createErrorFromErrorData(event.nativeEvent.error));
+  handleDidFailToReceiveAdWithError(event) {
+    if (this.props.onDidFailToReceiveAdWithError) {
+      this.props.onDidFailToReceiveAdWithError(
+        createErrorFromErrorData(event.nativeEvent.error),
+      )
     }
   }
 
@@ -68,8 +76,8 @@ class PublisherBanner extends Component {
         {...this.props}
         style={[this.props.style, this.state.style]}
         onSizeChange={this.handleSizeChange}
-        onAdFailedToLoad={this.handleAdFailedToLoad}
-        onAppEvent={this.handleAppEvent}
+        onDidFailToReceiveAdWithError={this.handleDidFailToReceiveAdWithError}
+        onAdmobDispatchAppEvent={this.handleAdmobDispatchAppEvent}
         ref={el => (this._bannerView = el)}
       />
     )
@@ -78,7 +86,7 @@ class PublisherBanner extends Component {
 
 Object.defineProperty(PublisherBanner, 'simulatorId', {
   get() {
-    return UIManager.RNDFPBannerView.Constants.simulatorId;
+    return NativeModules.RNDFPBannerViewManager.simulatorId
   },
 })
 
@@ -86,7 +94,7 @@ PublisherBanner.propTypes = {
   ...ViewPropTypes,
 
   /**
-   * DFP iOS library banner size constants
+   * AdMob iOS library banner size constants
    * (https://developers.google.com/admob/ios/banner)
    * banner (320x50, Standard Banner for Phones and Tablets)
    * largeBanner (320x100, Large Banner for Phones and Tablets)
@@ -106,7 +114,7 @@ PublisherBanner.propTypes = {
   validAdSizes: arrayOf(string),
 
   /**
-   * DFP ad unit ID
+   * AdMob ad unit ID
    */
   adUnitID: string,
 
@@ -115,18 +123,17 @@ PublisherBanner.propTypes = {
    */
   testDevices: arrayOf(string),
 
-  onSizeChange: func,
-
   /**
-   * DFP library events
+   * AdMob iOS library events
    */
-  onAdLoaded: func,
-  onAdFailedToLoad: func,
-  onAdOpened: func,
-  onAdClosed: func,
-  onAdLeftApplication: func,
-  onAppEvent: func,
-};
+  onSizeChange: func,
+  onAdViewDidReceiveAd: func,
+  onDidFailToReceiveAdWithError: func,
+  onAdViewWillPresentScreen: func,
+  onAdViewWillDismissScreen: func,
+  onAdViewDidDismissScreen: func,
+  onAdViewWillLeaveApplication: func,
+  onAdmobDispatchAppEvent: func,
 
   targeting: shape({
     /**
