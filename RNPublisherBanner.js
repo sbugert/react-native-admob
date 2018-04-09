@@ -134,6 +134,11 @@ PublisherBanner.propTypes = {
   onAdViewDidDismissScreen: func,
   onAdViewWillLeaveApplication: func,
   onAdmobDispatchAppEvent: func,
+  onAdLeftApplication: func,
+  onAdLoaded: func,
+  onAdFailedToLoad: func,
+  onAdOpened: func,
+  onAdClosed: func,
 
   targeting: shape({
     /**
