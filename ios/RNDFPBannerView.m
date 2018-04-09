@@ -62,6 +62,7 @@
         if (customTargeting != nil) {
           NSLog("customTargeting exists")
           for(NSString *key in [customTargeting allKeys]) {
+            NSLog(@"%@",key);
             NSLog(@"%@",[customTargeting objectForKey:key]);
           }
             request.customTargeting = customTargeting;
