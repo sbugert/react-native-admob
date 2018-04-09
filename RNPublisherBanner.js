@@ -139,6 +139,7 @@ PublisherBanner.propTypes = {
   onAdFailedToLoad: func,
   onAdOpened: func,
   onAdClosed: func,
+  onAppEvent: func,
 
   targeting: shape({
     /**
