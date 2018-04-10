@@ -55,16 +55,9 @@
 - (void)loadBanner {
     DFPRequest *request = [DFPRequest request];
     request.testDevices = _testDevices;
-    NSLog("start targeting")
     if (_targeting != nil) {
-      NSLog("targeting exists")
         NSDictionary *customTargeting = [_targeting objectForKey:@"customTargeting"];
         if (customTargeting != nil) {
-          NSLog("customTargeting exists")
-          for(NSString *key in [customTargeting allKeys]) {
-            NSLog(@"%@",key);
-            NSLog(@"%@",[customTargeting objectForKey:key]);
-          }
             request.customTargeting = customTargeting;
         }
         NSArray *categoryExclusions = [_targeting objectForKey:@"categoryExclusions"];
