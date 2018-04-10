@@ -33,6 +33,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     public static final String EVENT_AD_LEFT_APPLICATION = "rewardedVideoAdLeftApplication";
     public static final String EVENT_REWARDED = "rewardedVideoAdRewarded";
     public static final String EVENT_VIDEO_STARTED = "rewardedVideoAdVideoStarted";
+    public static final String EVENT_VIDEO_COMPLETED = "rewardedVideoAdVideoCompleted";
 
     RewardedVideoAd mRewardedVideoAd;
     String adUnitID;
@@ -78,6 +79,11 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     @Override
     public void onRewardedVideoAdClosed() {
         sendEvent(EVENT_AD_CLOSED, null);
+    }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+        sendEvent(EVENT_VIDEO_COMPLETED, null);
     }
 
     @Override
