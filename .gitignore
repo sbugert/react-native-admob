@@ -70,3 +70,4 @@ Example/android/app/app.iml
 Example/.buckconfig
 Example/.vscode/
 Example/android/app/BUCK
+*.iml
