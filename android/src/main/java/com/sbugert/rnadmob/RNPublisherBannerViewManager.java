@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import timber.log.Timber;
+
 class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
     protected PublisherAdView adView;
@@ -139,6 +141,17 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
             for (int i = 0; i < this.validAdSizes.length; i++) {
                 adSizes.add(this.validAdSizes[i]);
             }
+        }
+
+        String slot = null;
+        if (customTargeting != null) {
+            Object slotObject = customTargeting.get("slot");
+            if (slotObject != null) {
+                slot = slotObject.toString();
+            }
+        }
+        if (slot != null && slot.equalsIgnoreCase("spon")) {
+            adSizes.add(RNCustomAdSize.AD_SIZE_SPON);
         }
 
         if (adSizes.size() == 0) {
@@ -255,12 +268,14 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
 
     @ReactProp(name = PROP_AD_SIZE)
     public void setPropAdSize(final ReactPublisherAdView view, final String sizeString) {
+        Timber.v("setPropAdSize for view " + view.hashCode() + ": " + sizeString);
         AdSize adSize = getAdSizeFromString(sizeString);
         view.setAdSize(adSize);
     }
 
     @ReactProp(name = PROP_VALID_AD_SIZES)
     public void setPropValidAdSizes(final ReactPublisherAdView view, final ReadableArray adSizeStrings) {
+        Timber.v("setPropValidAdSizes for view " + view.hashCode() + ": " + adSizeStrings);
         ReadableNativeArray nativeArray = (ReadableNativeArray) adSizeStrings;
         ArrayList<Object> list = nativeArray.toArrayList();
         String[] adSizeStringsArray = list.toArray(new String[list.size()]);
@@ -275,11 +290,13 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
 
     @ReactProp(name = PROP_AD_UNIT_ID)
     public void setPropAdUnitID(final ReactPublisherAdView view, final String adUnitID) {
+        Timber.v("setPropAdUnitID for view " + view.hashCode() + ": " + adUnitID);
         view.setAdUnitID(adUnitID);
     }
 
     @ReactProp(name = PROP_TEST_DEVICES)
     public void setPropTestDevices(final ReactPublisherAdView view, final ReadableArray testDevices) {
+        Timber.v("setPropTestDevices for view " + view.hashCode() + ": " + testDevices);
         ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
         ArrayList<Object> list = nativeArray.toArrayList();
         view.setTestDevices(list.toArray(new String[list.size()]));
@@ -287,6 +304,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
 
     @ReactProp(name = PROP_CUSTOM_TARGETING)
     public void setPropCustomTargeting(final ReactPublisherAdView view, final ReadableMap customTargeting) {
+        Timber.v("setPropCustomTargeting for view " + view.hashCode() + ": " + customTargeting);
         ReadableNativeMap nativeMap = (ReadableNativeMap) customTargeting;
         Map<String, Object> map = nativeMap.toHashMap();
         view.setCustomTargeting(map);
@@ -311,7 +329,8 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
             case "smartBanner":
                 return AdSize.SMART_BANNER;
             default:
-                return AdSize.BANNER;
+                AdSize customAdSize = RNCustomAdSize.parseCustomAdSize(adSize);
+                return customAdSize == null ? AdSize.BANNER : customAdSize;
         }
     }
 

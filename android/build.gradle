@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 16
@@ -17,6 +17,7 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile 'com.google.android.gms:play-services-ads:+'
+    implementation 'com.facebook.react:react-native:+'
+    implementation 'com.google.android.gms:play-services-ads:+'
+    implementation 'com.jakewharton.timber:timber:4.7.0'
 }
