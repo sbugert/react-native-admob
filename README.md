@@ -318,6 +318,11 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
       <td><code>onRewardedVideoStarted</code></td>
     </tr>
     <tr>
+      <td><code>videoCompleted</code></td>
+      <td><code>rewardBasedVideoAdDidCompletePlaying</code></td>
+      <td><code>rewardedVideoAdVideoCompleted</code></td>
+    </tr>
+    <tr>
       <td><code>adClosed</code></td>
       <td><code>rewardBasedVideoAdDidClose</code></td>
       <td><code>onRewardedVideoAdClosed</code></td>

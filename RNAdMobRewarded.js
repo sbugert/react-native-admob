@@ -17,6 +17,7 @@ const eventMap = {
   adLeftApplication: 'rewardedVideoAdLeftApplication',
   rewarded: 'rewardedVideoAdRewarded',
   videoStarted: 'rewardedVideoAdVideoStarted',
+  videoCompleted: 'rewardedVideoAdVideoCompleted',
 };
 
 const _subscriptions = new Map();
