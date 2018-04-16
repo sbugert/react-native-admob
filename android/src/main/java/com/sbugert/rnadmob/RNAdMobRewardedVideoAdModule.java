@@ -34,6 +34,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     public static final String EVENT_REWARDED = "rewardedVideoAdRewarded";
     public static final String EVENT_VIDEO_STARTED = "rewardedVideoAdVideoStarted";
     public static final String EVENT_VIDEO_COMPLETED = "rewardedVideoAdVideoCompleted";
+
     RewardedVideoAd mRewardedVideoAd;
     String adUnitID;
     String[] testDevices;
