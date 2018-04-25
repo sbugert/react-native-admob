@@ -1,5 +1,5 @@
 {
-  "name": "react-native-admob",
+  "name": "@nfl/react-native-admob",
   "version": "2.0.0-beta.3",
   "description": "A react-native component for Google AdMob banners and interstitials",
   "author": "Simon Bugert <simon.bugert@gmail.com>",
