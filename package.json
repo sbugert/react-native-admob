@@ -1,6 +1,6 @@
 {
   "name": "react-native-admob",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "description": "A react-native component for Google AdMob banners and interstitials",
   "author": "Simon Bugert <simon.bugert@gmail.com>",
   "main": "index.js",
@@ -18,7 +18,6 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^4.3.0",
-    "eslint-plugin-react": "^7.1.0",
-    "eslint-plugin-react-native": "^3.2.0"
+    "eslint-plugin-react": "^7.1.0"
   }
 }
