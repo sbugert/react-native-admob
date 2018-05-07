@@ -33,7 +33,7 @@ export default class Example extends Component {
   constructor() {
     super();
     this.state = {
-      fluidSizeIndex: 0,
+      fluidSizeIndex: 0
     };
   }
 
@@ -148,6 +148,7 @@ export default class Example extends Component {
             <PublisherBanner
               adSize="banner"
               validAdSizes={['banner', 'largeBanner', 'mediumRectangle']}
+              customTargeting= {{"test1": "hello1", "test2": "hello2"}}
               adUnitID="/6499/example/APIDemo/AdSizes"
               ref={el => (this._adSizesExample = el)}
             />
@@ -159,7 +160,7 @@ export default class Example extends Component {
           <BannerExample title="DFP - App Events" style={this.state.appEventsExampleStyle}>
             <PublisherBanner
               style={{ height: 50 }}
-              adUnitID="/6499/example/APIDemo/AppEvents"
+              adUnitID="/6499/example/APIDem`o/AppEvents"
               onAdFailedToLoad={(error) => console.warn(error)}
               onAppEvent={(event) => {
                 if (event.name === 'color') {
