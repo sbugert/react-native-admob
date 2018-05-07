@@ -5,7 +5,7 @@ import {
   findNodeHandle,
   ViewPropTypes,
 } from 'react-native';
-import { string, func, arrayOf } from 'prop-types';
+import { string, func, arrayOf, object} from 'prop-types';
 
 import { createErrorFromErrorData } from './utils';
 
@@ -87,6 +87,11 @@ PublisherBanner.propTypes = {
    * banner is default
    */
   adSize: string,
+
+  /**
+   * make it as json?
+   */
+  customTargeting: object,
 
   /**
    * Optional array specifying all valid sizes that are appropriate for this slot.
