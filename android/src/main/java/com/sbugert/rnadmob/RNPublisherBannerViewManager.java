@@ -25,6 +25,7 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
@@ -277,6 +278,12 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     }
 
     private AdSize getAdSizeFromString(String adSize) {
+         if (Pattern.matches("\\{\\d*,\\d*\\}", adSize)) {
+            String[] sizes = adSize.substring(1, adSize.length() - 1).split(",");
+
+            return new AdSize(new Integer(sizes[0]), new Integer(sizes[1]));
+        }
+
         switch (adSize) {
             case "banner":
                 return AdSize.BANNER;
