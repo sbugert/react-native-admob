@@ -8,7 +8,9 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -32,6 +34,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     protected PublisherAdView adView;
 
     String[] testDevices;
+    HashMap<String,Object> customTargeting;
     AdSize[] validAdSizes;
     String adUnitID;
     AdSize adSize;
@@ -156,6 +159,12 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
                 adRequestBuilder.addTestDevice(testDevice);
             }
         }
+        if (customTargeting != null){
+            for (String key : customTargeting.keySet()) {
+                adRequestBuilder.addCustomTargeting(key, customTargeting.get(key).toString());       
+            }
+        }
+
         PublisherAdRequest adRequest = adRequestBuilder.build();
         this.adView.loadAd(adRequest);
     }
@@ -172,6 +181,10 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
     public void setTestDevices(String[] testDevices) {
         this.testDevices = testDevices;
+    }
+
+    public void setCustomTargeting(HashMap<String,Object> customTargeting) {
+        this.customTargeting = customTargeting;
     }
 
     public void setAdSize(AdSize adSize) {
@@ -199,6 +212,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     public static final String PROP_VALID_AD_SIZES = "validAdSizes";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_TEST_DEVICES = "testDevices";
+    public static final String PROP_CUSTOM_TARGETING = "customTargeting";
 
     public static final String EVENT_SIZE_CHANGE = "onSizeChange";
     public static final String EVENT_AD_LOADED = "onAdLoaded";
@@ -275,6 +289,13 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
         ReadableNativeArray nativeArray = (ReadableNativeArray)testDevices;
         ArrayList<Object> list = nativeArray.toArrayList();
         view.setTestDevices(list.toArray(new String[list.size()]));
+    }
+
+    @ReactProp(name = PROP_CUSTOM_TARGETING)
+    public void setPropCustomTargeting(final ReactPublisherAdView view, final ReadableMap customTargeting) {
+        ReadableNativeMap nativeMap = (ReadableNativeMap)customTargeting;
+        HashMap<String,Object> list = nativeMap.toHashMap();
+        view.setCustomTargeting(list);
     }
 
     private AdSize getAdSizeFromString(String adSize) {
