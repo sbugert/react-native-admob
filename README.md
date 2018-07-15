@@ -31,7 +31,7 @@ On Android the AdMob library code is part of Play Services, which is automatical
 **Notes For ReactNative 56.0:**
 
 ```
-// In your android/app/build.gradle 
+// In your android/app/build.gradle Add this
 // Change gmsSdkVersion version if build crash
 
 rootProject.ext {
