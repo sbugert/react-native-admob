@@ -28,6 +28,20 @@ For iOS you will have to add the [Google Mobile Ads SDK](https://developers.goog
 
 On Android the AdMob library code is part of Play Services, which is automatically added when this library is linked.
 
+**Notes For ReactNative 56.0:**
+
+```
+// In your android/app/build.gradle 
+// Change gmsSdkVersion version if build crash
+
+rootProject.ext {
+   compileSdkVersion = 26
+   buildToolsVersion = '26.0.1'
+   targetSdkVersion = 26
+   gmsSdkVersion = '+' 
+}
+```
+
 ## Usage
 
 ```jsx
