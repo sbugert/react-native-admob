@@ -1,12 +1,21 @@
 apply plugin: 'com.android.library'
 
+def _ext = rootProject.ext
+
+def _reactNativeVersion = _ext.has('reactNative') ? _ext.reactNative : '+'
+def _compileSdkVersion = _ext.has('compileSdkVersion') ? _ext.compileSdkVersion : 23
+def _buildToolsVersion = _ext.has('buildToolsVersion') ? _ext.buildToolsVersion : '23.0.1'
+def _minSdkVersion = _ext.has('minSdkVersion') ? _ext.minSdkVersion : 16
+def _targetSdkVersion = _ext.has('targetSdkVersion') ? _ext.targetSdkVersion : 23
+def _gmsSdkVersion = _ext.has('gmsSdkVersion') ? _ext.gmsSdkVersion : '+'
+
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion _compileSdkVersion
+    buildToolsVersion _buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion _minSdkVersion
+        targetSdkVersion _targetSdkVersion
     }
     buildTypes {
         release {
@@ -17,6 +26,6 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile 'com.google.android.gms:play-services-ads:+'
+    compile "com.facebook.react:react-native:${_reactNativeVersion}"
+    compile "com.google.android.gms:play-services-ads:${_gmsSdkVersion}"
 }
