@@ -7,6 +7,7 @@ Pod::Spec.new do |s|
   s.version      = package["version"]
   s.summary      = package["description"]
   s.author       = package["author"]
+  s.homepage     = 'https://github.com/sbugert/react-native-admob'
 
   s.license      = package["license"]
   s.platform     = :ios, "8.0"
