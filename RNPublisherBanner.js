@@ -16,6 +16,7 @@ class PublisherBanner extends Component {
     this.handleSizeChange = this.handleSizeChange.bind(this);
     this.handleAppEvent = this.handleAppEvent.bind(this);
     this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
+    this.loadBanner = this.loadBanner.bind(this);
     this.state = {
       style: {},
     };
