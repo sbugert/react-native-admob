@@ -26,6 +26,10 @@ For iOS you will have to add the [Google Mobile Ads SDK](https://developers.goog
 
 ### Android
 
+Add this line in your project `AndroidManifest.xml` inside `<application>`
+
+`<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="[appid here]"/>`
+
 On Android the AdMob library code is part of Play Services, which is automatically added when this library is linked.
 
 ## Usage
