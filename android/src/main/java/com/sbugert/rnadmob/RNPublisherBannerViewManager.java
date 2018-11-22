@@ -1,11 +1,15 @@
 package com.sbugert.rnadmob;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
@@ -22,6 +26,7 @@ import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +35,9 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
     protected PublisherAdView adView;
 
+    ReadableNativeMap kvs;
+    Location location;
+    String contentUrl;
     String[] testDevices;
     AdSize[] validAdSizes;
     String adUnitID;
@@ -152,8 +160,22 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
                 if (testDevice == "SIMULATOR") {
                     testDevice = PublisherAdRequest.DEVICE_ID_EMULATOR;
                 }
-                adRequestBuilder.addTestDevice(testDevice);
+                // adRequestBuilder.addTestDevice(testDevice);
             }
+        }
+        if (kvs != null) {
+            ReadableMapKeySetIterator iterator = kvs.keySetIterator();
+            while (iterator.hasNextKey()) {
+                String key = iterator.nextKey();
+                String value = kvs.getString(key);
+                adRequestBuilder.addCustomTargeting(key, value);
+            }
+        }
+        if (contentUrl != null) {
+            adRequestBuilder.setContentUrl(contentUrl);
+        }
+        if (location != null) {
+            adRequestBuilder.setLocation(location);
         }
         PublisherAdRequest adRequest = adRequestBuilder.build();
         this.adView.loadAd(adRequest);
@@ -181,6 +203,16 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
         this.validAdSizes = adSizes;
     }
 
+    public void setContentUrl(String contentUrl) {
+        this.contentUrl = contentUrl;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void setKvs (ReadableNativeMap kvs) { this.kvs = kvs; }
+
     @Override
     public void onAppEvent(String name, String info) {
         WritableMap event = Arguments.createMap();
@@ -198,6 +230,9 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     public static final String PROP_VALID_AD_SIZES = "validAdSizes";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_TEST_DEVICES = "testDevices";
+    public static final String PROP_KVS = "kvs";
+    public static final String PROP_CONTENT_URL = "contentUrl";
+    public static final String PROP_LOCATION = "location";
 
     public static final String EVENT_SIZE_CHANGE = "onSizeChange";
     public static final String EVENT_AD_LOADED = "onAdLoaded";
@@ -274,6 +309,17 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
         ReadableNativeArray nativeArray = (ReadableNativeArray)testDevices;
         ArrayList<Object> list = nativeArray.toArrayList();
         view.setTestDevices(list.toArray(new String[list.size()]));
+    }
+
+    @ReactProp(name=PROP_KVS)
+    public void setPropKVS(final ReactPublisherAdView view, final ReadableMap kvs) {
+        ReadableNativeMap nativeMap = (ReadableNativeMap)kvs;
+        view.setKvs(nativeMap);
+    }
+
+    @ReactProp(name=PROP_CONTENT_URL)
+    public void setPropContentUrl(final ReactPublisherAdView view, final String contentUrl) {
+        view.setContentUrl(contentUrl);
     }
 
     private AdSize getAdSizeFromString(String adSize) {
