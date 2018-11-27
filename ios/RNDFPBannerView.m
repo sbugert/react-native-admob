@@ -53,8 +53,12 @@
 #pragma clang diagnostic pop
 
 - (void)loadBanner {
-    GADRequest *request = [GADRequest request];
-    request.testDevices = _testDevices;
+    DFPRequest *request = [DFPRequest request];
+    
+    [request setTestDevices:_testDevices];
+    [request setCustomTargeting:_kvs];
+    [request setContentURL:_contentUrl];
+    
     [_bannerView loadRequest:request];
 }
 
@@ -77,7 +81,7 @@
     _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
 }
 
--(void)layoutSubviews
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     _bannerView.frame = self.bounds;

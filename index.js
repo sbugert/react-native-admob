@@ -9,6 +9,9 @@ module.exports = {
   get PublisherBanner() {
     return require('./RNPublisherBanner').default;
   },
+  get PublisherInterstitial() {
+    return require('./RNPublisherInterstitial').default;
+  },
   get AdMobRewarded() {
     return require('./RNAdMobRewarded').default;
   },

@@ -15,6 +15,7 @@
 		A962C2531CB27DBD00E508A1 /* RNAdMobInterstitial.m in Sources */ = {isa = PBXBuildFile; fileRef = A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */; };
 		A96DA7841C146DA600FC639B /* RNGADBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DA7811C146DA600FC639B /* RNGADBannerView.m */; };
 		A96DA7851C146DA600FC639B /* RNGADBannerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A96DA7831C146DA600FC639B /* RNGADBannerViewManager.m */; };
+		AA46D66221AD3DD500A4AAC6 /* RNDFPInterstitial.m in Sources */ = {isa = PBXBuildFile; fileRef = AA46D66021AD3DD400A4AAC6 /* RNDFPInterstitial.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +48,8 @@
 		A96DA7811C146DA600FC639B /* RNGADBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADBannerView.m; sourceTree = SOURCE_ROOT; };
 		A96DA7821C146DA600FC639B /* RNGADBannerViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADBannerViewManager.h; sourceTree = SOURCE_ROOT; };
 		A96DA7831C146DA600FC639B /* RNGADBannerViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADBannerViewManager.m; sourceTree = SOURCE_ROOT; };
+		AA46D66021AD3DD400A4AAC6 /* RNDFPInterstitial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNDFPInterstitial.m; sourceTree = SOURCE_ROOT; };
+		AA46D66121AD3DD400A4AAC6 /* RNDFPInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNDFPInterstitial.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,22 +82,24 @@
 		A96DA7761C146D7200FC639B /* RNAdMobManager */ = {
 			isa = PBXGroup;
 			children = (
+				AA46D66121AD3DD400A4AAC6 /* RNDFPInterstitial.h */,
+				AA46D66021AD3DD400A4AAC6 /* RNDFPInterstitial.m */,
 				0CB8C04C1D9143A6002BC3EF /* RNDFPBannerViewManager.h */,
 				0CB8C04D1D9143A6002BC3EF /* RNDFPBannerViewManager.m */,
+				0CB8C0491D913E00002BC3EF /* RNDFPBannerView.h */,
+				0CB8C04A1D913E00002BC3EF /* RNDFPBannerView.m */,
+				5E86A6451F126FCE008013EB /* RCTConvert+GADAdSize.h */,
+				5E86A6461F126FCE008013EB /* RCTConvert+GADAdSize.m */,
 				A96DA7801C146DA600FC639B /* RNGADBannerView.h */,
 				A96DA7811C146DA600FC639B /* RNGADBannerView.m */,
 				A96DA7821C146DA600FC639B /* RNGADBannerViewManager.h */,
 				A96DA7831C146DA600FC639B /* RNGADBannerViewManager.m */,
 				A962C2511CB27DBD00E508A1 /* RNAdMobInterstitial.h */,
 				A962C2521CB27DBD00E508A1 /* RNAdMobInterstitial.m */,
-				0CB8C0491D913E00002BC3EF /* RNDFPBannerView.h */,
-				0CB8C04A1D913E00002BC3EF /* RNDFPBannerView.m */,
 				5E2419831FE11E0F00C6B738 /* RNAdMobUtils.m */,
 				5E2419851FE11F1200C6B738 /* RNAdMobUtils.h */,
 				A90F2F8A1D50AEF200F2A2E3 /* RNAdMobRewarded.h */,
 				A90F2F8B1D50AEF200F2A2E3 /* RNAdMobRewarded.m */,
-				5E86A6451F126FCE008013EB /* RCTConvert+GADAdSize.h */,
-				5E86A6461F126FCE008013EB /* RCTConvert+GADAdSize.m */,
 			);
 			path = RNAdMobManager;
 			sourceTree = "<group>";
@@ -162,6 +167,7 @@
 				A96DA7841C146DA600FC639B /* RNGADBannerView.m in Sources */,
 				A96DA7851C146DA600FC639B /* RNGADBannerViewManager.m in Sources */,
 				5E2419841FE11E0F00C6B738 /* RNAdMobUtils.m in Sources */,
+				AA46D66221AD3DD500A4AAC6 /* RNDFPInterstitial.m in Sources */,
 				5E86A6471F126FCE008013EB /* RCTConvert+GADAdSize.m in Sources */,
 				0CB8C04E1D9143A6002BC3EF /* RNDFPBannerViewManager.m in Sources */,
 			);
