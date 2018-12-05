@@ -126,7 +126,15 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
     if (hasListeners) {
         [self sendEventWithName:kEventAdLoaded body:nil];
     }
-    _requestAdResolve(nil);
+    /*
+     * If requestAd is called twice in a row, it can trigger multiple requests
+     * Thus, _requestAdResolve can be nil upon reaching this async code
+     * A check is made to prevent calling _requestAdResolve if it is the case
+     * @Todo: find a better way to handle the service using Observables
+    */
+    if (_requestAdResolve) {
+        _requestAdResolve(nil);
+    }
 }
 
 - (void)interstitial:(__unused GADInterstitial *)interstitial didFailToReceiveAdWithError:(GADRequestError *)error
@@ -135,7 +143,15 @@ RCT_EXPORT_METHOD(isReady:(RCTResponseSenderBlock)callback)
         NSDictionary *jsError = RCTJSErrorFromCodeMessageAndNSError(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
         [self sendEventWithName:kEventAdFailedToLoad body:jsError];
     }
-    _requestAdReject(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
+    /*
+     * If requestAd is called twice in a row, it can trigger multiple requests
+     * Thus, _requestAdReject can be nil upon reaching this async code
+     * A check is made to prevent calling _requestAdReject if it is the case
+     * @Todo: find a better way to handle the service using Observables
+     */
+    if(_requestAdReject) {
+        _requestAdReject(@"E_AD_REQUEST_FAILED", error.localizedDescription, error);
+    }
 }
 
 - (void)interstitialWillPresentScreen:(__unused GADInterstitial *)ad
