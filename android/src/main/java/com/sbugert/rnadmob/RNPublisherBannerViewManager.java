@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
+class ReactPublisherAdView extends ReactViewGroup implements AppEventListener, LifecycleEventListener {
 
     protected PublisherAdView adView;
 
@@ -219,6 +220,21 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
         event.putString("name", name);
         event.putString("info", info);
         sendEvent(RNPublisherBannerViewManager.EVENT_APP_EVENT, event);
+    }
+
+    @Override
+    public void onHostResume() {
+
+    }
+
+    @Override
+    public void onHostPause() {
+
+    }
+
+    @Override
+    public void onHostDestroy() {
+        adView.destroy();
     }
 }
 
