@@ -23,6 +23,9 @@ In order to use this library, you have to link it to your project first. There's
 ### iOS
 
 For iOS you will have to add the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project.
+** Update for pod user **
+add Header search path to support Cocoapod project
++ $(SRCROOT)/../../../ios/Pods/Headers/Public
 
 ### Android
 
