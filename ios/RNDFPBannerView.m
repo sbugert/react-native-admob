@@ -16,6 +16,7 @@
 @implementation RNDFPBannerView
 {
     DFPBannerView  *_bannerView;
+    NSJSONSerialization *jsonTargets;
 }
 
 - (void)dealloc
@@ -53,7 +54,26 @@
 #pragma clang diagnostic pop
 
 - (void)loadBanner {
-    GADRequest *request = [GADRequest request];
+    DFPRequest *request = [DFPRequest request];
+
+    if (_targets) {
+        NSData *data = [_targets dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error;
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        NSArray *keys = [dictionary allKeys];
+        NSArray *values = [dictionary allValues];
+        NSUInteger i, cnt = [keys count];
+        NSMutableDictionary *customtargeting = [[NSMutableDictionary alloc] initWithCapacity:[keys count]];
+        for(i = 0; i < cnt; i++)
+        {
+            id targetValue = [values objectAtIndex:i];
+            id targetKey = [keys objectAtIndex:i];
+            [customtargeting setObject:targetValue forKey: targetKey];
+        }
+
+        request.customTargeting = customtargeting;
+    }
+
     request.testDevices = _testDevices;
     [_bannerView loadRequest:request];
 }

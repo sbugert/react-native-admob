@@ -1,7 +1,5 @@
 # react-native-admob [![npm](https://img.shields.io/npm/v/react-native-admob.svg)](https://www.npmjs.com/package/react-native-admob) [![npm (next)](https://img.shields.io/npm/v/react-native-admob/next.svg)](https://www.npmjs.com/package/react-native-admob)
 
-### ⚠️ Please note, the master branch tracks development of version 2 of this library, which is currently in beta. For version 1 please check out the [1.x branch](https://github.com/sbugert/react-native-admob/tree/1.x).
-
 A react-native module for Google AdMob Banners, Interstitials, and Rewarded Videos, and also DFP Banners.
 
 The banner types are implemented as components while the interstitial and rewarded video have an imperative API.
@@ -46,10 +44,14 @@ import {
   onAdFailedToLoad={error => console.error(error)}
 />
 
+// Data that will sended to DFP
+const data = {city: 'New York', temperature: 18}
+
 // Display a DFP Publisher banner
 <PublisherBanner
   adSize="fullBanner"
   adUnitID="your-admob-unit-id"
+  targets={JSON.stringify(data)}
   testDevices={[PublisherBanner.simulatorId]}
   onAdFailedToLoad={error => console.error(error)}
   onAppEvent={event => console.log(event.name, event.info)}
