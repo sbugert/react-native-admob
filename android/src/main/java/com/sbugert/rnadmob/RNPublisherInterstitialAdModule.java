@@ -13,6 +13,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -150,6 +151,19 @@ public class RNPublisherInterstitialAdModule extends ReactContextBaseJavaModule 
                             adRequestBuilder.addTestDevice(testDevice);
                         }
                     }
+                    if (kvs != null) {
+                        ReadableMapKeySetIterator iterator = kvs.keySetIterator();
+                        while (iterator.hasNextKey()) {
+                            String key = iterator.nextKey();
+                            String value = kvs.getString(key);
+                            adRequestBuilder.addCustomTargeting(key, value);
+                        }
+                    }
+                    if (contentUrl != null) {
+                        adRequestBuilder.setContentUrl(contentUrl);
+                    }
+
+
                     PublisherAdRequest adRequest = adRequestBuilder.build();
                     mInterstitialAd.loadAd(adRequest);
                 }
