@@ -10,7 +10,6 @@ import { string, func, arrayOf } from 'prop-types';
 import { createErrorFromErrorData } from './utils';
 
 class PublisherBanner extends Component {
-
   constructor() {
     super();
     this.handleSizeChange = this.handleSizeChange.bind(this);
@@ -28,8 +27,8 @@ class PublisherBanner extends Component {
   loadBanner() {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this._bannerView),
-      UIManager.RNDFPBannerView.Commands.loadBanner,
-      null,
+      UIManager.getViewManagerConfig('RNDFPBannerView').Commands.loadBanner,
+      null
     );
   }
 
