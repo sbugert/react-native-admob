@@ -15,10 +15,18 @@ class PublisherBanner extends Component {
     this.handleSizeChange = this.handleSizeChange.bind(this);
     this.handleAppEvent = this.handleAppEvent.bind(this);
     this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
-    this.state = {
-      style: {},
-    };
+    this.state = {};
   }
+
+  static getDerivedStateFromProps = (props: IProps, state: IState) => {
+    return {
+      ...state,
+      style: {
+        width: props.width,
+        height: props.height,
+      },
+    };
+  };
 
   componentDidMount() {
     this.loadBanner();
@@ -34,6 +42,10 @@ class PublisherBanner extends Component {
 
   handleSizeChange(event) {
     const { height, width } = event.nativeEvent;
+    if (height === this.state.style.height && width === this.state.style.width) {
+      return;
+    }
+
     this.setState({ style: { width, height } });
     if (this.props.onSizeChange) {
       this.props.onSizeChange({ width, height });
