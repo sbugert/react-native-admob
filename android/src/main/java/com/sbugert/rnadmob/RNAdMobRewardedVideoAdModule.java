@@ -63,7 +63,11 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
     @Override
     public void onRewardedVideoAdLoaded() {
         sendEvent(EVENT_AD_LOADED, null);
-        mRequestAdPromise.resolve(null);
+        // mRequestAdPromise.resolve(null);
+        if (mRequestAdPromise != null) {
+            mRequestAdPromise.resolve(null);
+            mRequestAdPromise = null;
+        }
     }
 
     @Override
@@ -117,7 +121,11 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         WritableMap error = Arguments.createMap();
         event.putString("message", errorMessage);
         sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
-        mRequestAdPromise.reject(errorString, errorMessage);
+        // mRequestAdPromise.reject(errorString, errorMessage);
+        if (mRequestAdPromise != null) {
+            mRequestAdPromise.reject(errorString, errorMessage);
+            mRequestAdPromise = null;
+        }
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
@@ -141,6 +149,8 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                if (getCurrentActivity() == null) return;
+
                 RNAdMobRewardedVideoAdModule.this.mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getCurrentActivity());
 
                 RNAdMobRewardedVideoAdModule.this.mRewardedVideoAd.setRewardedVideoAdListener(RNAdMobRewardedVideoAdModule.this);
@@ -174,7 +184,8 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (mRewardedVideoAd.isLoaded()) {
+                // if (mRewardedVideoAd.isLoaded()) {
+                if (mRewardedVideoAd != null && mRewardedVideoAd.isLoaded()) {
                     mRewardedVideoAd.show();
                     promise.resolve(null);
                 } else {
@@ -189,7 +200,12 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                callback.invoke(mRewardedVideoAd.isLoaded());
+                // callback.invoke(mRewardedVideoAd.isLoaded());
+                if (mRewardedVideoAd == null) {
+                    callback.invoke(false);
+                } else {
+                    callback.invoke(mRewardedVideoAd.isLoaded());
+                }
             }
         });
     }
