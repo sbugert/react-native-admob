@@ -19,6 +19,7 @@ import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
+
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.google.android.gms.ads.AdListener;
@@ -50,7 +51,9 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener, L
     }
 
     private void createAdView() {
-        if (this.adView != null) this.adView.destroy();
+        if (this.adView != null){
+            this.adView.destroy();
+        }
 
         final Context context = getContext();
         this.adView = new PublisherAdView(context);
@@ -107,6 +110,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener, L
                 sendEvent(RNPublisherBannerViewManager.EVENT_AD_LEFT_APPLICATION, null);
             }
         });
+
         this.addView(this.adView);
     }
 
@@ -223,18 +227,18 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener, L
     }
 
     @Override
-    public void onHostResume() {
+    public void onHostDestroy() {
+        this.adView.destroy();
+    }
 
+    @Override
+    public void onHostResume() {
+        this.adView.resume();
     }
 
     @Override
     public void onHostPause() {
-
-    }
-
-    @Override
-    public void onHostDestroy() {
-        adView.destroy();
+        this.adView.pause();
     }
 }
 
@@ -274,6 +278,14 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     @Override
     public void addView(ReactPublisherAdView parent, View child, int index) {
         throw new RuntimeException("RNPublisherBannerView cannot have subviews");
+    }
+
+    @Override
+    public void onDropViewInstance(ReactPublisherAdView view) {
+        view.adView.setAppEventListener(null);
+        view.adView.setAdListener(null);
+        view.adView.destroy();
+        super.onDropViewInstance(view);
     }
 
     @Override
