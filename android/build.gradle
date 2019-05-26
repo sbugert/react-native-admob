@@ -23,4 +23,6 @@ android {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.android.gms:play-services-ads:+'
+    implementation 'com.google.ads.mediation:nend:5.1.0.2'
+    implementation 'net.nend.android:nend-sdk:5.0.3'
 }
