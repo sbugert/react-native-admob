@@ -7,6 +7,7 @@
 #endif
 
 @import GoogleMobileAds;
+@import NendAdapter;
 
 @interface RNAdMobInterstitial : RCTEventEmitter <RCTBridgeModule, GADInterstitialDelegate>
 @end

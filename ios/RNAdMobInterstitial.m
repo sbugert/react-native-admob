@@ -59,7 +59,10 @@ RCT_EXPORT_METHOD(setTestDevices:(NSArray *)testDevices)
     _testDevices = RNAdMobProcessTestDevices(testDevices, kGADSimulatorID);
 }
 
-RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(requestAd:
+                  (NSString *)userId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     _requestAdResolve = nil;
     _requestAdReject = nil;
@@ -73,6 +76,12 @@ RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
 
         GADRequest *request = [GADRequest request];
         request.testDevices = _testDevices;
+
+        GADMAdapterNendExtras *extras = [[GADMAdapterNendExtras alloc] init];
+        extras.interstitialType = GADMNendInterstitialTypeVideo;
+        extras.userId = userId;
+        [request registerAdNetworkExtras:extras];
+
         [_interstitial loadRequest:request];
     } else {
         reject(@"E_AD_ALREADY_LOADED", @"Ad is already loaded.", nil);
