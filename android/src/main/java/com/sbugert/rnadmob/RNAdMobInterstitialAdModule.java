@@ -1,5 +1,6 @@
 package com.sbugert.rnadmob;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -13,15 +14,14 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.google.ads.mediation.nend.NendExtrasBundleBuilder;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.ads.mediation.nend.NendAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
 
@@ -137,6 +137,13 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                             adRequestBuilder.addTestDevice(testDevice);
                         }
                     }
+
+                    final Bundle bundle = new NendExtrasBundleBuilder()
+                        .setUserId(userId)
+                        .setInterstitialType(NendAdapter.InterstitialType.TYPE_VIDEO).build();
+
+                    adRequestBuilder.addNetworkExtrasBundle(NendAdapter.class, bundle);
+
                     AdRequest adRequest = adRequestBuilder.build();
                     mInterstitialAd.loadAd(adRequest);
                 }

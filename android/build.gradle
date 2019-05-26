@@ -19,4 +19,6 @@ android {
 dependencies {
     compile 'com.facebook.react:react-native:+'
     compile 'com.google.android.gms:play-services-ads:+'
+    compile 'com.google.ads.mediation:nend:5.1.0.2'
+    compile 'net.nend.android:nend-sdk:5.0.3'
 }
