@@ -3,7 +3,9 @@ package com.sbugert.rnadmob;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -58,6 +60,9 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener, L
         final Context context = getContext();
         this.adView = new PublisherAdView(context);
         this.adView.setAppEventListener(this);
+        // TMP : Test config for fluid format
+        //this.adView.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
+
         this.adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -368,6 +373,8 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
                 return AdSize.SMART_BANNER;
             case "smartBanner":
                 return AdSize.SMART_BANNER;
+            case "fluid":
+                return AdSize.FLUID;
             default:
                 return AdSize.BANNER;
         }
