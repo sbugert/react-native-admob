@@ -21,8 +21,10 @@ android {
 }
 
 dependencies {
-    implementation 'com.facebook.react:react-native:+'
-    implementation 'com.google.android.gms:play-services-ads:+'
-    implementation 'com.google.ads.mediation:nend:5.1.0.2'
-    implementation 'net.nend.android:nend-sdk:5.0.3'
+    compile 'com.facebook.react:react-native:+'
+    compile('com.google.android.gms:play-services-ads:17.2.1') {
+        exclude group: 'com.google.android.gms', module: 'play-services-measurement-sdk-api'
+    }
+    compile 'com.google.ads.mediation:nend:5.1.0.2'
+    compile 'net.nend.android:nend-sdk:5.0.3'
 }
