@@ -30,6 +30,11 @@ static NSString *const kEventVideoStarted = @"rewardedVideoAdVideoStarted";
 
 RCT_EXPORT_MODULE();
 
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
     return @[
