@@ -1,8 +1,12 @@
 package com.sbugert.rnadmob;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -13,20 +17,16 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
 
     public static final String REACT_CLASS = "RNAdMobInterstitial";
-
     public static final String EVENT_AD_LOADED = "interstitialAdLoaded";
     public static final String EVENT_AD_FAILED_TO_LOAD = "interstitialAdFailedToLoad";
     public static final String EVENT_AD_OPENED = "interstitialAdOpened";
@@ -37,6 +37,9 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     String[] testDevices;
 
     private Promise mRequestAdPromise;
+    private ReactApplicationContext context;
+
+    private boolean muted = false;
 
     @Override
     public String getName() {
@@ -46,52 +49,65 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     public RNAdMobInterstitialAdModule(ReactApplicationContext reactContext) {
         super(reactContext);
         mInterstitialAd = new InterstitialAd(reactContext);
+        context = reactContext;
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+
                 mInterstitialAd.setAdListener(new AdListener() {
                     @Override
                     public void onAdClosed() {
+                        if (muted) unmuteSound();
                         sendEvent(EVENT_AD_CLOSED, null);
                     }
+
                     @Override
                     public void onAdFailedToLoad(int errorCode) {
                         String errorString = "ERROR_UNKNOWN";
                         String errorMessage = "Unknown error";
+
                         switch (errorCode) {
                             case AdRequest.ERROR_CODE_INTERNAL_ERROR:
                                 errorString = "ERROR_CODE_INTERNAL_ERROR";
                                 errorMessage = "Internal error, an invalid response was received from the ad server.";
                                 break;
+
                             case AdRequest.ERROR_CODE_INVALID_REQUEST:
                                 errorString = "ERROR_CODE_INVALID_REQUEST";
                                 errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
                                 break;
+
                             case AdRequest.ERROR_CODE_NETWORK_ERROR:
                                 errorString = "ERROR_CODE_NETWORK_ERROR";
                                 errorMessage = "The ad request was unsuccessful due to network connectivity.";
                                 break;
+
                             case AdRequest.ERROR_CODE_NO_FILL:
                                 errorString = "ERROR_CODE_NO_FILL";
                                 errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
                                 break;
                         }
+
                         WritableMap event = Arguments.createMap();
                         WritableMap error = Arguments.createMap();
+
                         event.putString("message", errorMessage);
                         sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
                         mRequestAdPromise.reject(errorString, errorMessage);
                     }
+
                     @Override
                     public void onAdLeftApplication() {
                         sendEvent(EVENT_AD_LEFT_APPLICATION, null);
                     }
+
                     @Override
                     public void onAdLoaded() {
                         sendEvent(EVENT_AD_LOADED, null);
                         mRequestAdPromise.resolve(null);
                     }
+
                     @Override
                     public void onAdOpened() {
                         sendEvent(EVENT_AD_OPENED, null);
@@ -100,6 +116,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
             }
         });
     }
+
     private void sendEvent(String eventName, @Nullable WritableMap params) {
         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
     }
@@ -121,6 +138,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void requestAd(final Promise promise) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @SuppressLint("MissingPermission")
             @Override
             public void run () {
                 if (mInterstitialAd.isLoaded() || mInterstitialAd.isLoading()) {
@@ -150,6 +168,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
             @Override
             public void run () {
                 if (mInterstitialAd.isLoaded()) {
+                    if (muted) muteSound();
                     mInterstitialAd.show();
                     promise.resolve(null);
                 } else {
@@ -167,5 +186,20 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                 callback.invoke(mInterstitialAd.isLoaded());
             }
         });
+    }
+
+    @ReactMethod
+    public void setMute(final boolean muted) {
+        this.muted = muted;
+    }
+
+    private void unmuteSound () {
+        AudioManager aManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        aManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+    }
+
+    private void muteSound () {
+        AudioManager aManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        aManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
     }
 }
