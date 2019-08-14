@@ -1,12 +1,9 @@
 package com.sbugert.rnadmob;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -21,6 +18,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 
@@ -37,9 +35,6 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     String[] testDevices;
 
     private Promise mRequestAdPromise;
-    private ReactApplicationContext context;
-
-    private boolean muted = false;
 
     @Override
     public String getName() {
@@ -49,7 +44,6 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     public RNAdMobInterstitialAdModule(ReactApplicationContext reactContext) {
         super(reactContext);
         mInterstitialAd = new InterstitialAd(reactContext);
-        context = reactContext;
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -58,7 +52,6 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                 mInterstitialAd.setAdListener(new AdListener() {
                     @Override
                     public void onAdClosed() {
-                        if (muted) unmuteSound();
                         sendEvent(EVENT_AD_CLOSED, null);
                     }
 
@@ -168,7 +161,6 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
             @Override
             public void run () {
                 if (mInterstitialAd.isLoaded()) {
-                    if (muted) muteSound();
                     mInterstitialAd.show();
                     promise.resolve(null);
                 } else {
@@ -190,16 +182,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setMute(final boolean muted) {
-        this.muted = muted;
-    }
-
-    private void unmuteSound () {
-        AudioManager aManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        aManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-    }
-
-    private void muteSound () {
-        AudioManager aManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        aManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+        MobileAds.initialize(this.getReactApplicationContext());
+        MobileAds.setAppMuted(muted);
     }
 }

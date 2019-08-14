@@ -54,6 +54,11 @@ RCT_EXPORT_METHOD(setAdUnitID:(NSString *)adUnitID)
     _adUnitID = adUnitID;
 }
 
+RCT_EXPORT_METHOD(setMute:(BOOL) muted)
+{
+    [GADMobileAds sharedInstance].applicationMuted = muted;
+}
+
 RCT_EXPORT_METHOD(setTestDevices:(NSArray *)testDevices)
 {
     _testDevices = RNAdMobProcessTestDevices(testDevices, kGADSimulatorID);
