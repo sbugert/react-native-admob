@@ -59,6 +59,7 @@ const data = {city: 'New York', temperature: 18}
 
 // Display an interstitial
 AdMobInterstitial.setAdUnitID('your-admob-unit-id');
+AdMobInterstitial.setMute(true);
 AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
 AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
 
@@ -187,6 +188,10 @@ In comparison to the `AdMobBanner` and `PublisherBanner` which have a declaritiv
 ##### `setAdUnitID(adUnitID)`
 
 Sets the AdUnit ID for all future ad requests.
+
+##### `setMute(muted)`
+
+Sets the interstitial show muted or unmuted.
 
 ##### `setTestDevices(devices)`
 
