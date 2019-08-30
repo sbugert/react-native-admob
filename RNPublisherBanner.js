@@ -25,13 +25,11 @@ class PublisherBanner extends Component {
   }
 
   loadBanner() {
-    console.log("here:", UIManager);
-
-    // UIManager.dispatchViewManagerCommand(
-    //   findNodeHandle(this._bannerView),
-    //   UIManager.RNDFPBannerView.Commands.loadBanner,
-    //   null
-    // );
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this._bannerView),
+      UIManager.RNDFPBannerView.Commands.loadBanner,
+      null
+    );
   }
 
   handleSizeChange(event) {
