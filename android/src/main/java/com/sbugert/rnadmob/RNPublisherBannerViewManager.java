@@ -295,8 +295,22 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
             case "smartBanner":
                 return AdSize.SMART_BANNER;
             default:
-                return AdSize.BANNER;
+                return parseCustomAdSize(adSize);
         }
+    }
+
+    public static AdSize parseCustomAdSize(String sizeString)
+    {
+        AdSize adSize = AdSize.BANNER;
+        if(sizeString.contains("x")){
+            String[] sz = sizeString.split("x");
+            try {
+                adSize = new AdSize( Integer.parseInt(sz[0]),Integer.parseInt(sz[1]) );
+            }catch (Exception e){
+                Log.e(LOGTAG,"failed to parse ad size");
+            }
+        }
+        return adSize;
     }
 
     @Nullable
