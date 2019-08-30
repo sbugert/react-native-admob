@@ -29,4 +29,23 @@
     }
 }
 
++ (GADAdSize)parseCustomAdSize:(NSString *)bannerSizeString
+{
+    GADAdSize _localSize = kGADAdSizeBanner;
+    @try {
+        //try parse width x height string to GADAdSize
+        if ([bannerSizeString rangeOfString:@"x"].location != NSNotFound)
+        {
+            NSArray *array = [bannerSizeString componentsSeparatedByString:@"x"];
+            int width = [ array[0] intValue];
+            int height = [ array[1] intValue];
+            _localSize = GADAdSizeFromCGSize(CGSizeMake(width, height));
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception.reason);
+    }
+    return _localSize;
+}
+
 @end
