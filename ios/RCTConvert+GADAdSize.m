@@ -25,7 +25,7 @@
         return kGADAdSizeSmartBannerLandscape;
     }
     else {
-        return kGADAdSizeInvalid;
+        return [self parseCustomAdSize:adSize];
     }
 }
 
