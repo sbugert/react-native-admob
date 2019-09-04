@@ -10,7 +10,7 @@ import { string, func, arrayOf } from 'prop-types';
 import { createErrorFromErrorData } from './utils';
 
 class PublisherBanner extends Component {
-  
+
   constructor() {
     super();
     this.handleSizeChange = this.handleSizeChange.bind(this);
