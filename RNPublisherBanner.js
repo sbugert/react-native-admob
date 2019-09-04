@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   requireNativeComponent,
   UIManager,
   findNodeHandle,
-  ViewPropTypes
+  ViewPropTypes,
 } from "react-native";
-import { string, func, arrayOf } from "prop-types";
+import { string, func, arrayOf } from 'prop-types';
 
-import { createErrorFromErrorData } from "./utils";
+import { createErrorFromErrorData } from './utils';
 
 class PublisherBanner extends Component {
   constructor() {
@@ -16,7 +16,7 @@ class PublisherBanner extends Component {
     this.handleAppEvent = this.handleAppEvent.bind(this);
     this.handleAdFailedToLoad = this.handleAdFailedToLoad.bind(this);
     this.state = {
-      style: {}
+      style: {},
     };
   }
 
@@ -28,7 +28,7 @@ class PublisherBanner extends Component {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this._bannerView),
       UIManager.RNDFPBannerView.Commands.loadBanner,
-      null
+      null,
     );
   }
 
@@ -49,9 +49,7 @@ class PublisherBanner extends Component {
 
   handleAdFailedToLoad(event) {
     if (this.props.onAdFailedToLoad) {
-      this.props.onAdFailedToLoad(
-        createErrorFromErrorData(event.nativeEvent.error)
-      );
+      this.props.onAdFailedToLoad(createErrorFromErrorData(event.nativeEvent.error));
     }
   }
 
@@ -69,7 +67,7 @@ class PublisherBanner extends Component {
   }
 }
 
-PublisherBanner.simulatorId = "SIMULATOR";
+PublisherBanner.simulatorId = 'SIMULATOR';
 
 PublisherBanner.propTypes = {
   ...ViewPropTypes,
@@ -114,12 +112,9 @@ PublisherBanner.propTypes = {
   onAdOpened: func,
   onAdClosed: func,
   onAdLeftApplication: func,
-  onAppEvent: func
+  onAppEvent: func,
 };
 
-const RNDFPBannerView = requireNativeComponent(
-  "RNDFPBannerView",
-  PublisherBanner
-);
+const RNDFPBannerView = requireNativeComponent('RNDFPBannerView', PublisherBanner);
 
 export default PublisherBanner;
