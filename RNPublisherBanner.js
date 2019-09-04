@@ -4,7 +4,7 @@ import {
   UIManager,
   findNodeHandle,
   ViewPropTypes,
-} from "react-native";
+} from 'react-native';
 import { string, func, arrayOf } from 'prop-types';
 
 import { createErrorFromErrorData } from './utils';
