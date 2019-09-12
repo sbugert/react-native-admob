@@ -1,6 +1,7 @@
 package com.sbugert.rnadmob;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.annotation.Nullable;
 import android.view.View;
 
@@ -8,6 +9,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
@@ -19,12 +22,19 @@ import com.facebook.react.views.view.ReactViewGroup;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.doubleclick.AppEventListener;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.sbugert.rnadmob.customClasses.CustomTargeting;
+import com.sbugert.rnadmob.enums.TargetingEnums;
+import com.sbugert.rnadmob.enums.TargetingEnums.TargetingTypes;
 
 class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
@@ -34,6 +44,18 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     AdSize[] validAdSizes;
     String adUnitID;
     AdSize adSize;
+
+    // Targeting
+    Boolean hasTargeting = false;
+    CustomTargeting[] customTargeting;
+    String[] categoryExclusions;
+    String[] keywords;
+    Integer gender;
+    Date birthday;
+    Boolean childDirectedTreatment;
+    String contentURL;
+    String publisherProvidedID;
+    Location location;
 
     public ReactPublisherAdView(final Context context) {
         super(context);
@@ -155,6 +177,53 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
                 adRequestBuilder.addTestDevice(testDevice);
             }
         }
+
+        // Targeting
+        if (hasTargeting) {
+            if (customTargeting != null && customTargeting.length > 0) {
+                for (int i = 0; i < customTargeting.length; i++) {
+                    String key = customTargeting[i].key;
+                    String value = customTargeting[i].value;
+                    if (!key.isEmpty() && !value.isEmpty()) {
+                        adRequestBuilder.addCustomTargeting(key, value);
+                    }
+                }
+            }
+            if (categoryExclusions != null && categoryExclusions.length > 0) {
+                for (int i =0; i < categoryExclusions.length; i++) {
+                    String categoryExclusion = categoryExclusions[i];
+                    if (!categoryExclusion.isEmpty()) {
+                        adRequestBuilder.addCategoryExclusion(categoryExclusion);
+                    }
+                }
+            }
+            if (keywords != null && keywords.length > 0) {
+                for (int i = 0; i < keywords.length; i++) {
+                    String keyword = keywords[i];
+                    if (!keyword.isEmpty()) {
+                        adRequestBuilder.addKeyword(keyword);
+                    }
+                }
+            }
+            if (gender != null) {
+                adRequestBuilder.setGender(gender);
+            }
+            if (birthday != null) {
+                adRequestBuilder.setBirthday(birthday);
+            }
+            if (childDirectedTreatment != null) {
+                adRequestBuilder.tagForChildDirectedTreatment(childDirectedTreatment);
+            }
+            if (contentURL != null) {
+                adRequestBuilder.setContentUrl(contentURL);
+            }
+            if (publisherProvidedID != null) {
+                adRequestBuilder.setPublisherProvidedId(publisherProvidedID);
+            }
+            if (location != null) {
+                adRequestBuilder.setLocation(location);
+            }
+        }
         PublisherAdRequest adRequest = adRequestBuilder.build();
         this.adView.loadAd(adRequest);
     }
@@ -171,6 +240,43 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
     public void setTestDevices(String[] testDevices) {
         this.testDevices = testDevices;
+    }
+
+    // Targeting
+    public void setCustomTargeting(CustomTargeting[] customTargeting) {
+        this.customTargeting = customTargeting;
+    }
+
+    public void setCategoryExclusions(String[] categoryExclusions) {
+        this.categoryExclusions = categoryExclusions;
+    }
+
+    public void setKeywords(String[] keywords) {
+        this.keywords = keywords;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setChildDirectedTreatment(Boolean childDirectedTreatment) {
+        this.childDirectedTreatment = childDirectedTreatment;
+    }
+
+    public void setContentURL(String contentURL) {
+        this.contentURL = contentURL;
+    }
+
+    public void setPublisherProvidedID(String publisherProvidedID) {
+        this.publisherProvidedID = publisherProvidedID;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public void setAdSize(AdSize adSize) {
@@ -198,6 +304,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     public static final String PROP_VALID_AD_SIZES = "validAdSizes";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_TEST_DEVICES = "testDevices";
+    public static final String PROP_TARGETING = "targeting";
 
     public static final String EVENT_SIZE_CHANGE = "onSizeChange";
     public static final String EVENT_AD_LOADED = "onAdLoaded";
@@ -276,6 +383,87 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
         view.setTestDevices(list.toArray(new String[list.size()]));
     }
 
+    @ReactProp(name = PROP_TARGETING)
+    public void setPropTargeting(final ReactPublisherAdView view, final ReadableMap targetingObjects) {
+
+        ReadableMapKeySetIterator targetings = targetingObjects.keySetIterator();
+
+        if (targetings.hasNextKey()) {
+            for (
+                ReadableMapKeySetIterator it = targetingObjects.keySetIterator();
+                it.hasNextKey();
+            ) {
+                String targetingType = it.nextKey();
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.CUSTOMTARGETING))) {
+                    view.hasTargeting = true;
+                    ReadableMap customTargetingObject = targetingObjects.getMap(targetingType);
+                    CustomTargeting[] customTargetingArray = getCustomTargeting(customTargetingObject);
+                    view.setCustomTargeting(customTargetingArray);
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.CATEGORYEXCLUSIONS))) {
+                    view.hasTargeting = true;
+                    ReadableArray categoryExclusionsArray = targetingObjects.getArray(targetingType);
+                    ReadableNativeArray nativeArray = (ReadableNativeArray)categoryExclusionsArray;
+                    ArrayList<Object> list = nativeArray.toArrayList();
+                    view.setCategoryExclusions(list.toArray(new String[list.size()]));
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.KEYWORDS))) {
+                    view.hasTargeting = true;
+                    ReadableArray keywords = targetingObjects.getArray(targetingType);
+                    ReadableNativeArray nativeArray = (ReadableNativeArray)keywords;
+                    ArrayList<Object> list = nativeArray.toArrayList();
+                    view.setKeywords(list.toArray(new String[list.size()]));
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.GENDER))) {
+                    view.hasTargeting = true;
+                    String genderString = targetingObjects.getString(targetingType);
+                    Integer gender = getGenderFromString(genderString);
+                    view.setGender(gender);
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.BIRTHDAY))) {
+                    view.hasTargeting = true;
+                    String birthdayString = targetingObjects.getString(targetingType);
+                    try {
+                        Date birthday = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX").parse(birthdayString);
+                        view.setBirthday(birthday);
+                    } catch (Exception ignored) {
+                        // Do nothing
+                    }
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.CHILDDIRECTEDTREATMENT))) {
+                    view.hasTargeting = true;
+                    Boolean childDirectedTreatment = targetingObjects.getBoolean(targetingType);
+                    view.setChildDirectedTreatment(childDirectedTreatment);
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.CONTENTURL))) {
+                    view.hasTargeting = true;
+                    String contentURL = targetingObjects.getString(targetingType);
+                    view.setContentURL(contentURL);
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.PUBLISHERPROVIDEDID))) {
+                    view.hasTargeting = true;
+                    String publisherProvidedID = targetingObjects.getString(targetingType);
+                    view.setPublisherProvidedID(publisherProvidedID);
+                }
+
+                if (targetingType.equals(TargetingEnums.getEnumString(TargetingTypes.LOCATION))) {
+                    view.hasTargeting = true;
+                    ReadableMap locationObject = targetingObjects.getMap(targetingType);
+                    Location location = getLocation(locationObject);
+                    view.setLocation(location);
+                }
+            }
+        }
+    }
+
     private AdSize getAdSizeFromString(String adSize) {
         switch (adSize) {
             case "banner":
@@ -297,6 +485,52 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
             default:
                 return AdSize.BANNER;
         }
+    }
+
+    private CustomTargeting[] getCustomTargeting(ReadableMap customTargeting) {
+        ArrayList<CustomTargeting> list = new ArrayList<CustomTargeting>();
+
+        for (
+            ReadableMapKeySetIterator it = customTargeting.keySetIterator();
+            it.hasNextKey();
+        ) {
+            String key = it.nextKey();
+            String value = customTargeting.getString(key);
+            list.add(new CustomTargeting(key, value));
+        }
+
+        CustomTargeting[] targetingList = list.toArray(new CustomTargeting[list.size()]);
+        return targetingList;
+    }
+
+    private Integer getGenderFromString(String gender) {
+        switch (gender) {
+            case "male":
+                return AdRequest.GENDER_MALE;
+            case "female":
+                return AdRequest.GENDER_FEMALE;
+            case "unknown":
+                return AdRequest.GENDER_UNKNOWN;
+            default:
+                return AdRequest.GENDER_UNKNOWN;
+        }
+    }
+
+    private Location getLocation(ReadableMap locationObject) {
+        if (
+            locationObject.hasKey("latitude")
+            && locationObject.hasKey("longitude")
+            && locationObject.hasKey("accuracy")
+        ) {
+            Location locationClass = new Location("");
+            locationClass.setLatitude(locationObject.getDouble("latitude"));
+            locationClass.setLongitude(locationObject.getDouble("longitude"));
+            locationClass.setAccuracy((float) locationObject.getDouble("accuracy"));
+
+            return locationClass;
+        }
+
+        return null;
     }
 
     @Nullable
