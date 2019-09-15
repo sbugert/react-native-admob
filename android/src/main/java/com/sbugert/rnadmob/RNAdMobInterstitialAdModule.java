@@ -132,7 +132,6 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                 if (mInterstitialAd.isLoaded() || mInterstitialAd.isLoading()) {
                     promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
                 } else {
-                  
                     mRequestAdPromise = promise;
                     AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
                     if (testDevices != null) {
