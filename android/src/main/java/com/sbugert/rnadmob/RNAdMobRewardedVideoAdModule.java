@@ -180,7 +180,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (mRewardedVideoAd.isLoaded()) {
+                if (mRewardedVideoAd != null && mRewardedVideoAd.isLoaded()) {
                     mRewardedVideoAd.show();
                     promise.resolve(null);
                 } else {
@@ -195,7 +195,11 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                callback.invoke(mRewardedVideoAd.isLoaded());
+                if (mRewardedVideoAd != null) {
+                    callback.invoke(mRewardedVideoAd.isLoaded());
+                } else {
+                    callback.invoke(false);
+                }
             }
         });
     }

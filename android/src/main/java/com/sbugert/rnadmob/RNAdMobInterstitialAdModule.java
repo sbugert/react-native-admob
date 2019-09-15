@@ -81,7 +81,10 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                         WritableMap error = Arguments.createMap();
                         event.putString("message", errorMessage);
                         sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
-                        mRequestAdPromise.reject(errorString, errorMessage);
+                        if (mRequestAdPromise != null) {
+                            mRequestAdPromise.reject(errorString, errorMessage);
+                            mRequestAdPromise = null;
+                        }
                     }
                     @Override
                     public void onAdLeftApplication() {
@@ -90,7 +93,10 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                     @Override
                     public void onAdLoaded() {
                         sendEvent(EVENT_AD_LOADED, null);
-                        mRequestAdPromise.resolve(null);
+                        if (mRequestAdPromise != null) {
+                          mRequestAdPromise.resolve(null);
+                          mRequestAdPromise = null;
+                        }
                     }
                     @Override
                     public void onAdOpened() {
