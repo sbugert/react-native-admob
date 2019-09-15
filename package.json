@@ -18,6 +18,8 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^4.19.1",
-    "eslint-plugin-react": "^7.14.3"
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-react": "^7.14.3",
+    "prettier": "^1.18.2"
   }
 }
