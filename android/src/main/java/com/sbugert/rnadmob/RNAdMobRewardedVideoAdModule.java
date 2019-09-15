@@ -120,7 +120,6 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
         WritableMap error = Arguments.createMap();
         event.putString("message", errorMessage);
         sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
-
         if (mRequestAdPromise != null) {
           mRequestAdPromise.reject(errorString, errorMessage);
           mRequestAdPromise = null;
