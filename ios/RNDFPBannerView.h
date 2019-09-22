@@ -1,4 +1,4 @@
-#if __has_include(<React/RCTComponent.h>)
+#if __has_include(<React/RCTView.h>)
 #import <React/RCTView.h>
 #else
 #import "RCTView.h"
