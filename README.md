@@ -20,6 +20,10 @@ You can use npm or Yarn to install the latest beta version:
 
 In order to use this library, you have to link it to your project first. There's excellent documentation on how to do this in the [React Native Docs](https://facebook.github.io/react-native/docs/linking-libraries-ios.html#content).
 
+Alternatively for iOS you can install the library with CocoaPods by adding a line to your `Podfile`;
+
+    pod 'react-native-admob', path: '../node_modules/react-native-admob'
+
 ### iOS
 
 For iOS you will have to add the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project.
@@ -75,7 +79,7 @@ For a full example reference to the [example project](Example).
 
 ##### `adSize`
 
-*Corresponding to [iOS framework banner size constants](https://developers.google.com/admob/ios/banner)*
+_Corresponding to [iOS framework banner size constants](https://developers.google.com/admob/ios/banner)_
 
 <table>
   <thead>
@@ -84,7 +88,7 @@ For a full example reference to the [example project](Example).
       <th>Description</th>
       <th>Availability</th>
       <th>Size (WxH)</th>
-    </t>
+    </tr>
   </thead>
   <tbody>
     <tr>
@@ -129,7 +133,7 @@ For a full example reference to the [example project](Example).
   </tbody>
 </table>
 
-*Note: There is no `smartBannerPortrait` and `smartBannerLandscape` on Android. Both prop values will map to `smartBanner`*
+_Note: There is no `smartBannerPortrait` and `smartBannerLandscape` on Android. Both prop values will map to `smartBanner`_
 
 ##### `onAdLoaded`
 
@@ -155,8 +159,7 @@ Accepts a function. Called when a user click will open another app (such as the 
 
 Accepts a function. Called when the size of the banner changes. The function is called with an object containing the width and the height.
 
-
-*Above names correspond to the [Ad lifecycle event callbacks](https://developers.google.com/admob/android/banner#ad_events)*
+_Above names correspond to the [Ad lifecycle event callbacks](https://developers.google.com/admob/android/banner#ad_events)_
 
 ### PublisherBanner
 
@@ -190,7 +193,7 @@ Sets the AdUnit ID for all future ad requests.
 
 Sets the devices which are served test ads.
 
-*For simulators/emulators you can use `AdMobInterstitial.simulatorId` for the test device ID.*
+_For simulators/emulators you can use `AdMobInterstitial.simulatorId` for the test device ID._
 
 ##### `requestAd()`
 
@@ -203,7 +206,6 @@ Shows an interstitial and returns a promise, which resolves when an ad is going 
 ##### `isReady(callback)`
 
 Calls callback with a boolean value whether the interstitial is ready to be shown.
-
 
 #### Events
 
@@ -265,7 +267,7 @@ Sets the AdUnit ID for all future ad requests.
 
 Sets the devices which are served test ads.
 
-*For simulators/emulators you can use `AdMobRewarded.simulatorId` for the test device ID.*
+_For simulators/emulators you can use `AdMobRewarded.simulatorId` for the test device ID._
 
 ##### `requestAd()`
 
@@ -289,7 +291,7 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
       <th>This library</th>
       <th>iOS</th>
       <th>Android</th>
-    </t>
+    </tr>
   </thead>
   <tbody>
     <tr>
