@@ -12,7 +12,6 @@
 #endif
 
 #include "RCTConvert+GADAdSize.h"
-#include "RCTConvert+GADGender.h"
 
 @implementation RNDFPBannerView
 {
@@ -70,18 +69,6 @@
         if (keywords != nil) {
             request.keywords = keywords;
         }
-        NSString *gender = [_targeting objectForKey:@"gender"];
-        if (gender != nil) {
-            request.gender = [RCTConvert GADGender:gender];
-        }
-        NSDate *birthday = [_targeting objectForKey:@"birthday"];
-        if (birthday != nil) {
-            request.birthday = [RCTConvert NSDate:birthday];
-        }
-        id childDirectedTreatment = [_targeting objectForKey:@"childDirectedTreatment"];
-        if (childDirectedTreatment != nil) {
-            [request tagForChildDirectedTreatment:childDirectedTreatment];
-        }
         NSString *contentURL = [_targeting objectForKey:@"contentURL"];
         if (contentURL != nil) {
             request.contentURL = contentURL;
@@ -98,7 +85,7 @@
             [request setLocationWithLatitude:latitude longitude:longitude accuracy:accuracy];
         }
     }
-    
+
     [_bannerView loadRequest:request];
 }
 

@@ -3,6 +3,6 @@
 
 @interface RCTConvert (GoogleMobileAds)
 
-+ (GADGender)GADGender:(id)json;
++ (GADMaxAdContentRating)GADMaxAdContentRating:(id)json;
 
 @end

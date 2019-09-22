@@ -142,11 +142,8 @@ export default class Example extends Component {
               adUnitID="/6499/example/APIDemo/AdSizes"
               ref={el => (this._adSizesExample = el)}
               targeting={{
-                customTargeting: { group: "users" },
+                customTargeting: { group: 'users' },
                 categoryExclusions: ['media'],
-                gender: 'male',
-                birthday: new Date(1989, 6, 9),
-                childDirectedTreatment: true,
                 contentURL: 'admob://',
                 publisherProvidedID: 'abc123',
               }}

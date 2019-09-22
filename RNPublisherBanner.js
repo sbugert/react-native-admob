@@ -142,23 +142,6 @@ PublisherBanner.propTypes = {
     keywords: arrayOf(string),
 
     /**
-     * When using backfill or an SDK mediation creative, gender can be supplied
-     * in the ad request for targeting purposes.
-     */
-    gender: oneOf(['unknown', 'male', 'female']),
-
-    /**
-     * When using backfill or an SDK mediation creative, birthday can be supplied
-     * in the ad request for targeting purposes.
-     */
-    birthday: instanceOf(Date),
-
-    /**
-     * Indicate that you want Google to treat your content as child-directed.
-     */
-    childDirectedTreatment: bool,
-
-    /**
      * Applications that monetize content matching a webpage's content may pass
      * a content URL for keyword targeting.
      */
