@@ -141,6 +141,12 @@ export default class Example extends Component {
               validAdSizes={['banner', 'largeBanner', 'mediumRectangle']}
               adUnitID="/6499/example/APIDemo/AdSizes"
               ref={el => (this._adSizesExample = el)}
+              targeting={{
+                customTargeting: { group: 'users' },
+                categoryExclusions: ['media'],
+                contentURL: 'admob://',
+                publisherProvidedID: 'abc123',
+              }}
             />
             <Button
               title="Reload"

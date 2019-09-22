@@ -5171,7 +5171,7 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
 "react-native-admob@file:..":
-  version "2.0.0-beta.5"
+  version "2.0.0-beta.6"
   dependencies:
     prop-types "^15.7.2"
 
