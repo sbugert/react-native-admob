@@ -32,6 +32,8 @@ For iOS you will have to add the [Google Mobile Ads SDK](https://developers.goog
 
 On Android the AdMob library code is part of Play Services, which is automatically added when this library is linked.
 
+But you still have to manually update your `AndroidManifest.xml`, as described in the [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
+
 ## Usage
 
 ```jsx
