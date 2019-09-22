@@ -3,21 +3,25 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "react": "16.0.0",
-    "react-native": "0.51.0",
+    "react": "16.8.6",
+    "react-native": "0.60.5",
     "react-native-admob": "file:.."
   },
   "devDependencies": {
-    "babel-jest": "21.2.0",
-    "babel-plugin-module-resolver": "^2.7.1",
-    "babel-preset-react-native": "4.0.0",
-    "escape-string-regexp": "^1.0.5",
-    "jest": "21.2.1",
-    "react-test-renderer": "16.0.0"
+    "@babel/core": "^7.6.0",
+    "@babel/runtime": "^7.6.0",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "escape-string-regexp": "^2.0.0",
+    "eslint": "^6.4.0",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.8.6"
   },
   "jest": {
     "preset": "react-native"
