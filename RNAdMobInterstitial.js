@@ -1,8 +1,4 @@
-import {
-  NativeModules,
-  NativeEventEmitter,
-} from 'react-native';
-
+import { NativeEventEmitter, NativeModules } from 'react-native';
 import { createErrorFromErrorData } from './utils';
 
 const RNAdMobInterstitial = NativeModules.RNAdMobInterstitial;
@@ -24,7 +20,9 @@ const addEventListener = (event, handler) => {
   if (mappedEvent) {
     let listener;
     if (event === 'adFailedToLoad') {
-      listener = eventEmitter.addListener(mappedEvent, error => handler(createErrorFromErrorData(error)));
+      listener = eventEmitter.addListener(mappedEvent, (error) =>
+        handler(createErrorFromErrorData(error))
+      );
     } else {
       listener = eventEmitter.addListener(mappedEvent, handler);
     }
