@@ -1,5 +1,10 @@
 name: Integrate React Native AdMob
-on: push
+on:
+  schedule:
+    - cron: 0 12 * * 1
+  pull_request:
+    branches:
+      - master
 jobs:
   integrate:
     name: Create React Native App and integrate React Native Admob
