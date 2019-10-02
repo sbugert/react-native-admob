@@ -25,7 +25,24 @@
         return kGADAdSizeSmartBannerLandscape;
     }
     else {
-        return kGADAdSizeInvalid;
+        GADAdSize resultAdSize = kGADAdSizeInvalid;
+
+        NSRange searchedRange = NSMakeRange(0, [adSize length]);
+        NSString *pattern = @"^[0-9]+(x)[0-9]+$";
+        NSError *error = nil;
+
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+        NSArray *matches = [regex matchesInString:adSize options:0 range:searchedRange];
+        NSUInteger result = [matches count];
+
+        if (result) {
+            NSArray *dimentions = [adSize componentsSeparatedByString:@"x"];
+            NSUInteger width = [[dimentions objectAtIndex:0] intValue];
+            NSUInteger height = [[dimentions objectAtIndex:1] intValue];
+            resultAdSize = GADAdSizeFromCGSize(CGSizeMake(width, height));
+        }
+
+        return resultAdSize;
     }
 }
 
