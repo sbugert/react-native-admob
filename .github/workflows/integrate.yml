@@ -1,0 +1,71 @@
+name: Integrate React Native AdMob
+on:
+  schedule:
+    - cron: 0 12 * * 1
+  pull_request:
+    branches:
+      - master
+jobs:
+  integrate:
+    name: Create React Native App and integrate React Native Admob
+    runs-on: macOS-10.14
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: Install xmlstarlet
+        run: brew install xmlstarlet
+      - name: Install xcpretty
+        run: gem install xcpretty
+      - name: Configure Xcode
+        run: sudo xcode-select --switch /Applications/Xcode_11.app
+      - name: Install React Native CLI
+        run: sudo npm install -g react-native-cli
+      - name: Initialize React Native application
+        run: react-native init ReactNativeAdMobExample
+      - name: Add react-native-admob
+        working-directory: ./ReactNativeAdMobExample
+        run: yarn add react-native-admob@next
+      - name: Configure Android Project
+        working-directory: ./ReactNativeAdMobExample
+        run: |
+          xml ed -L \
+            -s /manifest/application -t elem -n meta-data \
+            -i /manifest/application/meta-data -t attr -n android:name -v "com.google.android.gms.ads.APPLICATION_ID" \
+            -i /manifest/application/meta-data -t attr -n android:value -v "ca-app-pub-3940256099942544~1458002511" \
+            ./android/app/src/main/AndroidManifest.xml
+      - name: Configure iOS Project
+        working-directory: ./ReactNativeAdMobExample/ios
+        run: |
+          cp ../../Example/ios/ExampleTests/ExampleTests.m ./ReactNativeAdMobExampleTests/ReactNativeAdMobExampleTests.m
+          sed -i -e '/target '"'"'ReactNativeAdMobExample'"'"' do/a\
+            pod '"'"'Google-Mobile-Ads-SDK'"'"'
+          ' Podfile
+          /usr/libexec/PlistBuddy -c 'Add :GADApplicationIdentifier string ca-app-pub-3940256099942544~1458002511' \
+            ReactNativeAdMobExample/Info.plist
+          pod install
+      - name: Update App.js
+        working-directory: ./ReactNativeAdMobExample
+        run: cp ../Example/App.js ./App.js
+      - name: Start packager
+        working-directory: ./ReactNativeAdMobExample
+        run: react-native start &
+      - name: Run iOS
+        working-directory: ./ReactNativeAdMobExample
+        run: react-native run-ios --simulator "iPhone 11 Pro"
+      - name: Take screenshot after delay
+        run: sleep 30 && xcrun simctl io booted screenshot screenshot.png
+      - uses: actions/upload-artifact@master
+        with:
+          name: screenshot
+          path: ./screenshot.png
+      - name: Run iOS tests
+        working-directory: ./ReactNativeAdMobExample/ios
+        run: |
+          set -o pipefail && xcodebuild \
+            -workspace ReactNativeAdMobExample.xcworkspace \
+            -scheme ReactNativeAdMobExample \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 11 Pro' \
+            test | xcpretty
