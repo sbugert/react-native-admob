@@ -19,9 +19,9 @@ Pod::Spec.new do |s|
   # So instead we add the default location of the framework to the framework
   # search paths, and we rely on consumers of this library to add
   # Google-Mobile-Ads-SDK as a direct dependency.
-  s.weak_frameworks        = 'GoogleMobileAds'
+  s.weak_frameworks        = 'GoogleMobileAds', 'NendAdapter'
   s.pod_target_xcconfig    = {
-    'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/Google-Mobile-Ads-SDK/Frameworks/**"',
+    'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/**"',
   }
 
   s.dependency 'React'
