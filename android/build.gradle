@@ -1,12 +1,16 @@
 apply plugin: 'com.android.library'
 
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion safeExtGet('compileSdkVersion', 23)
+    buildToolsVersion safeExtGet('buildToolsVersion', "23.0.1")
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion safeExtGet('targetSdkVersion', 22)
     }
     buildTypes {
         release {
@@ -18,7 +22,9 @@ android {
 
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    compile 'com.google.android.gms:play-services-ads:+'
+    compile('com.google.android.gms:play-services-ads:17.2.1') {
+        exclude group: 'com.google.android.gms', module: 'play-services-measurement-sdk-api'
+    }
     compile 'com.google.ads.mediation:nend:5.1.0.2'
     compile 'net.nend.android:nend-sdk:5.0.3'
 }
