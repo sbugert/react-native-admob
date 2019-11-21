@@ -2,7 +2,7 @@
 
 ### ⚠️ Please note, the master branch tracks development of version 2 of this library, which is currently in beta. For version 1 please check out the [1.x branch](https://github.com/sbugert/react-native-admob/tree/1.x).
 
-A react-native module for Google AdMob Banners, Interstitials, and Rewarded Videos, and also DFP Banners.
+A react-native module for Google AdMob Banners, Interstitials, Rewarded Videos and also DFP Banners.
 
 The banner types are implemented as components while the interstitial and rewarded video have an imperative API.
 
