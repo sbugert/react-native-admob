@@ -229,6 +229,12 @@ public class RNAdMobBannerViewManager extends ViewGroupManager<ReactAdView> {
     }
 
     private AdSize getAdSizeFromString(String adSize) {
+        if (Pattern.matches("\\{\\d*,\\d*\\}", adSize)) {
+            String[] sizes = adSize.substring(1, adSize.length() - 1).split(",");
+
+            return new AdSize(new Integer(sizes[0]), new Integer(sizes[1]));
+        }
+      
         switch (adSize) {
             case "banner":
                 return AdSize.BANNER;
