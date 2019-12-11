@@ -24,6 +24,7 @@ import com.google.android.gms.ads.AdView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 class ReactAdView extends ReactViewGroup {
 
