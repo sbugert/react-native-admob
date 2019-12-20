@@ -3,6 +3,9 @@ module.exports = {
   get AdMobBanner() {
     return require('./RNAdMobBanner').default;
   },
+  get AdMobNative() {
+    return require('./RNAdMobNative').default;
+  },
   get AdMobInterstitial() {
     return require('./RNAdMobInterstitial').default;
   },
