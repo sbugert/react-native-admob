@@ -42,6 +42,7 @@ import {
   AdMobInterstitial,
   PublisherBanner,
   AdMobRewarded,
+  AdMobNative,
 } from 'react-native-admob'
 
 // Display a banner
@@ -69,6 +70,13 @@ AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
 // Display a rewarded ad
 AdMobRewarded.setAdUnitID('your-admob-unit-id');
 AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
+
+// Display a native ad
+<AdMobNative 
+  adUnitID="your-admob-unit-id"
+  nightMode="" 
+  style={{ width: 600, height: 300 }} 
+/>
 ```
 
 For a full example reference to the [example project](Example).
@@ -338,6 +346,8 @@ Unfortunately, events are not consistent across iOS and Android. To have one uni
     </tr>
   </tbody>
 </table>
+
+### AdMobNative
 
 ---
 
