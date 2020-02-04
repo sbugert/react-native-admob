@@ -1,5 +1,8 @@
 /* eslint-disable global-require */
 module.exports = {
+  get AdMobNative() {
+    return require('./RNAdMobNative').default;
+  },
   get AdMobBanner() {
     return require('./RNAdMobBanner').default;
   },
