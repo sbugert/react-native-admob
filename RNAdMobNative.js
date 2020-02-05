@@ -18,9 +18,9 @@ class RNAdMobNative extends Component {
   }
 
   componentDidMount() {
-    const { adUnitId } = this.props;
-    if (adUnitId) {
-      return this.loadNativeAd(adUnitId);
+    const { adUnitID } = this.props;
+    if (adUnitID) {
+      return this.loadNativeAd(adUnitID);
     }
     console.warn('Attempted to load native ad without ad unit id');
   }
