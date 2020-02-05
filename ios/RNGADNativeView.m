@@ -46,31 +46,29 @@
    }
 }
 
+- (void)addTemplateView:(GADTTemplateView *)templateView withNativeAd:(GADUnifiedNativeAd *)nativeAd
+{
+    nativeAd.delegate = self;
+    templateView.nativeAd = nativeAd;
+    
+    [self addSubview:templateView];
+    
+    [templateView addHorizontalConstraintsToSuperviewWidth];
+    [templateView addVerticalCenterConstraintToSuperview];
+}
+
 - (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADUnifiedNativeAd *)nativeAd {
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
     }
     
+    nativeAd.delegate = self;
     if([_adSize  isEqual: @"medium"]) {
         GADTMediumTemplateView *templateView = [[GADTMediumTemplateView alloc] init];
-        
-        nativeAd.delegate = self;
-        templateView.nativeAd = nativeAd;
-        
-        [self addSubview:templateView];
-        
-        [templateView addHorizontalConstraintsToSuperviewWidth];
-        [templateView addVerticalCenterConstraintToSuperview];
+        [self addTemplateView:templateView withNativeAd:nativeAd];
     } else {
         GADTSmallTemplateView *templateView = [[GADTSmallTemplateView alloc] init];
-        
-        nativeAd.delegate = self;
-        templateView.nativeAd = nativeAd;
-        
-        [self addSubview:templateView];
-        
-        [templateView addHorizontalConstraintsToSuperviewWidth];
-        [templateView addVerticalCenterConstraintToSuperview];
+        [self addTemplateView:templateView withNativeAd:nativeAd];
     }
 }
 
