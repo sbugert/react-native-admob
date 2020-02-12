@@ -2,7 +2,6 @@ package com.sbugert.rnadmob;
 
 import android.content.Context;
 import android.graphics.Color;
-//import android.support.annotation.Nullable;
 import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +47,7 @@ import java.util.Map;
 class ReactNativeView extends ReactViewGroup {
 
     String adUnitID;
-    String adSize;
+    String adSize = "small";
     UnifiedNativeAdView nativeAdView;
 
     private LinearLayout primaryParentView;
@@ -139,14 +138,14 @@ class ReactNativeView extends ReactViewGroup {
 
         int template;
 
-        if(adSize == "medium") {
+        if(adSize.equals("medium")) {
             template = R.layout.medium_template;
         } else {
             template = R.layout.small_template;
         }
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        nativeAdView = (UnifiedNativeAdView) inflater.inflate(template, null);
+        this.nativeAdView = (UnifiedNativeAdView) inflater.inflate(template, null);
         this.addView(nativeAdView);
 
     }
