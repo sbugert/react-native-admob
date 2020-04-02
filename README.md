@@ -28,6 +28,12 @@ Alternatively for iOS you can install the library with CocoaPods by adding a lin
 
 For iOS you will have to add the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project.
 
+##### Additional Setup  for Native Ads
+Download `GADTSmallTemplateView.xib` and `GADTMediumTemplateView.xib` files from this repo [googleads-mobile-ios-native-templates](https://github.com/googleads/googleads-mobile-ios-native-templates) 
+
+Once downloaded, drag these files into the root directory of your react-native xcode  project.
+
+
 ### Android
 
 On Android the AdMob library code is part of Play Services, which is automatically added when this library is linked.
@@ -42,7 +48,14 @@ import {
   AdMobInterstitial,
   PublisherBanner,
   AdMobRewarded,
+  AdMobNative
 } from 'react-native-admob'
+
+// Display a native ad
+<AdMobNative
+  adUnitID="your-admob-unit-id"
+  adSize="small" | "medium"
+/>
 
 // Display a banner
 <AdMobBanner
@@ -73,7 +86,54 @@ AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
 
 For a full example reference to the [example project](Example).
 
+#### Native Ads Styling
+Native ads are displayed using native ad template files. These can be changed to alter to visual appearance of ads.
+##### IOS Template files
+`GADTSmallTemplateView.xib` and `GADTMediumTemplateView.xib`
+Added to the root dir of you react-native xcode project
+
+** Refer to Installation section above if you have not downloaded these files.
+##### Android template files
+`small_template.xml` and`medium_template.xml` files are included in the `res/layout` directory of this library's android project.
+
 ## Reference
+
+### AdMobNative
+
+#### Properties
+
+##### `adSize`
+String of value "small" or "medium". Default is "small"
+
+##### `adUnitID`
+Unique ad mob unit id
+
+##### `testDevices`
+Array of strings
+
+#### Events
+
+##### `onAdOpened`
+Called when an ad opens an overlay that covers the screen.
+
+##### `onAdClosed`
+Called when the user is about to return to the application after clicking on an ad.
+
+##### `onAdLeftApplication`
+Called when an ad leaves the application (e.g., to go to the browser).
+
+##### `didRecordImpression`
+Called when an impression is recorded for an ad. At the current time, this method is only used with native ads originating from Google in one of the system-defined formats (App Install or Content).
+
+##### `didRecordClick`
+Called when a click is recorded for an ad. At the current time, this method is only used with native ads originating from Google in one of the system-defined formats (App Install or Content).
+
+##### `onAdLoaded`
+Called when an ad is received.
+
+##### `onAdFailedToLoad`
+Called when an ad request failed. The error code is usually `ERROR_CODE_INTERNAL_ERROR`, `ERROR_CODE_INVALID_REQUEST`, `ERROR_CODE_NETWORK_ERROR`, or `ERROR_CODE_NO_FILL`.
+
 
 ### AdMobBanner
 
