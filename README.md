@@ -55,6 +55,11 @@ import {
 <AdMobNative
   adUnitID="your-admob-unit-id"
   adSize="small" | "medium"
+  style={{
+     width: '100%',
+     height: 370, // You need to provide fixed height or else ad will not show properly
+     // medium sized ad is 370 & small ad is 100 or 91 to be exact.
+  }}
 />
 
 // Display a banner
