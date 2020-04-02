@@ -80,6 +80,7 @@ class ReactNativeView extends ReactViewGroup {
                         populateUnifiedNativeAdView(unifiedNativeAd, nativeAdView);
 
                         //calculate ad size and layout
+                        if (nativeAdView == null) return;
                         nativeAdView.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
                                 MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
                         nativeAdView.layout(0, 0, nativeAdView.getMeasuredWidth(), nativeAdView.getMeasuredHeight());
@@ -184,8 +185,14 @@ class ReactNativeView extends ReactViewGroup {
         primaryView = (TextView) findViewById(R.id.primary);
         secondaryView = (TextView) findViewById(R.id.secondary);
         secondaryParentView = (LinearLayout) findViewById(R.id.body);
+
         ratingBar = (RatingBar) findViewById(R.id.rating_bar);
-        ratingBar.setEnabled(false);
+
+        if (ratingBar != null) {
+            ratingBar.setEnabled(false);
+        }
+
+
         tertiaryView = (TextView) findViewById(R.id.tertiary);
         tertiaryParentView = (LinearLayout) findViewById(R.id.third_line);
         callToActionView = (Button) findViewById(R.id.cta);
@@ -194,6 +201,13 @@ class ReactNativeView extends ReactViewGroup {
         primaryParentView = (LinearLayout) findViewById(R.id.headline);
         callToActionParentView = (LinearLayout) findViewById(R.id.cta_parent);
         background = (LinearLayout) findViewById(R.id.background);
+
+
+        if (nativeAdView == null
+
+        ) {
+            return;
+        }
 
 
         String store = nativeAd.getStore();
@@ -205,6 +219,11 @@ class ReactNativeView extends ReactViewGroup {
         Image icon = nativeAd.getIcon();
 
         String tertiaryText;
+
+        if (nativeAdView == null
+        ) {
+            return;
+        }
 
         nativeAdView.setCallToActionView(callToActionParentView);
         nativeAdView.setHeadlineView(primaryParentView);
@@ -230,12 +249,24 @@ class ReactNativeView extends ReactViewGroup {
             secondaryView.setLines(3);
         }
 
+        if (nativeAdView == null
+
+        ) {
+            return;
+        }
+
         primaryView.setText(headline);
         tertiaryView.setText(tertiaryText);
         callToActionView.setText(cta);
 
         // Set the secondary view to be the star rating if available.
         // Otherwise fall back to the body text.
+
+        if (nativeAdView == null
+        ) {
+            return;
+        }
+
         if (starRating != null && starRating > 0) {
             secondaryView.setVisibility(GONE);
             ratingBar.setVisibility(VISIBLE);
@@ -248,11 +279,24 @@ class ReactNativeView extends ReactViewGroup {
             nativeAdView.setBodyView(secondaryView);
         }
 
+        if (nativeAdView == null
+
+
+        ) {
+            return;
+        }
+
         if (icon != null) {
             iconView.setVisibility(VISIBLE);
             iconView.setImageDrawable(icon.getDrawable());
         } else {
             iconView.setVisibility(GONE);
+        }
+
+        if (nativeAdView == null
+
+        ) {
+            return;
         }
 
         // This method tells the Google Mobile Ads SDK that you have finished populating your
