@@ -71,21 +71,21 @@ class ReactNativeView extends ReactViewGroup {
         final Context context = getContext();
 
         AdLoader.Builder builder = new AdLoader.Builder(context, this.adUnitID);
-                builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-                    @Override
-                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                        // Show the ad.
-                        sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
+        builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+            @Override
+            public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                // Show the ad.
+                sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
 
-                        populateUnifiedNativeAdView(unifiedNativeAd, nativeAdView);
+                populateUnifiedNativeAdView(unifiedNativeAd, nativeAdView);
 
-                        //calculate ad size and layout
-                        if (nativeAdView == null) return;
-                        nativeAdView.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
-                                MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
-                        nativeAdView.layout(0, 0, nativeAdView.getMeasuredWidth(), nativeAdView.getMeasuredHeight());
-                    }
-                })
+                //calculate ad size and layout
+                if (nativeAdView == null) return;
+                nativeAdView.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
+                        MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
+                nativeAdView.layout(0, 0, nativeAdView.getMeasuredWidth(), nativeAdView.getMeasuredHeight());
+            }
+        })
                 .withAdListener(new AdListener() {
                     @Override
                     public void onAdFailedToLoad(int errorCode) {
@@ -110,6 +110,31 @@ class ReactNativeView extends ReactViewGroup {
                         error.putString("message", errorMessage);
                         event.putMap("error", error);
                         sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+                    }
+
+                    @Override
+                    public void onAdImpression() {
+                        sendEvent(RNAdMobNativeViewManager.EVENT_AD_IMPRESSION, null);
+                    }
+
+                    @Override
+                    public void onAdClicked() {
+                        sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLICKED, null);
+                    }
+
+                    @Override
+                    public void onAdClosed() {
+                        sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLOSED, null);
+                    }
+
+                    @Override
+                    public void onAdOpened() {
+                        sendEvent(RNAdMobNativeViewManager.EVENT_AD_OPENED, null);
+                    }
+
+                    @Override
+                    public void onAdLeftApplication() {
+                        sendEvent(RNAdMobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
                     }
                 })
                 .withNativeAdOptions(new NativeAdOptions.Builder()
@@ -352,6 +377,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<ReactNativeView> 
     public static final String EVENT_AD_OPENED = "onAdOpened";
     public static final String EVENT_AD_CLOSED = "onAdClosed";
     public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
+    public static final String EVENT_AD_IMPRESSION = "didRecordImpression";
+    public static final String EVENT_AD_CLICKED = "didRecordClick";
 
     public static final int COMMAND_LOAD_NATIVE = 1;
 
@@ -382,7 +409,9 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<ReactNativeView> 
                 EVENT_AD_FAILED_TO_LOAD,
                 EVENT_AD_OPENED,
                 EVENT_AD_CLOSED,
-                EVENT_AD_LEFT_APPLICATION
+                EVENT_AD_LEFT_APPLICATION,
+                EVENT_AD_IMPRESSION,
+                EVENT_AD_CLICKED
         };
         for (int i = 0; i < events.length; i++) {
             builder.put(events[i], MapBuilder.of("registrationName", events[i]));
