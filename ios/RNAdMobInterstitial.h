@@ -9,4 +9,8 @@
 @import GoogleMobileAds;
 
 @interface RNAdMobInterstitial : RCTEventEmitter <RCTBridgeModule, GADInterstitialDelegate>
+
++ (UIViewController*)topViewController;
++ (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)viewController;
+
 @end

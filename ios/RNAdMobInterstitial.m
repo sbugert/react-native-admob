@@ -34,6 +34,37 @@ static NSString *const kEventAdLeftApplication = @"interstitialAdLeftApplication
     return NO;
 }
 
++ (UIViewController*)topViewController {
+    return [self topViewControllerWithRootViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+}
+
++ (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)viewController {
+    if ([viewController isKindOfClass:[UITabBarController class]]) {
+        UITabBarController* tabBarController = (UITabBarController*)viewController;
+        return [self topViewControllerWithRootViewController:tabBarController.selectedViewController];
+    } else if ([viewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navContObj = (UINavigationController*)viewController;
+        return [self topViewControllerWithRootViewController:navContObj.visibleViewController];
+    } else if (viewController.presentedViewController && !viewController.presentedViewController.isBeingDismissed) {
+        UIViewController* presentedViewController = viewController.presentedViewController;
+        return [self topViewControllerWithRootViewController:presentedViewController];
+    }
+    else {
+        for (UIView *view in [viewController.view subviews])
+        {
+            id subViewController = [view nextResponder];
+            if ( subViewController && [subViewController isKindOfClass:[UIViewController class]])
+            {
+                if ([(UIViewController *)subViewController presentedViewController]  && ![subViewController presentedViewController].isBeingDismissed) {
+                    return [self topViewControllerWithRootViewController:[(UIViewController *)subViewController presentedViewController]];
+                }
+            }
+        }
+        return viewController;
+    }
+}
+
+
 RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents
@@ -72,7 +103,8 @@ RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
         _interstitial.delegate = self;
 
         GADRequest *request = [GADRequest request];
-        request.testDevices = _testDevices;
+//        request.testDevices = _testDevices;
+        GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
         [_interstitial loadRequest:request];
     } else {
         reject(@"E_AD_ALREADY_LOADED", @"Ad is already loaded.", nil);
@@ -82,7 +114,7 @@ RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
 RCT_EXPORT_METHOD(showAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     if ([_interstitial isReady]) {
-        [_interstitial presentFromRootViewController:[UIApplication sharedApplication].delegate.window.rootViewController];
+        [_interstitial presentFromRootViewController: RNAdMobInterstitial.topViewController];
         resolve(nil);
     }
     else {
