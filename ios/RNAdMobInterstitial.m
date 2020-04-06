@@ -103,7 +103,6 @@ RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
         _interstitial.delegate = self;
 
         GADRequest *request = [GADRequest request];
-//        request.testDevices = _testDevices;
         GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
         [_interstitial loadRequest:request];
     } else {
