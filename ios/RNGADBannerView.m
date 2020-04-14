@@ -56,10 +56,51 @@
                                 });
         }
     }
+    
+    if (self.apsSlotUUID != nil) {
+        DTBAdLoader* adLoader = [DTBAdLoader new];
+        CGSize adSize = CGSizeFromGADAdSize(_bannerView.adSize);
+        DTBAdSize *size = [[DTBAdSize alloc]
+                           initBannerAdSizeWithWidth:adSize.width
+                           height:adSize.height
+                           andSlotUUID:self.apsSlotUUID];
+        [adLoader setSizes:size, nil];
+        if (self.apsAutoRefresh != nil) {
+            [adLoader setAutoRefresh:self.apsAutoRefresh];
+        }
+        [adLoader loadAd:self];
+    } else {
+        [self requestAd];
+   }
+}
+
+- (void)requestAd{
     GADRequest *request = [GADRequest request];
     request.testDevices = _testDevices;
     [_bannerView loadRequest:request];
 }
+
+- (void)onFailure:(DTBAdError)error {
+    NSLog(@"Failed to load banner ad :(");
+    [self requestAd];
+}
+
+- (void)onSuccess:(DTBAdResponse *)adResponse {
+    NSLog(@"Loading banner ad");
+    NSString *amznSlots = adResponse.amznSlots;
+
+    BOOL isSmart = _bannerView.adSize.flags == kGADAdSizeSmartBannerPortrait.flags ||
+        _bannerView.adSize.flags == kGADAdSizeSmartBannerLandscape.flags;
+    NSDictionary *mediationHints = [adResponse mediationHints:isSmart];
+    GADCustomEventExtras *extras = [[GADCustomEventExtras alloc] init];
+    [extras setExtras:mediationHints forLabel:amznSlots];
+
+    GADRequest *request = [GADRequest request];
+    [request registerAdNetworkExtras:extras];
+    request.testDevices = _testDevices;
+    [_bannerView loadRequest:request];
+}
+
 
 - (void)setTestDevices:(NSArray *)testDevices
 {
