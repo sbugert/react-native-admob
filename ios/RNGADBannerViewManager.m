@@ -45,4 +45,7 @@ RCT_EXPORT_VIEW_PROPERTY(onAdOpened, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdClosed, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdLeftApplication, RCTBubblingEventBlock)
 
+RCT_EXPORT_VIEW_PROPERTY(apsSlotUUID, NSString)
+RCT_EXPORT_VIEW_PROPERTY(apsAutoRefresh, NSNumber)
+
 @end
