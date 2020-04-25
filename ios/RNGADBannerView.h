@@ -3,12 +3,13 @@
 #else
 #import "RCTView.h"
 #endif
+#import <DTBiOSSDK/DTBiOSSDK.h>
 
 @import GoogleMobileAds;
 
 @class RCTEventDispatcher;
 
-@interface RNGADBannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate>
+@interface RNGADBannerView : RCTView <GADBannerViewDelegate, GADAdSizeDelegate, DTBAdCallback>
 
 @property (nonatomic, copy) NSArray *testDevices;
 
@@ -18,6 +19,8 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onAdOpened;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdClosed;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdLeftApplication;
+@property (nonatomic, copy) NSString* apsSlotUUID;
+@property (nonatomic, copy) NSNumber* apsAutoRefresh;
 
 - (void)loadBanner;
 
