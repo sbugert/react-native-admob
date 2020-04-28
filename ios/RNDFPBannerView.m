@@ -53,8 +53,15 @@
 #pragma clang diagnostic pop
 
 - (void)loadBanner {
-    GADRequest *request = [GADRequest request];
+    DFPRequest *request = [DFPRequest request];
     request.testDevices = _testDevices;
+
+     if (_customTargeting != nil) {
+        if (_customTargeting.count > 0) {
+            request.customTargeting = _customTargeting;
+        }
+    }
+
     [_bannerView loadRequest:request];
 }
 
@@ -76,6 +83,13 @@
 {
     _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
 }
+
+
+- (void)setCustomTargeting:(NSDictionary *)customTargeting
+{
+    _customTargeting = customTargeting;
+}
+
 
 -(void)layoutSubviews
 {

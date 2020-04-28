@@ -1,4 +1,4 @@
-import { arrayOf, func, string } from 'prop-types';
+import { arrayOf, func, string, object } from 'prop-types';
 import React, { Component } from 'react';
 import {
   findNodeHandle,
@@ -87,6 +87,11 @@ PublisherBanner.propTypes = {
    * banner is default
    */
   adSize: string,
+
+  /**
+* make it as json?
+*/
+  customTargeting: object,
 
   /**
    * Optional array specifying all valid sizes that are appropriate for this slot.
