@@ -39,11 +39,11 @@ class AdMobBanner extends Component {
   }
 
   handleAdFailedToLoad(event) {
-    if (this.props.onAdFailedToLoad) {
-      this.props.onAdFailedToLoad(
-        createErrorFromErrorData(event.nativeEvent.error)
-      );
-    }
+    // if (this.props.onAdFailedToLoad) {
+    //   this.props.onAdFailedToLoad(
+    //     createErrorFromErrorData(event.nativeEvent.error)
+    //   );
+    // }
   }
 
   render() {
