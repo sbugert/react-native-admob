@@ -12,6 +12,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -20,6 +23,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +40,7 @@ public class RNDFPInterstitialAdModule extends ReactContextBaseJavaModule {
 
   PublisherInterstitialAd mInterstitialAd;
   String[] testDevices;
+  ReadableMap customTargeting;
 
   private Promise mRequestAdPromise;
 
@@ -120,6 +125,11 @@ public class RNDFPInterstitialAdModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void setCustomTargeting(ReadableMap customTargeting) {
+    this.customTargeting = customTargeting;
+  }
+
+  @ReactMethod
   public void requestAd(final Promise promise) {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
@@ -132,6 +142,31 @@ public class RNDFPInterstitialAdModule extends ReactContextBaseJavaModule {
           if (testDevices != null) {
             for (int i = 0; i < testDevices.length; i++) {
               adRequestBuilder.addTestDevice(testDevices[i]);
+            }
+          }
+
+          if (customTargeting != null) {
+            ReadableMapKeySetIterator iterator = customTargeting.keySetIterator();
+            while (iterator.hasNextKey()) {
+              String key = iterator.nextKey();
+              ReadableType type = customTargeting.getType(key);
+              switch (type) {
+                case String:
+                  adRequestBuilder.addCustomTargeting(key, customTargeting.getString(key));
+                  break;
+                case Array:
+                  ReadableArray arrayValue = customTargeting.getArray(key);
+                  adRequestBuilder.addCustomTargeting(key, (List<String>) (Object) arrayValue.toArrayList());
+                  break;
+                case Number:
+                  adRequestBuilder.addCustomTargeting(key, Integer.toString(customTargeting.getInt(key)));
+                  break;
+                case Boolean:
+                  adRequestBuilder.addCustomTargeting(key, Boolean.toString(customTargeting.getBoolean(key)));
+                  break;
+                default:
+                  break;
+              }
             }
           }
           PublisherAdRequest adRequest = adRequestBuilder.build();
