@@ -8,7 +8,10 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -22,6 +25,8 @@ import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +39,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     AdSize[] validAdSizes;
     String adUnitID;
     AdSize adSize;
+    ReadableMap customTargeting;
 
     public ReactPublisherAdView(final Context context) {
         super(context);
@@ -155,6 +161,32 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
                 adRequestBuilder.addTestDevice(testDevice);
             }
         }
+
+        if (this.customTargeting != null) {
+            ReadableMapKeySetIterator iterator = this.customTargeting.keySetIterator();
+            while (iterator.hasNextKey()) {
+                String key = iterator.nextKey();
+                ReadableType type = this.customTargeting.getType(key);
+                switch (type) {
+                    case String:
+                        adRequestBuilder.addCustomTargeting(key, this.customTargeting.getString(key));
+                        break;
+                    case Array:
+                        ReadableArray arrayValue = this.customTargeting.getArray(key);
+                        adRequestBuilder.addCustomTargeting(key, (List<String>) (Object) arrayValue.toArrayList());
+                        break;
+                    case Number:
+                        adRequestBuilder.addCustomTargeting(key, Integer.toString(this.customTargeting.getInt(key)));
+                        break;
+                    case Boolean:
+                        adRequestBuilder.addCustomTargeting(key, Boolean.toString(this.customTargeting.getBoolean(key)));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        
         PublisherAdRequest adRequest = adRequestBuilder.build();
         this.adView.loadAd(adRequest);
     }
@@ -181,6 +213,10 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
         this.validAdSizes = adSizes;
     }
 
+    public void setCustomTargeting(ReadableMap customTargeting) {
+        this.customTargeting = customTargeting;
+    }
+
     @Override
     public void onAppEvent(String name, String info) {
         WritableMap event = Arguments.createMap();
@@ -198,6 +234,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     public static final String PROP_VALID_AD_SIZES = "validAdSizes";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_TEST_DEVICES = "testDevices";
+    public static final String PROP_CUSTOM_TARGETING = "customTargeting";
 
     public static final String EVENT_SIZE_CHANGE = "onSizeChange";
     public static final String EVENT_AD_LOADED = "onAdLoaded";
@@ -262,6 +299,11 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
                 adSizes[i] = getAdSizeFromString(adSizeString);
         }
         view.setValidAdSizes(adSizes);
+    }
+
+    @ReactProp(name = PROP_CUSTOM_TARGETING)
+    public void setCustomTargeting(final ReactPublisherAdView view, final ReadableMap customTargeting) {
+        view.setCustomTargeting(customTargeting);
     }
 
     @ReactProp(name = PROP_AD_UNIT_ID)
