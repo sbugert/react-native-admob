@@ -18,6 +18,7 @@ static NSString *const kEventAdLeftApplication = @"interstitialAdLeftApplication
     DFPInterstitial  *_interstitial;
     NSString *_adUnitID;
     NSArray *_testDevices;
+    NSDictionary *_customTargeting;
     RCTPromiseResolveBlock _requestAdResolve;
     RCTPromiseRejectBlock _requestAdReject;
     BOOL hasListeners;
@@ -53,6 +54,11 @@ RCT_EXPORT_METHOD(setTestDevices:(NSArray *)testDevices)
     _testDevices = testDevices;
 }
 
+RCT_EXPORT_METHOD(setCustomTargeting:(NSDictionary *)customTargeting)
+{
+    _customTargeting = customTargeting;
+}
+
 RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     _requestAdResolve = nil;
@@ -67,6 +73,13 @@ RCT_EXPORT_METHOD(requestAd:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
 
         DFPRequest *request = [DFPRequest request];
         request.testDevices = _testDevices;
+        
+        if (_customTargeting != nil) {
+            if (_customTargeting.count > 0) {
+                request.customTargeting = _customTargeting;
+            }
+        }
+
         [_interstitial loadRequest:request];
     } else {
         reject(@"E_AD_ALREADY_LOADED", @"Ad is already loaded.", nil);
