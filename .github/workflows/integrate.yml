@@ -8,7 +8,7 @@ on:
 jobs:
   integrate:
     name: Create React Native App and integrate React Native Admob
-    runs-on: macOS-10.14
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
