@@ -1,7 +1,9 @@
 package com.sbugert.rnadmob;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
@@ -41,9 +43,11 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
     }
 
     private void createAdView() {
-        if (this.adView != null) this.adView.destroy();
+        if (this.adView != null)
+            this.adView.destroy();
 
         final Context context = getContext();
+
         this.adView = new PublisherAdView(context);
         this.adView.setAppEventListener(this);
         this.adView.setAdListener(new AdListener() {
@@ -63,18 +67,18 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
             public void onAdFailedToLoad(int errorCode) {
                 String errorMessage = "Unknown error";
                 switch (errorCode) {
-                    case PublisherAdRequest.ERROR_CODE_INTERNAL_ERROR:
-                        errorMessage = "Internal error, an invalid response was received from the ad server.";
-                        break;
-                    case PublisherAdRequest.ERROR_CODE_INVALID_REQUEST:
-                        errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
-                        break;
-                    case PublisherAdRequest.ERROR_CODE_NETWORK_ERROR:
-                        errorMessage = "The ad request was unsuccessful due to network connectivity.";
-                        break;
-                    case PublisherAdRequest.ERROR_CODE_NO_FILL:
-                        errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
-                        break;
+                case PublisherAdRequest.ERROR_CODE_INTERNAL_ERROR:
+                    errorMessage = "Internal error, an invalid response was received from the ad server.";
+                    break;
+                case PublisherAdRequest.ERROR_CODE_INVALID_REQUEST:
+                    errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
+                    break;
+                case PublisherAdRequest.ERROR_CODE_NETWORK_ERROR:
+                    errorMessage = "The ad request was unsuccessful due to network connectivity.";
+                    break;
+                case PublisherAdRequest.ERROR_CODE_NO_FILL:
+                    errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
+                    break;
                 }
                 WritableMap event = Arguments.createMap();
                 WritableMap error = Arguments.createMap();
@@ -121,10 +125,7 @@ class ReactPublisherAdView extends ReactViewGroup implements AppEventListener {
 
     private void sendEvent(String name, @Nullable WritableMap event) {
         ReactContext reactContext = (ReactContext) getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        getId(),
-                        name,
-                        event);
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), name, event);
     }
 
     public void loadBanner() {
@@ -208,6 +209,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     public static final String EVENT_APP_EVENT = "onAppEvent";
 
     public static final int COMMAND_LOAD_BANNER = 1;
+    private static final String LOGTAG = "ADMOBpublisherBanner";
 
     @Override
     public String getName() {
@@ -229,15 +231,8 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     @Nullable
     public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
-        String[] events = {
-            EVENT_SIZE_CHANGE,
-            EVENT_AD_LOADED,
-            EVENT_AD_FAILED_TO_LOAD,
-            EVENT_AD_OPENED,
-            EVENT_AD_CLOSED,
-            EVENT_AD_LEFT_APPLICATION,
-            EVENT_APP_EVENT
-        };
+        String[] events = { EVENT_SIZE_CHANGE, EVENT_AD_LOADED, EVENT_AD_FAILED_TO_LOAD, EVENT_AD_OPENED,
+                EVENT_AD_CLOSED, EVENT_AD_LEFT_APPLICATION, EVENT_APP_EVENT };
         for (int i = 0; i < events.length; i++) {
             builder.put(events[i], MapBuilder.of("registrationName", events[i]));
         }
@@ -252,14 +247,14 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
 
     @ReactProp(name = PROP_VALID_AD_SIZES)
     public void setPropValidAdSizes(final ReactPublisherAdView view, final ReadableArray adSizeStrings) {
-        ReadableNativeArray nativeArray = (ReadableNativeArray)adSizeStrings;
+        ReadableNativeArray nativeArray = (ReadableNativeArray) adSizeStrings;
         ArrayList<Object> list = nativeArray.toArrayList();
         String[] adSizeStringsArray = list.toArray(new String[list.size()]);
         AdSize[] adSizes = new AdSize[list.size()];
 
         for (int i = 0; i < adSizeStringsArray.length; i++) {
-                String adSizeString = adSizeStringsArray[i];
-                adSizes[i] = getAdSizeFromString(adSizeString);
+            String adSizeString = adSizeStringsArray[i];
+            adSizes[i] = getAdSizeFromString(adSizeString);
         }
         view.setValidAdSizes(adSizes);
     }
@@ -271,32 +266,45 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
 
     @ReactProp(name = PROP_TEST_DEVICES)
     public void setPropTestDevices(final ReactPublisherAdView view, final ReadableArray testDevices) {
-        ReadableNativeArray nativeArray = (ReadableNativeArray)testDevices;
+        ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
         ArrayList<Object> list = nativeArray.toArrayList();
         view.setTestDevices(list.toArray(new String[list.size()]));
     }
 
     private AdSize getAdSizeFromString(String adSize) {
         switch (adSize) {
-            case "banner":
-                return AdSize.BANNER;
-            case "largeBanner":
-                return AdSize.LARGE_BANNER;
-            case "mediumRectangle":
-                return AdSize.MEDIUM_RECTANGLE;
-            case "fullBanner":
-                return AdSize.FULL_BANNER;
-            case "leaderBoard":
-                return AdSize.LEADERBOARD;
-            case "smartBannerPortrait":
-                return AdSize.SMART_BANNER;
-            case "smartBannerLandscape":
-                return AdSize.SMART_BANNER;
-            case "smartBanner":
-                return AdSize.SMART_BANNER;
-            default:
-                return AdSize.BANNER;
+        case "banner":
+            return AdSize.BANNER;
+        case "largeBanner":
+            return AdSize.LARGE_BANNER;
+        case "mediumRectangle":
+            return AdSize.MEDIUM_RECTANGLE;
+        case "fullBanner":
+            return AdSize.FULL_BANNER;
+        case "leaderBoard":
+            return AdSize.LEADERBOARD;
+        case "smartBannerPortrait":
+            return AdSize.SMART_BANNER;
+        case "smartBannerLandscape":
+            return AdSize.SMART_BANNER;
+        case "smartBanner":
+            return AdSize.SMART_BANNER;
+        default:
+            return parseCustomAdSize(adSize);
         }
+    }
+
+    public static AdSize parseCustomAdSize(String sizeString) {
+        AdSize adSize = AdSize.BANNER;
+        if (sizeString.contains("x")) {
+            String[] sz = sizeString.split("x");
+            try {
+                adSize = new AdSize(Integer.parseInt(sz[0]), Integer.parseInt(sz[1]));
+            } catch (Exception e) {
+                Log.e(LOGTAG, "failed to parse ad size");
+            }
+        }
+        return adSize;
     }
 
     @Nullable
@@ -306,11 +314,12 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
     }
 
     @Override
-    public void receiveCommand(ReactPublisherAdView root, int commandId, @javax.annotation.Nullable ReadableArray args) {
+    public void receiveCommand(ReactPublisherAdView root, int commandId,
+            @javax.annotation.Nullable ReadableArray args) {
         switch (commandId) {
-            case COMMAND_LOAD_BANNER:
-                root.loadBanner();
-                break;
+        case COMMAND_LOAD_BANNER:
+            root.loadBanner();
+            break;
         }
     }
 }
