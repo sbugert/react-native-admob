@@ -33,7 +33,7 @@
         UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
         UIViewController *rootViewController = [keyWindow rootViewController];
 
-        _bannerView = [[DFPBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+        _bannerView = [[DFPBannerView alloc] init];
         _bannerView.delegate = self;
         _bannerView.adSizeDelegate = self;
         _bannerView.appEventDelegate = self;
@@ -53,7 +53,7 @@
 #pragma clang diagnostic pop
 
 - (void)loadBanner {
-    GADRequest *request = [GADRequest request];
+    DFPRequest *request = [DFPRequest request];
     request.testDevices = _testDevices;
     [_bannerView loadRequest:request];
 }
@@ -75,12 +75,6 @@
 - (void)setTestDevices:(NSArray *)testDevices
 {
     _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
-}
-
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    _bannerView.frame = self.bounds;
 }
 
 # pragma mark GADBannerViewDelegate
