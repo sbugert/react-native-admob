@@ -1,8 +1,9 @@
 package com.sbugert.rnadmob;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -24,6 +25,7 @@ import com.google.android.gms.ads.AdView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 class ReactAdView extends ReactViewGroup {
 
@@ -229,6 +231,12 @@ public class RNAdMobBannerViewManager extends ViewGroupManager<ReactAdView> {
     }
 
     private AdSize getAdSizeFromString(String adSize) {
+        if (Pattern.matches("\\{\\d*,\\d*\\}", adSize)) {
+            String[] sizes = adSize.substring(1, adSize.length() - 1).split(",");
+
+            return new AdSize(new Integer(sizes[0]), new Integer(sizes[1]));
+        }
+      
         switch (adSize) {
             case "banner":
                 return AdSize.BANNER;
