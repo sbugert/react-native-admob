@@ -151,9 +151,9 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
 
                 RNAdMobRewardedVideoAdModule.this.mRewardedVideoAd.setRewardedVideoAdListener(RNAdMobRewardedVideoAdModule.this);
 
-                if (mRewardedVideoAd.isLoaded()) {
-                    promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
-                } else {
+                // if (mRewardedVideoAd.isLoaded()) {
+                //     promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
+                // } else {
                     mRequestAdPromise = promise;
 
                     AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
@@ -170,7 +170,7 @@ public class RNAdMobRewardedVideoAdModule extends ReactContextBaseJavaModule imp
 
                     AdRequest adRequest = adRequestBuilder.build();
                     mRewardedVideoAd.loadAd(adUnitID, adRequest);
-                }
+                // }
             }
         });
     }
