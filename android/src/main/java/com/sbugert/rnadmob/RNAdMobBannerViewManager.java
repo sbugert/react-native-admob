@@ -1,9 +1,17 @@
 package com.sbugert.rnadmob;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
+import com.amazon.admob_adapter.APSAdMobCustomBannerEvent;
+import com.amazon.device.ads.AdError;
+import com.amazon.device.ads.DTBAdCallback;
+import com.amazon.device.ads.DTBAdRequest;
+import com.amazon.device.ads.DTBAdResponse;
+import com.amazon.device.ads.DTBAdSize;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
@@ -32,6 +40,9 @@ class ReactAdView extends ReactViewGroup {
     String adUnitID;
     String[] testDevices;
     AdSize adSize;
+
+    String apsSlotUUID;
+    Integer apsAutoRefresh;
 
     public ReactAdView(final Context context) {
         super(context);
@@ -125,6 +136,40 @@ class ReactAdView extends ReactViewGroup {
     }
 
     public void loadBanner() {
+        if(APSUtil.shouldUseAPS() && this.apsSlotUUID != null){
+            loadAPSBanner();
+        }else{
+            loadAdmobBanner();
+        }
+    }
+    private void loadAdmobBanner(){
+        AdRequest adRequest = makeRequestBuilderWithTestDevices().build();
+        this.adView.loadAd(adRequest);
+    }
+    private void loadAPSBanner(){
+        final DTBAdRequest loader = new DTBAdRequest();
+        loader.setSizes(new DTBAdSize(this.adSize.getWidth(), this.adSize.getHeight(), this.apsSlotUUID));
+        loader.loadAd(new DTBAdCallback() {
+
+            @Override
+            public void onFailure(AdError adError) {
+                Log.e("AdError", "Oops banner ad load has failed: " + adError.getMessage());
+                loadAdmobBanner();
+            }
+
+            @Override
+            public void onSuccess(DTBAdResponse dtbAdResponse) {
+                Bundle bundle = dtbAdResponse.getRenderingBundle();
+
+                @SuppressWarnings("unchecked")
+                AdRequest request = makeRequestBuilderWithTestDevices()
+                        .addCustomEventExtrasBundle(APSAdMobCustomBannerEvent.class, bundle)
+                        .build();
+                adView.loadAd(request);
+            }
+        });
+    }
+    private AdRequest.Builder makeRequestBuilderWithTestDevices(){
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         if (testDevices != null) {
             for (int i = 0; i < testDevices.length; i++) {
@@ -135,8 +180,7 @@ class ReactAdView extends ReactViewGroup {
                 adRequestBuilder.addTestDevice(testDevice);
             }
         }
-        AdRequest adRequest = adRequestBuilder.build();
-        this.adView.loadAd(adRequest);
+        return adRequestBuilder;
     }
 
     public void setAdUnitID(String adUnitID) {
@@ -157,6 +201,15 @@ class ReactAdView extends ReactViewGroup {
         this.adSize = adSize;
         this.adView.setAdSize(adSize);
     }
+
+    public void setApsSlotUUID(String apsSlotUUID) {
+        this.apsSlotUUID = apsSlotUUID;
+    }
+
+    public void setApsAutoRefresh(Integer apsAutoRefresh) {
+        this.apsAutoRefresh = apsAutoRefresh;
+    }
+
 }
 
 public class RNAdMobBannerViewManager extends ViewGroupManager<ReactAdView> {
@@ -166,6 +219,10 @@ public class RNAdMobBannerViewManager extends ViewGroupManager<ReactAdView> {
     public static final String PROP_AD_SIZE = "adSize";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_TEST_DEVICES = "testDevices";
+
+    public static final String PROP_APS_SLOT_UUID = "apsSlotUUID";
+    public static final String PROP_APS_AUTO_REFRESH = "apsAutoRefresh";
+
 
     public static final String EVENT_SIZE_CHANGE = "onSizeChange";
     public static final String EVENT_AD_LOADED = "onAdLoaded";
@@ -227,6 +284,16 @@ public class RNAdMobBannerViewManager extends ViewGroupManager<ReactAdView> {
         ArrayList<Object> list = nativeArray.toArrayList();
         view.setTestDevices(list.toArray(new String[list.size()]));
     }
+
+    @ReactProp(name = PROP_APS_SLOT_UUID)
+    public void setPropsApsSlotUUID(final ReactAdView view, final String apsSlotUUID){
+        view.setApsSlotUUID(apsSlotUUID);
+    }
+    @ReactProp(name = PROP_APS_AUTO_REFRESH)
+    public void setPropsApsAutoRefresh(final ReactAdView view, final Integer apsAutoRefresh){
+        view.setApsAutoRefresh(apsAutoRefresh);
+    }
+
 
     private AdSize getAdSizeFromString(String adSize) {
         switch (adSize) {
