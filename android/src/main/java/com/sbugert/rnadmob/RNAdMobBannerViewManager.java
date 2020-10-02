@@ -135,6 +135,7 @@ class ReactAdView extends ReactViewGroup {
                 adRequestBuilder.addTestDevice(testDevice);
             }
         }
+        adRequestBuilder.tagForChildDirectedTreatment(true);
         AdRequest adRequest = adRequestBuilder.build();
         this.adView.loadAd(adRequest);
     }

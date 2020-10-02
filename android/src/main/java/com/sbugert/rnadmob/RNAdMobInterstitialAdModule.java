@@ -143,6 +143,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
                             adRequestBuilder.addTestDevice(testDevice);
                         }
                     }
+                    adRequestBuilder.tagForChildDirectedTreatment(true);
                     AdRequest adRequest = adRequestBuilder.build();
                     mInterstitialAd.loadAd(adRequest);
                 }
