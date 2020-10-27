@@ -286,7 +286,7 @@ public class RNPublisherBannerViewManager extends ViewGroupManager<ReactPublishe
                 return AdSize.MEDIUM_RECTANGLE;
             case "fullBanner":
                 return AdSize.FULL_BANNER;
-            case "leaderBoard":
+            case "leaderboard":
                 return AdSize.LEADERBOARD;
             case "smartBannerPortrait":
                 return AdSize.SMART_BANNER;
