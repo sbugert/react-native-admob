@@ -1,3 +1,22 @@
+buildscript {
+  // The Android Gradle plugin is only required when opening the android folder stand-alone.
+  // This avoids unnecessary downloads and potential conflicts when the library is included as a
+  // module dependency in an application project.
+  // ref: https://docs.gradle.org/current/userguide/tutorial_using_tasks.html#sec:build_script_external_dependencies
+  if (project == rootProject) {
+    repositories {
+      google()
+      jcenter()
+    }
+    dependencies {
+      classpath 'com.android.tools.build:gradle:3.5.3'
+    }
+  }
+  repositories {
+    mavenCentral()
+  }
+}
+
 apply plugin: 'com.android.library'
 
 def safeExtGet(prop, fallback) {
@@ -22,5 +41,5 @@ android {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.google.android.gms:play-services-ads:+'
+    implementation "com.google.android.gms:play-services-ads:${safeExtGet('googlePlayServicesAdsVersion', '19.+')}"
 }
