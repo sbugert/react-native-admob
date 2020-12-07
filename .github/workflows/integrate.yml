@@ -8,7 +8,7 @@ on:
 jobs:
   integrate:
     name: Create React Native App and integrate React Native Admob
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -19,7 +19,7 @@ jobs:
       - name: Install xcpretty
         run: gem install xcpretty
       - name: Configure Xcode
-        run: sudo xcode-select --switch /Applications/Xcode_11.app
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app
       - name: Install React Native CLI
         run: sudo npm install -g react-native-cli
       - name: Initialize React Native application
