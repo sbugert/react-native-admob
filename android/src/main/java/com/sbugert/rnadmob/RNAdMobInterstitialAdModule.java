@@ -145,23 +145,25 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
+              if (mInterstitialAds.containsKey(adUnitId)) {
                 if (mInterstitialAds.get(adUnitId).isLoaded() || mInterstitialAds.get(adUnitId).isLoading()) {
-                    promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
+                  promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
                 } else {
-                    mRequestAdPromises.put(adUnitId, promise);
-                    AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-                    if (testDevices != null) {
-                        for (int i = 0; i < testDevices.length; i++) {
-                            String testDevice = testDevices[i];
-                            if (testDevice == "SIMULATOR") {
-                                testDevice = AdRequest.DEVICE_ID_EMULATOR;
-                            }
-                            adRequestBuilder.addTestDevice(testDevice);
-                        }
+                  mRequestAdPromises.put(adUnitId, promise);
+                  AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+                  if (testDevices != null) {
+                    for (int i = 0; i < testDevices.length; i++) {
+                      String testDevice = testDevices[i];
+                      if (testDevice == "SIMULATOR") {
+                        testDevice = AdRequest.DEVICE_ID_EMULATOR;
+                      }
+                      adRequestBuilder.addTestDevice(testDevice);
                     }
-                    AdRequest adRequest = adRequestBuilder.build();
-                    mInterstitialAds.get(adUnitId).loadAd(adRequest);
+                  }
+                  AdRequest adRequest = adRequestBuilder.build();
+                  mInterstitialAds.get(adUnitId).loadAd(adRequest);
                 }
+              }
             }
         });
     }
@@ -186,7 +188,7 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
-              if (mInterstitialAds.get(adUnitId) != null){
+              if (mInterstitialAds.containsKey(adUnitId)){
                 callback.invoke(mInterstitialAds.get(adUnitId).isLoaded());
               } else {
                 callback.invoke(false);
