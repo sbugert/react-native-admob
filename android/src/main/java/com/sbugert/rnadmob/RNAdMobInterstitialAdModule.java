@@ -3,6 +3,7 @@ package com.sbugert.rnadmob;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -33,10 +34,11 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     public static final String EVENT_AD_CLOSED = "interstitialAdClosed";
     public static final String EVENT_AD_LEFT_APPLICATION = "interstitialAdLeftApplication";
 
-    InterstitialAd mInterstitialAd;
+    ReactApplicationContext mContext;
+    Map<String, InterstitialAd> mInterstitialAds;
     String[] testDevices;
 
-    private Promise mRequestAdPromise;
+    private final Map<String, Promise> mRequestAdPromises;
 
     @Override
     public String getName() {
@@ -45,75 +47,89 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
 
     public RNAdMobInterstitialAdModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        mInterstitialAd = new InterstitialAd(reactContext);
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                mInterstitialAd.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdClosed() {
-                        sendEvent(EVENT_AD_CLOSED, null);
-                    }
-                    @Override
-                    public void onAdFailedToLoad(int errorCode) {
-                        String errorString = "ERROR_UNKNOWN";
-                        String errorMessage = "Unknown error";
-                        switch (errorCode) {
-                            case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                                errorString = "ERROR_CODE_INTERNAL_ERROR";
-                                errorMessage = "Internal error, an invalid response was received from the ad server.";
-                                break;
-                            case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                                errorString = "ERROR_CODE_INVALID_REQUEST";
-                                errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
-                                break;
-                            case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                                errorString = "ERROR_CODE_NETWORK_ERROR";
-                                errorMessage = "The ad request was unsuccessful due to network connectivity.";
-                                break;
-                            case AdRequest.ERROR_CODE_NO_FILL:
-                                errorString = "ERROR_CODE_NO_FILL";
-                                errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
-                                break;
-                        }
-                        WritableMap event = Arguments.createMap();
-                        WritableMap error = Arguments.createMap();
-                        event.putString("message", errorMessage);
-                        sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
-                        if (mRequestAdPromise != null) {
-                            mRequestAdPromise.reject(errorString, errorMessage);
-                            mRequestAdPromise = null;
-                        }
-                    }
-                    @Override
-                    public void onAdLeftApplication() {
-                        sendEvent(EVENT_AD_LEFT_APPLICATION, null);
-                    }
-                    @Override
-                    public void onAdLoaded() {
-                        sendEvent(EVENT_AD_LOADED, null);
-                        if (mRequestAdPromise != null) {
-                          mRequestAdPromise.resolve(null);
-                          mRequestAdPromise = null;
-                        }
-                    }
-                    @Override
-                    public void onAdOpened() {
-                        sendEvent(EVENT_AD_OPENED, null);
-                    }
-                });
-            }
-        });
+        mContext = reactContext;
+        mInterstitialAds = new HashMap<>();
+        mRequestAdPromises = new HashMap<>();
     }
+
     private void sendEvent(String eventName, @Nullable WritableMap params) {
         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
     }
 
     @ReactMethod
-    public void setAdUnitID(String adUnitID) {
-        if (mInterstitialAd.getAdUnitId() == null) {
-            mInterstitialAd.setAdUnitId(adUnitID);
+    public void setAdUnitID(final String adUnitID) {
+        if (!mInterstitialAds.containsKey(adUnitID)) {
+            mInterstitialAds.put(adUnitID, new InterstitialAd(mContext));
+            mInterstitialAds.get(adUnitID).setAdUnitId(adUnitID);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+              @Override
+              public void run() {
+                mInterstitialAds.get(adUnitID).setAdListener(new AdListener() {
+                  @Override
+                  public void onAdClosed() {
+                    WritableMap params = Arguments.createMap();
+                    params.putString("adUnitId", adUnitID);
+                    sendEvent(EVENT_AD_CLOSED, params);
+                  }
+                  @Override
+                  public void onAdFailedToLoad(int errorCode) {
+                    String errorString = "ERROR_UNKNOWN";
+                    String errorMessage = "Unknown error";
+                    switch (errorCode) {
+                      case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+                        errorString = "ERROR_CODE_INTERNAL_ERROR";
+                        errorMessage = "Internal error, an invalid response was received from the ad server.";
+                        break;
+                      case AdRequest.ERROR_CODE_INVALID_REQUEST:
+                        errorString = "ERROR_CODE_INVALID_REQUEST";
+                        errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
+                        break;
+                      case AdRequest.ERROR_CODE_NETWORK_ERROR:
+                        errorString = "ERROR_CODE_NETWORK_ERROR";
+                        errorMessage = "The ad request was unsuccessful due to network connectivity.";
+                        break;
+                      case AdRequest.ERROR_CODE_NO_FILL:
+                        errorString = "ERROR_CODE_NO_FILL";
+                        errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
+                        break;
+                    }
+                    WritableMap event = Arguments.createMap();
+                    WritableMap error = Arguments.createMap();
+                    event.putString("message", errorMessage);
+                    event.putString("adUnitId", adUnitID);
+                    sendEvent(EVENT_AD_FAILED_TO_LOAD, event);
+                    if (mRequestAdPromises.get(adUnitID) != null) {
+                      mRequestAdPromises.get(adUnitID).reject(errorString, errorMessage);
+                      // todo:: check how to set promise to null
+                      mRequestAdPromises.put(adUnitID, null);
+                    }
+                  }
+                  @Override
+                  public void onAdLeftApplication() {
+                    WritableMap params = Arguments.createMap();
+                    params.putString("adUnitId", adUnitID);
+                    sendEvent(EVENT_AD_LEFT_APPLICATION, params);
+                  }
+                  @Override
+                  public void onAdLoaded() {
+                    WritableMap params = Arguments.createMap();
+                    params.putString("adUnitId", adUnitID);
+                    sendEvent(EVENT_AD_LOADED, params);
+                    if (mRequestAdPromises.get(adUnitID) != null) {
+                      mRequestAdPromises.get(adUnitID).resolve(null);
+                      // todo:: check how to set promise to null
+                      mRequestAdPromises.put(adUnitID, null);
+                    }
+                  }
+                  @Override
+                  public void onAdOpened() {
+                    WritableMap params = Arguments.createMap();
+                    params.putString("adUnitId", adUnitID);
+                    sendEvent(EVENT_AD_OPENED, params);
+                  }
+                });
+              }
+            });
         }
     }
 
@@ -125,38 +141,40 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void requestAd(final Promise promise) {
+    public void requestAd(final String adUnitId, final Promise promise) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
-                if (mInterstitialAd.isLoaded() || mInterstitialAd.isLoading()) {
-                    promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
+              if (mInterstitialAds.containsKey(adUnitId)) {
+                if (mInterstitialAds.get(adUnitId).isLoaded() || mInterstitialAds.get(adUnitId).isLoading()) {
+                  promise.reject("E_AD_ALREADY_LOADED", "Ad is already loaded.");
                 } else {
-                    mRequestAdPromise = promise;
-                    AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-                    if (testDevices != null) {
-                        for (int i = 0; i < testDevices.length; i++) {
-                            String testDevice = testDevices[i];
-                            if (testDevice == "SIMULATOR") {
-                                testDevice = AdRequest.DEVICE_ID_EMULATOR;
-                            }
-                            adRequestBuilder.addTestDevice(testDevice);
-                        }
+                  mRequestAdPromises.put(adUnitId, promise);
+                  AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+                  if (testDevices != null) {
+                    for (int i = 0; i < testDevices.length; i++) {
+                      String testDevice = testDevices[i];
+                      if (testDevice == "SIMULATOR") {
+                        testDevice = AdRequest.DEVICE_ID_EMULATOR;
+                      }
+                      adRequestBuilder.addTestDevice(testDevice);
                     }
-                    AdRequest adRequest = adRequestBuilder.build();
-                    mInterstitialAd.loadAd(adRequest);
+                  }
+                  AdRequest adRequest = adRequestBuilder.build();
+                  mInterstitialAds.get(adUnitId).loadAd(adRequest);
                 }
+              }
             }
         });
     }
 
     @ReactMethod
-    public void showAd(final Promise promise) {
+    public void showAd(final String adUnitId, final Promise promise) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
+                if (mInterstitialAds.get(adUnitId).isLoaded()) {
+                    mInterstitialAds.get(adUnitId).show();
                     promise.resolve(null);
                 } else {
                     promise.reject("E_AD_NOT_READY", "Ad is not ready.");
@@ -166,11 +184,15 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void isReady(final Callback callback) {
+    public void isReady(final String adUnitId, final Callback callback) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run () {
-                callback.invoke(mInterstitialAd.isLoaded());
+              if (mInterstitialAds.containsKey(adUnitId)){
+                callback.invoke(mInterstitialAds.get(adUnitId).isLoaded());
+              } else {
+                callback.invoke(false);
+              }
             }
         });
     }
