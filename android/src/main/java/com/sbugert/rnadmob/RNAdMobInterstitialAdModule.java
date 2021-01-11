@@ -188,6 +188,8 @@ public class RNAdMobInterstitialAdModule extends ReactContextBaseJavaModule {
             public void run () {
               if (mInterstitialAds.get(adUnitId) != null){
                 callback.invoke(mInterstitialAds.get(adUnitId).isLoaded());
+              } else {
+                callback.invoke(false);
               }
             }
         });
