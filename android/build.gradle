@@ -19,4 +19,6 @@ android {
 dependencies {
     compile 'com.facebook.react:react-native:+'
     compile 'com.google.android.gms:play-services-ads:+'
+    implementation 'org.prebid:prebid-mobile-sdk:[1,2)'
+
 }
