@@ -4,6 +4,7 @@
   "description": "A react-native component for Google AdMob banners and interstitials",
   "author": "Simon Bugert <simon.bugert@gmail.com>",
   "main": "index.js",
+  "types": "index.d.ts",
   "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
