@@ -39,7 +39,7 @@ interface AdMobBannerProps extends ViewProps {
   onSizeChange?: Function;
 
   onAdLoaded?: Function;
-  onAdFailedToLoad?: Function;
+  onAdFailedToLoad?: (err: Error) => any;
   onAdOpened?: Function;
   onAdClosed?: Function;
   onAdLeftApplication?: Function;
@@ -52,8 +52,16 @@ export const AdMobInterstitial: {
   requestAd: () => Promise<unknown>;
   showAd: () => Promise<unknown>;
   isReady: (callback: Function) => void;
-  addEventListener: (event: unknown, handler: unknown) => void;
-  removeEventListener: (type: unknown, handler: unknown) => void;
+  addEventListener: (
+    event:
+      | 'adLoaded'
+      | 'adFailedToLoad'
+      | 'adOpened'
+      | 'adClosed'
+      | 'adLeftApplication',
+    handler: Function
+  ) => void;
+  removeEventListener: (type: unknown, handler: Function) => void;
   removeAllListeners: () => void;
   simulatorId: 'SIMULATOR';
 };
@@ -102,7 +110,7 @@ interface PublisherBannerProps extends ViewProps {
    * DFP library events
    */
   onAdLoaded?: Function;
-  onAdFailedToLoad?: Function;
+  onAdFailedToLoad?: (err: Error) => any;
   onAdOpened?: Function;
   onAdClosed?: Function;
   onAdLeftApplication?: Function;
@@ -117,8 +125,19 @@ export const AdMobRewarded: {
   requestAd: () => Promise<unknown>;
   showAd: () => Promise<unknown>;
   isReady: (callback: Function) => void;
-  addEventListener: (event: unknown, handler: unknown) => void;
-  removeEventListener: (type: unknown, handler: unknown) => void;
+  addEventListener: (
+    event:
+      | 'adLoaded'
+      | 'adFailedToLoad'
+      | 'adOpened'
+      | 'adClosed'
+      | 'adLeftApplication'
+      | 'rewarded'
+      | 'videoStarted'
+      | 'videoCompleted',
+    handler: Function
+  ) => void;
+  removeEventListener: (type: unknown, handler: Function) => void;
   removeAllListeners: () => void;
   simulatorId: 'SIMULATOR';
 };
