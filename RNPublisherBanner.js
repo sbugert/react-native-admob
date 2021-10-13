@@ -2,7 +2,6 @@ import { arrayOf, func, string } from 'prop-types';
 import React, { Component } from 'react';
 import {
   findNodeHandle,
-  requireNativeComponent,
   UIManager,
 } from 'react-native';
 import { createErrorFromErrorData } from './utils';
@@ -113,6 +112,8 @@ PublisherBanner.propTypes = {
   onAdLeftApplication: func,
   onAppEvent: func,
 };
+
+const requireNativeComponent = (str) => null;
 
 const RNDFPBannerView = requireNativeComponent(
   'RNDFPBannerView',
