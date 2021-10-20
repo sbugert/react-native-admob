@@ -2,9 +2,8 @@ import { arrayOf, func, string } from 'prop-types';
 import React, { Component } from 'react';
 import {
   findNodeHandle,
-  requireNativeComponent,
   UIManager,
-  ViewPropTypes,
+  requireNativeComponent,
 } from 'react-native';
 import { createErrorFromErrorData } from './utils';
 
@@ -62,7 +61,6 @@ class AdMobBanner extends Component {
 AdMobBanner.simulatorId = 'SIMULATOR';
 
 AdMobBanner.propTypes = {
-  ...ViewPropTypes,
 
   /**
    * AdMob iOS library banner size constants
