@@ -2,11 +2,11 @@ import { arrayOf, func, string } from 'prop-types';
 import React, { Component } from 'react';
 import {
   findNodeHandle,
-  requireNativeComponent,
   UIManager,
-  ViewPropTypes,
 } from 'react-native';
 import { createErrorFromErrorData } from './utils';
+
+const requireNativeComponent = require('react-native').requireNativeComponent;
 
 class PublisherBanner extends Component {
   constructor() {
@@ -71,7 +71,6 @@ class PublisherBanner extends Component {
 PublisherBanner.simulatorId = 'SIMULATOR';
 
 PublisherBanner.propTypes = {
-  ...ViewPropTypes,
 
   /**
    * DFP iOS library banner size constants
