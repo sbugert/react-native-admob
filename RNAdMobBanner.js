@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
   findNodeHandle,
   UIManager,
+  requireNativeComponent,
 } from 'react-native';
 import { createErrorFromErrorData } from './utils';
 
@@ -97,8 +98,6 @@ AdMobBanner.propTypes = {
   onAdClosed: func,
   onAdLeftApplication: func,
 };
-
-const requireNativeComponent = (str) => null;
 
 const RNGADBannerView = requireNativeComponent('RNGADBannerView', AdMobBanner);
 
