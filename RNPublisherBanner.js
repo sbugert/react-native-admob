@@ -3,10 +3,9 @@ import React, { Component } from 'react';
 import {
   findNodeHandle,
   UIManager,
+  requireNativeComponent,
 } from 'react-native';
 import { createErrorFromErrorData } from './utils';
-
-const requireNativeComponent = require('react-native').requireNativeComponent;
 
 class PublisherBanner extends Component {
   constructor() {
